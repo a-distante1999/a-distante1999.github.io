@@ -3,9 +3,16 @@ body {
 }
 
 header{
-    font-family: "Roboto Slab", sans-serif;
     color: rgb(0, 0, 0);
     text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Roboto Slab", sans-serif;
+}
+
+p {
+    font-family: "Roboto Slab", sans-serif;
 }
 
 header div{
