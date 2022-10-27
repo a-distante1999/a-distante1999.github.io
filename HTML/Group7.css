@@ -1,0 +1,27 @@
+body{
+    background-color: rgb(255, 255, 255);
+}
+
+header{
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+header div{
+    width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+header div h3 ul li{
+    padding: 2px;
+}
+
+header h3{
+    text-align:left;
+}
+
+section{
+    color: rgb(0, 0, 0);
+
+}
