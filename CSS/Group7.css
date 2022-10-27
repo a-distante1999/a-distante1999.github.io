@@ -2,11 +2,8 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-title {
-    font-family: "Roboto Slab", sans-serif;
-}
-
 header{
+    font-family: "Roboto Slab", sans-serif;
     color: rgb(0, 0, 0);
     text-align: center;
 }
