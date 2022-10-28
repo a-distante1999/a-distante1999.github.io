@@ -2,7 +2,7 @@ body {
     background-color: rgba(0, 0, 0,.05); /*rgb(243, 243, 243)*/
 }
 
-header{
+header {
     color: rgb(0, 0, 0);
     text-align: center;
     /*background-color: rgb(219, 231, 219) ;  /*rgb(169, 221, 180)*/ /*rgb(169, 221, 180)*/
@@ -13,15 +13,14 @@ header{
 h1, h2, h3, h4, h5, h6 {
     font-family: "Roboto Slab", sans-serif;
     text-align: center;
-    
 }
 
-div.content{
+div.content {
     padding-bottom: 5em;
     /*rgb(251, 251, 251)*/
 }
 
-section{
+section {
     padding:1em;
     padding-left: 30em;
     padding-right: 30em;
@@ -32,24 +31,22 @@ p, a {
     text-align: justify;
 }
 
-
-
-header div{
+header div {
     width: fit-content;
     margin-right: auto;
     margin-left: auto;
 }
 
-header div h3 ul {
-padding-inline-start: 0px;
+ul {
+    padding-inline-start: 0px;
 }
 
-header div h3 ul li{
+header div h3 ul li {
     padding: 2px;
     list-style: none;
 }
 
-section{
+section {
     color: rgb(0, 0, 0);
 
 }
