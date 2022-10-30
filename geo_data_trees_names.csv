@@ -1,19 +1,16 @@
-Names,Count
-Acer pseudoplatanus,900
-Cupressus,399
-Acer platanoides,157
-Sophora japonica,376
-Tilia cordata,509
-Acer campestre,458
-Acer tataricum ssp. ginnala,6
-Fagus,22
-Acer opalus,1
-Sorbus,11
-Carpinus betulus,536
-Prunus avium,208
-Fraxinus,69
-Prunus serrulata,20
-Parrotia persica,272
-Ostrya carpinifolia,211
-Celtis australis,1028
+Names,Count;
+Acer pseudoplatanus,171;
+Cupressus,399;
+Acer platanoides,157;
+Sophora japonica,376;
+Tilia cordata,509;
+Acer campestre,458;
+Acer tataricum ssp. ginnala,6;
+Fagus,22;
+Acer opalus,1;
+Sorbus,11;
+Carpinus betulus,536;
+Prunus avium,208;
+Fraxinus,69;
+Prunus serrulata,20;
 
