@@ -2,37 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="../CSS/Group7.css">
+    <title>Eco-Benefit Project</title>
+    <link rel="stylesheet" type="text/css" href="/css/Group7.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
-	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Graph I - TREE ABOUNDANCE</h1>
-			<div class="chart chart-categories"></div>
-		
-		<script>
+<header>
+    <h1>Graph I - TREE ABOUNDANCE</h1>
+</header>
+<div class="content">
+<div class="chart chart-categories"></div>
+</div>
+<script>
+    let currentWidth = 0;
 
-let currentWidth = 0;
-
-    const chartCards = $('.chart').closest('.card');
     const margin = {top: 30, right: 30, bottom: 30, left: 200};
 
     const getHeight = (d) => parseFloat(d.length || d) * 30; //30 è l'altezza di ogni barra
     const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left; //
 
-    const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
-
     function DrawChartCategories(element)
     {
-        d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/CSV/geo_data_trees_categories.csv").then(data => {
-			// Trasformo i dati in int e float perchè all'inizio i dati sono considerati stringa
+        d3.csv("/csv/geo_data_trees_categories.csv").then(data => {
+            // Trasformo i dati in int e float perchè all'inizio i dati sono considerati stringa
             data.forEach((d) => {
                 d.Abundance = parseInt(d.Abundance);
                 d.Canopy = parseFloat(d.Canopy).toFixed(2); //toFixed serve a ottenere due cifre
@@ -66,7 +63,7 @@ let currentWidth = 0;
                         .range([0, width]);
 
             // Scrive i numeri sull'asse
-			svg.append("g")
+            svg.append("g")
                .attr("transform", `translate(0,${height})`)
                .call(d3.axisBottom(x).tickSizeOuter(0));
 
@@ -84,13 +81,13 @@ let currentWidth = 0;
                             .domain(data)
                             .range(d3.schemeSet1);
 
-            const tooltip = d3.select(element) //La definizione di questa classe è nel CSS
+            const tooltip = d3.select(element) //La definizione di questa classe è nel css
                               .append("div")
                               .attr("class", "tooltip")
                               .style("display", "none");
 
             const mouseover = function (event, d) {
-                tooltip.html('Abundance: ' + d.Abundance +'<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
+                tooltip.html('Abundance: ' + d.Abundance + '<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
                        .style("display", "block");
             }
 
@@ -111,7 +108,7 @@ let currentWidth = 0;
                .data(data) //Quali sono i dati del grafico
                .join("rect")
                .attr("fill", d => color(d.Abundance)) //Colore barretta
-               .attr("x", d => x(0)) 
+               .attr("x", d => x(0))
                .attr("y", d => y(d.Name)) //Posizione della barra sull'asse y
                 //.attr("width", d => x(d.Abundance))  Se metto solo questo, non fa l'animazione
                .attr("height", d => y.bandwidth()) //Dimensione automatica della dimensione della barra
@@ -135,8 +132,6 @@ let currentWidth = 0;
         });
     }
 
-    
-
     $(document).ready(function () {
         $(window).resize();
     });
@@ -144,15 +139,9 @@ let currentWidth = 0;
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            DrawChartCategories('.chart-categories');   
+            DrawChartCategories('.chart-categories');
         }
     });
-
-
-
 </script>
-		
-    </header>
-    
 </body>
 </html>
