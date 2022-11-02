@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <script src="https://d3js.org/d3.v4.js"></script>
-<div id="First_graph"></div>
+
 
 <html lang="en">
 <head>
@@ -15,64 +15,149 @@
 </head>
 <body>
     <header>
-        <h1>Graph 1</h1>
-		
+        <h1>Graph I - TREE ABOUNDANCE</h1>
+		<div id="First_graph"></div>
 		<script>
 
+let currentWidth = 0;
 
-// set the dimensions and margins of the graph
-var margin = {top: 20, right: 30, bottom: 40, left: 90},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    const chartCards = $('.chart').closest('.card');
+    const margin = {top: 30, right: 30, bottom: 30, left: 200};
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+    const getHeight = (d) => parseFloat(d.length || d) * 30; //30 è l'altezza di ogni barra
+    const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left; //
 
-// Parse the Data
-d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/graph/geo_data_trees_names.csv", function(data) {
+    const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
-  // Add X axis
-  var x = d3.scaleLinear()
-    .domain([0, 13000])
-    .range([ 0, width]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-      .attr("transform", "translate(-10,0)rotate(-45)")
-      .style("text-anchor", "end");
+    function DrawChartCategories(element)
+    {
+        d3.csv("/CSV/geo_data_trees_categories.csv").then(data => {
+			// Trasformo i dati in int e float perchè all'inizio i dati sono considerati stringa
+            data.forEach((d) => {
+                d.Abundance = parseInt(d.Abundance);
+                d.Canopy = parseFloat(d.Canopy).toFixed(2); //toFixed serve a ottenere due cifre
+            });
 
-  // Y axis
-  var y = d3.scaleBand()
-    .range([ 0, height ])
-    .domain(data.map(function(d) { return d.Country; }))
-    .padding(.1);
-  svg.append("g")
-    .call(d3.axisLeft(y))
+            // Ordino i dati
+            data.sort((a, b) => b.Abundance - a.Abundance);
 
-  //Bars
-  svg.selectAll("myRect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.Country); })
-    .attr("width", function(d) { return x(d.Value); })
-    .attr("height", y.bandwidth() )
-    .attr("fill", "#69b3a2")
+            // Taglio i dati
+            data.length = 25
 
+            // Serve a invertire i dati, se non ci fosse avrei il più abbondante in fondo
+            data.reverse()
 
-    // .attr("x", function(d) { return x(d.Country); })
-    // .attr("y", function(d) { return y(d.Value); })
-    // .attr("width", x.bandwidth())
-    // .attr("height", function(d) { return height - y(d.Value); })
-    // .attr("fill", "#69b3a2")
+            // set chart dimensions
+            const height = getHeight(data);
+            const width = getWidth(element);
+
+            // append the svg object to the body of the page (crea il container del grafico)
+            const svg = d3.select(element)
+                          .html('')
+                          .append("svg")
+                          .attr("width", width + margin.left + margin.right)
+                          .attr("height", height + margin.top + margin.bottom)
+                          .append("g")
+                          .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // X axis
+            const x = d3.scaleLinear()
+                        .domain([0, d3.max(data, d => d.Abundance)])
+                        .range([0, width]);
+
+            // Scrive i numeri sull'asse
+			svg.append("g")
+               .attr("transform", `translate(0,${height})`)
+               .call(d3.axisBottom(x).tickSizeOuter(0));
+
+            // Add Y axis
+            const y = d3.scaleBand()
+                        .domain(data.map(d => d.Name))
+                        .range([height, 0])
+                        .padding([0.1]); // Spaziatura barre
+
+            svg.append("g")
+               .call(d3.axisLeft(y).tickSizeOuter(0));
+
+            // color palette = one color per subgroup
+            const color = d3.scaleOrdinal()
+                            .domain(data)
+                            .range(d3.schemeSet1);
+
+            const tooltip = d3.select(element) //La definizione di questa classe è nel CSS
+                              .append("div")
+                              .attr("class", "tooltip")
+                              .style("display", "none");
+
+            const mouseover = function (event, d) {
+                tooltip.html('Abundance: ' + d.Abundance +'<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
+                       .style("display", "block");
+            }
+
+            const mousemove = function (event, d) { //Serve a far seguire il mouse over
+                let height = parseFloat(tooltip.style('height')); //Serve ad agganciare il fumetto nell'angolo in basso a sx
+
+                tooltip
+                    .style("left", (event.x) + "px")
+                    .style("top", (event.y - height) + "px")
+            }
+
+            const mouseleave = function (event, d) {
+                tooltip.style("display", "none");
+            }
+
+            // Show the bars
+            svg.selectAll("mybar")
+               .data(data) //Quali sono i dati del grafico
+               .join("rect")
+               .attr("fill", d => color(d.Abundance)) //Colore barretta
+               .attr("x", d => x(0)) 
+               .attr("y", d => y(d.Name)) //Posizione della barra sull'asse y
+                //.attr("width", d => x(d.Abundance))  Se metto solo questo, non fa l'animazione
+               .attr("height", d => y.bandwidth()) //Dimensione automatica della dimensione della barra
+               .attr("stroke", "black") // Colore del bordo
+               .attr("stroke-width", ".5") //Spessore bordo
+               .on("mouseover", mouseover) //All'evento mouse over, chiamo la funzone mouse over
+               .on("mousemove", mousemove)
+               .on("mouseleave", mouseleave)
+
+            // Animazione del grafico
+            svg.selectAll("rect")
+               .transition()
+               .duration(1000)
+                //.attr("x", d => x(0))
+                //.attr("y", d => y(d.Name))
+               .attr("width", d => x(d.Abundance))
+                //.attr("height", d => y.bandwidth())
+               .delay(function (d, i) {
+                   return (i * 75)
+               })
+        });
+    }
+
+    
+
+    $(document).ready(function () {
+        chartCards.find('.card-title').on('click', (e) => {
+            const target = $(e.currentTarget).next('.card-body');
+            if (target.is(':visible')) {
+                target.hide(300);
+            }
+            else {
+                target.show(300);
+            }
+        })
+
+        $(window).resize();
+    });
+
+    $(window).resize(function () {
+        if (currentWidth !== window.innerWidth) {
+            currentWidth = window.innerWidth;
+            DrawChartCategories('.chart-categories');
+            DrawChartNeighborhoods('.chart-neighborhoods');
+        }
+    });
 
 })
 
