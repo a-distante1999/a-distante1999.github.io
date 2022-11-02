@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Eco-Benefit Project</title>
-    <link rel="stylesheet" type="text/css" href="/css/Group7.css">
+    <link rel="stylesheet" type="text/css" href="../css/Group7.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -26,7 +26,7 @@
 
     function DrawChartCategories(element)
     {
-        d3.csv("/csv/geo_data_trees_categories.csv").then(data => {
+        d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_categories.csv").then(data => {
             // Trasformo i dati in int e float perchè all'inizio i dati sono considerati stringa
             data.forEach((d) => {
                 d.Abundance = parseInt(d.Abundance);
