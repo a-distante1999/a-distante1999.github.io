@@ -47,3 +47,12 @@ section {
     color: rgb(0, 0, 0);
 
 }
+
+.tooltip {
+    position: fixed;
+    border: 1px solid;
+    border-radius: 5px;
+    opacity: 1 !important;
+    background-color: white;
+    transform: translate(7%, -7%) !important;
+}
