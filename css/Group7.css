@@ -1,5 +1,5 @@
 body {
-    background-color: rgba(0, 0, 0,.05); /*rgb(243, 243, 243)*/
+    background-color: rgba(0, 0, 0, .05); /*rgb(243, 243, 243)*/
 }
 
 header {
@@ -21,7 +21,7 @@ div.content {
 }
 
 section {
-    padding:1em;
+    padding: 1em;
     padding-left: 30em;
     padding-right: 30em;
 }
@@ -41,7 +41,6 @@ ul {
     padding-inline-start: 0px;
     list-style: none;
 }
-
 
 section {
     color: rgb(0, 0, 0);
