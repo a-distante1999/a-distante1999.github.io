@@ -54,4 +54,5 @@ section {
     opacity: 1 !important;
     background-color: white;
     transform: translate(7%, -7%) !important;
+	padding: 5px;
 }
