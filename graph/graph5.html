@@ -28,36 +28,69 @@
         height,
         widthSquares = 10,
         heightSquares = 10,
-        squareSize = 25,
+        squareSize = 20,
         squareValue = 0,
         gap = 2,
         thewaffle = [];
 
     var color = d3.scaleOrdinal(d3.schemeCategory10); //COLORI
-    
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/waffle.csv").then(data => {
-        //total
-        //total = d3.sum(waffle, function(d) { return d.Percentage; });
-        total = 100;
+
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then(data => {
+        let neighborhood = 'MEANO';
+        //MEANO no
+        //BONDONE ok
+        //SARDAGNA non contiene nessun albero
+        //ARGENTARIO ok
+        //S.GIUSEPPE-S.CHIARA ok
+        //POVO ok
+        //RAVINA-ROMAGNANO no
+        //MATTARELLO ok
+        //VILLAZZANO ok
+        //OLTREFERSINA ok
+        //GARDOLO ok
+        //CENTRO STORICO PIEDICASTELLO ok
+        
+        let thedata = []
+        data.forEach(function (row) {
+            if (row.Neighborhood == neighborhood) {
+                Object.keys(row).slice(1, 6).forEach(function (tree) {
+                    thedata.push({ 'Tree': tree, 'Abundance': row[tree] });
+                })
+            }
+        });
+         
+       
+
+        total = d3.sum(thedata, function (d) { return d.Abundance; });
+
 
         //value of a square
         squareValue = total / (widthSquares * heightSquares);
 
+        function roundDown(s)
+            {
+                sumTot = d3.sum
+            }
+
         //remap waffle
-        data.forEach(function (d, i) {
-            d.Percentage = +d.Percentage;
-            d.units = Math.floor(d.Percentage / squareValue);
+        thedata.forEach(function (d, i) {
+            d.Abundance = +d.Abundance;
+            d.Units = Math.floor(d.Abundance / squareValue);
+            console.log(d.Units);
+           //d.Units = (d.Abundance / squareValue).toFixed(16);
             thewaffle = thewaffle.concat(
-                Array(d.units + 1).join(1).split('').map(function () {
+                Array(d.Units + 1).join(1).split('').map(function () {
                     return {
                         squareValue: squareValue,
-                        units: d.units,
-                        Percentage: d.Percentage,
-                        groupIndex: i
+                        Units: d.Units,
+                        Abundance: d.Abundance,
+                        GroupIndex: i
+   
                     };
                 })
             );
         });
+        console.log(thewaffle);
 
         width = (squareSize * widthSquares) + widthSquares * gap + 25;
         height = (squareSize * heightSquares) + heightSquares * gap + 25;
@@ -75,7 +108,7 @@
             .attr("width", squareSize)
             .attr("height", squareSize)
             .attr("fill", function (d) {
-                return color(d.groupIndex);
+                return color(d.GroupIndex);
             })
             .attr("x", function (d, i) {
                 //group n squares for column
@@ -88,7 +121,7 @@
             })
             .append("title")
             .text(function (d, i) {
-                return "Tree range: " + data[d.groupIndex].Tree + " | " + d.Percentage + " , " + d.units + "%"
+                return thedata[d.GroupIndex].Tree + ": " + d.Abundance + " (" + d.Units + "%)"
             });
 
         //add legend with categorical waffle
@@ -98,7 +131,7 @@
             .attr('height', 200)
             .append('g')
             .selectAll("div")
-            .data(data)
+            .data(thedata)
             .enter()
             .append("g")
             .attr('transform', function (d, i) { return "translate(0," + i * 20 + ")"; });
@@ -112,8 +145,6 @@
             .attr("x", 25)
             .attr("y", 13)
             .text(d => d.Tree);
-
-            console.log(data)
     });
 </script>
 
