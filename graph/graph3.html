@@ -13,8 +13,9 @@
 <header>
     <h1>Graph 3</h1>
 	<div class="content">
+<div class="content">
 <div id="my_dataviz"></div>
-</header>
+</div>
 <script>
 
 // set the dimensions and margins of the graph
@@ -31,46 +32,36 @@ const svg = d3.select("#my_dataviz")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 // Parse the Data
-d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then ( function(data) {
+d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/percentage.csv").then( function(data) {
 
   // List of subNeighborhoods = header of the csv files = soil condition here
-  const subNeighborhoods = data.columns.slice(1)
+  const subNeighborhoods = data.columns.slice()
 
   // List of Neighborhoods = species here = value of the first column called Neighborhood -> I show them on the X axis
-  const Neighborhoods = data.map(d => d.Neighborhood)
+  const Neighborhoods = data.map(d => (d.Neighborhood))
 
-  // Add X axis
-  const x = d3.scaleLinear()
-      .domain([0,100])
-      .range([0, width])
-      //.padding([0.2])
+// Add X axis
+const x = d3.scaleLinear()
+      .domain([0, 100])
+      .rangeRound([0, width]);
+      // Scrive i numeri sull'asse
+
   svg.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(d3.axisBottom(x).tickSizeOuter(0));
-
+    
   // Add Y axis
   const y = d3.scaleBand()
     .domain(Neighborhoods)
     .range([ height, 0 ])
-	.padding([0.1]);
+    .padding([0.1]); // Spaziatura barre
   svg.append("g")
-    .call(d3.axisLeft(y).tickSizeOuter(0));
-
+    .call(d3.axisLeft(y).tickSizeOuter(0))
+    
   // color palette = one color per subNeighborhood
   const color = d3.scaleOrdinal()
     .domain(subNeighborhoods)
     .range(['#A63CB3','#FD4B84','#FA9832','#31EE82','#28A2DC','#5366D7'])
-
-  // Normalize the data -> sum of each Neighborhood must be 100!
-  console.log(data)
-  dataNormalized = []
-  data.forEach(function(d){
-    // Compute the total
-    tot = 0
-    for (i in subNeighborhoods){ name=subNeighborhoods[i] ; tot += +d[name] }
-    // Now normalize
-    for (i in subNeighborhoods){ name=subNeighborhoods[i] ; d[name] = d[name] / tot * 100}
-  })
 
   //stack the data? --> stack per subNeighborhood
   const stackedData = d3.stack()
@@ -92,6 +83,7 @@ d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.i
         .attr("x", d => x(d[0]))
         .attr("width", d => x(d[1]) - x(d[0]))
         .attr("height",y.bandwidth())
+        .attr()
 })
 
 </script>
