@@ -35,7 +35,7 @@
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Parse the Data
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/percentage.csv").then(function (data) {
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods_percentage.csv").then(function (data) {
 
         // List of subNeighborhoods = header of the csv files = soil condition here
         const subNeighborhoods = data.columns.slice()
@@ -86,7 +86,6 @@
             .attr("x", d => x(d[0]))
             .attr("width", d => x(d[1]) - x(d[0]))
             .attr("height", y.bandwidth())
-            .attr()
     })
 
 </script>

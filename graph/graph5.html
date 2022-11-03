@@ -34,10 +34,7 @@
         thewaffle = [];
 
     var color = d3.scaleOrdinal(d3.schemeCategory10); //COLORI
-    /*
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/waffle.csv", function(error, waffle)
-    */
-
+    
     d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/waffle.csv").then(data => {
         //total
         //total = d3.sum(waffle, function(d) { return d.Percentage; });
