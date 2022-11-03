@@ -37,7 +37,7 @@
             data.sort((a, b) => b.Abundance - a.Abundance);
 
             // Taglio i dati
-            data.length = 25
+            data.length = 20
 
             // Serve a invertire i dati, se non ci fosse avrei il più abbondante in fondo
             data.reverse()
@@ -73,19 +73,19 @@
 
             svg.append("g")
                .call(d3.axisLeft(y).tickSizeOuter(0));
-
+/*
             // color palette = one color per subgroup
             const color = d3.scaleOrdinal()
                             .domain(data)
                             .range(d3.schemeSet1);
-
+*/
             const tooltip = d3.select(element) //La definizione di questa classe è nel css
                               .append("div")
                               .attr("class", "tooltip")
                               .style("display", "none");
 
             const mouseover = function (event, d) {
-                tooltip.html('Abundance: ' + d.Abundance + '<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
+                tooltip.html('Aboundance: ' + d.Abundance + '<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
                        .style("display", "block");
             }
 
@@ -105,7 +105,7 @@
             svg.selectAll("mybar")
                .data(data) //Quali sono i dati del grafico
                .join("rect")
-               .attr("fill", d => color(d.Abundance)) //Colore barretta
+               .attr("fill", "rgb(12,240,233)") //Colore barretta
                .attr("x", d => x(0))
                .attr("y", d => y(d.Name)) //Posizione della barra sull'asse y
                 //.attr("width", d => x(d.Abundance))  Se metto solo questo, non fa l'animazione
