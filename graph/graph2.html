@@ -32,7 +32,7 @@ const svg = d3.select("#my_dataviz")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 // Parse the Data
-d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_stacked.csv").then( function(data) {
+d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then( function(data) {
 
   // List of subgroups = header of the csv files = soil condition here
   const subgroups = data.columns.slice()
@@ -42,7 +42,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/da
 
 // Add X axis
 const x = d3.scaleLinear()
-      .domain([0, 60])
+      .domain([0, 3500])
       .rangeRound([0, width]);
       // Scrive i numeri sull'asse
 
@@ -61,7 +61,7 @@ const x = d3.scaleLinear()
   // color palette = one color per subgroup
   const color = d3.scaleOrdinal()
     .domain(subgroups)
-    .range(['#e41a1c','#377eb8','#4daf4a'])
+    .range(['#e41a1c','#377eb8','#4daf4a','#e41a1c','#377eb8','#4daf4a'])
 
   //stack the data? --> stack per subgroup
   const stackedData = d3.stack()
