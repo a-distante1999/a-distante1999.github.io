@@ -1,16 +1,23 @@
 body {
-    background-color: rgba(0, 0, 0, .05); /*rgb(243, 243, 243)*/
+    background-color: rgba(0, 0, 0, .05);
+    /*rgb(243, 243, 243)*/
 }
 
 header {
     color: rgb(0, 0, 0);
     text-align: center;
-    /*background-color: rgb(219, 231, 219) ;  /*rgb(169, 221, 180)*/ /*rgb(169, 221, 180)*/
+    /*background-color: rgb(219, 231, 219) ;  /*rgb(169, 221, 180)*/
+    /*rgb(169, 221, 180)*/
     padding-bottom: 1em;
     padding-top: 1em;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: "Roboto Slab", sans-serif;
     text-align: center;
 }
@@ -26,7 +33,8 @@ section {
     padding-right: 30em;
 }
 
-p, a {
+p,
+a {
     font-family: "Fira Sans", sans-serif;
     text-align: justify;
 }
@@ -47,6 +55,10 @@ section {
 
 }
 
+.text-center {
+    text-align: center;
+}
+
 .tooltip {
     position: fixed;
     border: 1px solid;
@@ -54,5 +66,5 @@ section {
     opacity: 1 !important;
     background-color: white;
     transform: translate(7%, -7%) !important;
-	padding: 5px;
+    padding: 5px;
 }
