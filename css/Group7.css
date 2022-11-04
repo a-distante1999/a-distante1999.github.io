@@ -6,18 +6,13 @@ body {
 header {
     color: rgb(0, 0, 0);
     text-align: center;
-    /*background-color: rgb(219, 231, 219) ;  /*rgb(169, 221, 180)*/
+    /*background-color: rgb(219, 231, 219) ; /*rgb(169, 221, 180)*/
     /*rgb(169, 221, 180)*/
     padding-bottom: 1em;
     padding-top: 1em;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1,h2,h3,h4,h5,h6 {
     font-family: "Roboto Slab", sans-serif;
     text-align: center;
 }
@@ -28,13 +23,14 @@ div.content {
 }
 
 section {
-    padding: 1em;
-    padding-left: 30em;
-    padding-right: 30em;
+    padding: 3em;
+    color: rgb(0, 0, 0);
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 700px;
 }
 
-p,
-a {
+p,a {
     font-family: "Fira Sans", sans-serif;
     text-align: justify;
 }
@@ -50,9 +46,8 @@ ul {
     list-style: none;
 }
 
-section {
-    color: rgb(0, 0, 0);
-
+.text-center {
+    text-align: center;
 }
 
 .text-center {
@@ -67,4 +62,15 @@ section {
     background-color: white;
     transform: translate(7%, -7%) !important;
     padding: 5px;
+}
+
+@media only screen and (max-width: 1200px){
+    section {
+        min-width: 500px;
+        width: fit-content;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 0em;
+        padding-right: 0em;
+    }
 }
