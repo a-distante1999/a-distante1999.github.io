@@ -50,6 +50,10 @@ ul {
     text-align: center;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .tooltip {
     position: fixed;
     border: 1px solid;

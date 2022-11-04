@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
     <title>Eco-Benefit Project</title>
     <link rel="stylesheet" type="text/css" href="../css/Group7.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
@@ -9,128 +11,146 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 </head>
+
 <body>
-<header>
-    <h1>Graph 5</h1>
-	
-</div>
-</header>
-<div id="waffle"></div>
-	<div id="legend">
-<script>
-
-var total = 0;
-var width,
-    height,
-    widthSquares = 20,
-    heightSquares = 5,
-    squareSize = 25,
-    squareValue = 0,
-    gap = 1,
-    thewaffle = [];  
-
-var color = d3.scaleOrdinal(d3.schemeCategory10);
-/*
-d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/waffle.csv", function(error, waffle)
-*/
-
- d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/waffle.csv").then(data => {
-            data.forEach((d) => {
-                d.Percentage = parseInt(d.Percentage);
-            });
-{
-  //total
-  //total = d3.sum(waffle, function(d) { return d.Percentage; });
-  total = 100;
-
-  //value of a square
-  squareValue = total / (widthSquares*heightSquares);
-  
-  //remap waffle
-  waffle.forEach(function(d, i) 
-  {
-      d.Percentage = +d.Percentage;
-      d.units = Math.floor(d.Percentage/squareValue);
-      thewaffle = thewaffle.concat(
-        Array(d.units+1).join(1).split('').map(function()
-          {
-            return {  squareValue:squareValue,                      
-                      units: d.units,
-                      Percentage: d.Percentage,
-                      groupIndex: i};
-          })
-        );
-  });
-
-  width = (squareSize*widthSquares) + widthSquares*gap + 25;
-  height = (squareSize*heightSquares) + heightSquares*gap + 25;
-
-  var waffle = d3.select("#waffle")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .selectAll("div")
-      .waffle(thewaffle)
-      .enter()
-      .append("rect")
-      .attr("width", squareSize)
-      .attr("height", squareSize)
-      .attr("fill", function(d)
-      {
-        return color(d.groupIndex);
-      })
-      .attr("x", function(d, i)
-        {
-          //group n squares for column
-          col = Math.floor(i/heightSquares);
-          return (col*squareSize) + (col*gap);
-        })
-      .attr("y", function(d, i)
-      {
-        row = i%heightSquares;
-        return (heightSquares*squareSize) - ((row*squareSize) + (row*gap))
-      })
-      .append("title")
-        .text(function (d,i) 
-          {
-            return "Tree range: " + waffle[d.groupIndex].Tree + " | " +  d.Percentage + " , " + d.units + "%"
-          });
-/*
-   //add legend with categorical waffle
-   var legend = d3.select("#legend")
-    .append("svg")
-    .attr('width', 300)
-    .attr('height', 200)
-    .append('g')
-    .selectAll("div")
-    .waffle(waffle)
-    .enter()
-      .append("g")
-      .attr('transform', function(d,i){ return "translate(0," + i*20 + ")";});
-  legend.append("rect")
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", function(d, i) { return color(i)});
-  legend.append("text")
-    .attr("x", 25)
-    .attr("y", 13)
-    .text( function(d) { return d.Tree});
-
-    //add value of a unit square
-    var legend2 = d3.select("#legend")
-      .select('svg')
-      .append('g')
-      .attr('transform', "translate(100,0)");
-
-legend2.append("text")    
-        .attr('y', '14')    
-        .attr('font-size', '18px')
-        .text("Total: " + total)
-        .attr("fill", "#444444");
-	*/	
-});
-
-</script>
+    <header>
+        <h1>Graph 5</h1>
+    </header>
+    <div class="content text-center">
+        <div id="waffle"></div>
+        <div id="legend"></div>
+    </div>
 </body>
+
+<script>
+    var total = 0;
+    var width,
+        height,
+        widthSquares = 10,
+        heightSquares = 10,
+        squareSize = 20,
+        squareValue = 0,
+        gap = 2,
+        thewaffle = [];
+
+    var color = d3.scaleOrdinal(d3.schemeCategory10); //COLORI
+
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then(data => {
+        let neighborhood = 'BONDONE';
+        //MEANO no
+        //BONDONE ok
+        //SARDAGNA non contiene nessun albero
+        //ARGENTARIO ok
+        //S.GIUSEPPE-S.CHIARA ok
+        //POVO ok
+        //RAVINA-ROMAGNANO no
+        //MATTARELLO ok
+        //VILLAZZANO ok
+        //OLTREFERSINA ok
+        //GARDOLO ok
+        //CENTRO STORICO PIEDICASTELLO ok
+        
+        let thedata = []
+        data.forEach(function (row) {
+            if (row.Neighborhood == neighborhood) {
+                Object.keys(row).slice(1, 6).forEach(function (tree) {
+                    thedata.push({ 'Tree': tree, 'Abundance': row[tree] });
+                })
+            }
+        });
+         
+       
+
+        total = d3.sum(thedata, function (d) { return d.Abundance; });
+
+
+        //value of a square
+        squareValue = total / (widthSquares * heightSquares);
+
+        function roundDown(s)
+            {
+                sumTot = d3.sum
+            }
+
+        //remap waffle
+        thedata.forEach(function (d, i) {
+            d.Abundance = +d.Abundance;
+            d.Units = Math.floor(d.Abundance / squareValue);
+           //d.Units = (d.Abundance / squareValue).toFixed(16);
+            thewaffle = thewaffle.concat(
+                Array(d.Units + 1).join(1).split('').map(function () {
+                    return {
+                        squareValue: squareValue,
+                        Units: d.Units,
+                        Abundance: d.Abundance,
+                        GroupIndex: i
+   
+                    };
+                })
+            );
+        });
+
+        width = (squareSize * widthSquares) + widthSquares * gap + 25;
+        height = (squareSize * heightSquares) + heightSquares * gap + 25;
+
+        var waffle = d3.select("#waffle")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("transform", "rotate(90)")
+            .append("g")
+            .selectAll("div")
+            .data(thewaffle)
+            .enter()
+            .append("rect")
+            .attr("width", squareSize)
+            .attr("height", squareSize)
+            .attr("fill", function (d) {
+                return color(d.GroupIndex);
+            })
+            .attr("x", function (d, i) {
+                //group n squares for column
+                col = Math.floor(i / heightSquares);
+                return (col * squareSize) + (col * gap);
+            })
+            .attr("y", function (d, i) {
+                row = i % heightSquares;
+                return (heightSquares * squareSize) - ((row * squareSize) + (row * gap))
+            })
+            .append("title")
+            .text(function (d, i) {
+                return thedata[d.GroupIndex].Tree + ": " + d.Abundance + " (" + d.Units + "%)"
+            });
+
+        /*
+        var mydiv = $("#legend"); 
+        mydiv.css('margin-top', '50px').css('clear', 'none')
+        */
+       
+        //add legend with categorical waffle
+        var legend = d3.select("#legend")
+            .append("svg")
+            .attr('width', 300)
+            .attr('height', 200)
+            .append('g')
+            .attr("font-family", "Fira Sans")
+            .selectAll("div")
+            .data(thedata)
+            .enter()
+            .append("g")
+            .attr('transform', function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", function (d, i) { return color(i) });
+
+        legend.append("text")
+            .attr("x", 25)
+            .attr("y", 13)
+            .text(d => d.Tree);
+
+    });
+</script>
+
 </html>
