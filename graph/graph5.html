@@ -52,40 +52,53 @@
         
         let thedata = []
         data.forEach(function (row) {
-            if (row.Neighborhood == neighborhood) {
+            if (row.Neighborhood === neighborhood) {
                 Object.keys(row).slice(1, 6).forEach(function (tree) {
                     thedata.push({ 'Tree': tree, 'Abundance': row[tree] });
                 })
             }
         });
-         
-       
 
         total = d3.sum(thedata, function (d) { return d.Abundance; });
 
-
         //value of a square
         squareValue = total / (widthSquares * heightSquares);
+        let mergedData = []
+        for (let i = 0; i < thedata.length; i++) {
+            let unit = parseFloat((thedata[i].Abundance / squareValue).toFixed(10));
+            mergedData[i] = [
+                thedata[i],
+                {"Integer": Math.floor(unit)},
+                {"Decimal": parseFloat((unit - Math.floor(unit)).toFixed(10))}
+            ].reduce(function (r, o) {
+                Object.keys(o).forEach(function (k) { r[k] = o[k]; });
+                return r;
+            }, {});
+        }
+        mergedData.sort(function (a, b) {
+            return b.Decimal- a.Decimal;
+        });
 
-        function roundDown(s)
-            {
-                sumTot = d3.sum
-            }
+        let tot = d3.sum(mergedData, function (d) { return d.Integer; });
+
+        for (let i = 0; i < 100 - tot; i++) {
+            mergedData[i].Integer += 1
+        }
 
         //remap waffle
-        thedata.forEach(function (d, i) {
+        mergedData.forEach(function (d, i) {
+            console.log(d)
             d.Abundance = +d.Abundance;
-            d.Units = Math.floor(d.Abundance / squareValue);
-           //d.Units = (d.Abundance / squareValue).toFixed(16);
             thewaffle = thewaffle.concat(
-                Array(d.Units + 1).join(1).split('').map(function () {
+                Array(d.Integer+ 1).join(1).split('').map(function () {
                     return {
                         squareValue: squareValue,
-                        Units: d.Units,
+                        Units: d.Integer,
                         Abundance: d.Abundance,
                         GroupIndex: i
-   
+
                     };
+
                 })
             );
         });
