@@ -1,39 +1,52 @@
-function DrawChartWaffle(chartSelector, legendSelector) {
+const waffleObject = {
+    rawData: [],
+    waffleData: [],
+    neighborhoodData: [],
+    chartSelector: null,
+    legendSelector: null,
+    drawChart: function (neighborhood, clean) {
+        var total = 0;
+        var width,
+            height,
+            widthSquares = 10,
+            heightSquares = 10,
+            squareSize = 20,
+            squareValue = 0,
+            gap = 2,
+            thewaffle = [];
 
-    var total = 0;
-    var width,
-        height,
-        widthSquares = 10,
-        heightSquares = 10,
-        squareSize = 20,
-        squareValue = 0,
-        gap = 2,
-        thewaffle = [];
 
+        var color = d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']); //COLORI
 
-    var color = d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']); //COLORI
-
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then(data => {
-        let neighborhood = 'BONDONE';
-
-        let thedata = []
-        data.forEach(function (row) {
+        let waffleData = []
+        this.rawData.forEach(function (row) {
             if (row.Neighborhood === neighborhood) {
                 Object.keys(row).slice(1, 6).forEach(function (tree) {
-                    thedata.push({ 'Tree': tree, 'Abundance': row[tree] });
+                    waffleData.push({ 'Tree': tree, 'Abundance': parseInt(row[tree]) });
                 })
             }
         });
 
-        total = d3.sum(thedata, function (d) { return d.Abundance; });
+        total = d3.sum(waffleData, function (d) { return d.Abundance; });
+
+        if (!total || !this.chartSelector) {
+            return;
+        }
 
         //value of a square
         squareValue = total / (widthSquares * heightSquares);
+
+        waffleData.forEach(function (d, i) {
+            let unit = parseFloat((d.Abundance / squareValue).toFixed(10));
+            d['Integer'] = Math.floor(unit);
+            d['Decimal'] = parseFloat((unit - Math.floor(unit)).toFixed(10));
+        })
+
         let mergedData = []
-        for (let i = 0; i < thedata.length; i++) {
-            let unit = parseFloat((thedata[i].Abundance / squareValue).toFixed(10));
+        for (let i = 0; i < waffleData.length; i++) {
+            let unit = parseFloat((waffleData[i].Abundance / squareValue).toFixed(10));
             mergedData[i] = [
-                thedata[i],
+                waffleData[i],
                 { "Integer": Math.floor(unit) },
                 { "Decimal": parseFloat((unit - Math.floor(unit)).toFixed(10)) }
             ].reduce(function (r, o) {
@@ -60,6 +73,7 @@ function DrawChartWaffle(chartSelector, legendSelector) {
                         squareValue: squareValue,
                         Units: d.Integer,
                         Abundance: d.Abundance,
+                        Tree: d.Tree,
                         GroupIndex: i
                     };
                 })
@@ -69,7 +83,13 @@ function DrawChartWaffle(chartSelector, legendSelector) {
         width = (squareSize * widthSquares) + widthSquares * gap + 25;
         height = (squareSize * heightSquares) + heightSquares * gap + 25;
 
-        var waffle = d3.select(chartSelector)
+        const waffle = d3.select(this.chartSelector);
+
+        if (clean) {
+            waffle.html('')
+        }
+
+        waffle
             .append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -95,11 +115,18 @@ function DrawChartWaffle(chartSelector, legendSelector) {
             })
             .append("title")
             .text(function (d, i) {
-                return thedata[d.GroupIndex].Tree + ": " + d.Abundance + " (" + d.Units + "%)"
+                return d.Tree + ": " + d.Abundance + " (" + d.Units + "%)"
             });
 
+        this.drawLegend()
+    },
+    drawLegend: function () {
+        if (!this.legendSelector) {
+            return;
+        }
+
         //add legend with categorical waffle
-        var legend = d3.select(legendSelector)
+        const legend = d3.select(this.legendSelector)
             .append("svg")
             .attr('width', 300)
             .attr('height', 200)
@@ -120,16 +147,42 @@ function DrawChartWaffle(chartSelector, legendSelector) {
             .attr("x", 25)
             .attr("y", 13)
             .text(d => d.Tree);
+    },
+    drawNeighborhoods: function (selector) {
+        self = this;
+
+        this.neighborhoodData.forEach(function (d, _) {
+            const input = $(document.createElement("input"))
+                .attr('type', 'radio')
+                .attr('name', 'neighborhood')
+                .attr('value', d)
+                .attr('id', d)
+                .on('change', (e) => self.drawChart($(e.currentTarget).attr('value'), true))
+
+            const label = $(document.createElement("label"))
+                .attr('for', d)
+                .html(d + '<br>')
+
+            $(selector).append(input);
+            $(selector).append(label);
+        })
+
+    }
+
+};
+
+$(document).ready(async function () {
+    waffleObject.rawData = await d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv")
+
+    waffleObject.chartSelector = '.all-charts';
+
+    waffleObject.rawData.forEach(function (d, _) {
+        waffleObject.neighborhoodData.push(d.Neighborhood)
+        waffleObject.drawChart(d.Neighborhood);
     });
-}
 
-$(document).ready(function () {
-    $(window).resize();
-});
+    waffleObject.drawNeighborhoods('.neighborhoods')
 
-$(window).resize(function () {
-    //if (currentWidth !== window.innerWidth) {
-    //currentWidth = window.innerWidth;
-    DrawChartWaffle('.chart', '.legend');
-    //}
+    waffleObject.chartSelector = '.chart';
+    waffleObject.legendSelector = '.legend';
 });
