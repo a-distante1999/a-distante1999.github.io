@@ -12,12 +12,14 @@ header {
     padding-top: 1em;
 }
 
-h1,h2,h3{
+h1,
+h2,
+h3 {
     font-family: "Roboto Slab", sans-serif;
     text-align: center;
 }
 
-h1{
+h1 {
     max-width: fit-content;
     padding: 5px 15px;
     margin-left: auto;
@@ -30,7 +32,9 @@ h1{
     outline: none;
 }
 
-h4,h5,h6 {
+h4,
+h5,
+h6 {
     font-family: "Roboto Slab", sans-serif;
 }
 
@@ -47,7 +51,8 @@ section {
     max-width: 700px;
 }
 
-p,a {
+p,
+a {
     font-family: "Fira Sans", sans-serif;
     text-align: justify;
 }
@@ -61,6 +66,10 @@ header div {
 ul {
     padding-inline-start: 0px;
     list-style: none;
+}
+
+li {
+    padding: .5rem;
 }
 
 .button {
@@ -77,10 +86,6 @@ ul {
     text-align: center;
 }
 
-.text-center {
-    text-align: center;
-}
-
 .tooltip {
     position: fixed;
     border: 1px solid;
@@ -91,7 +96,7 @@ ul {
     padding: 5px;
 }
 
-@media only screen and (max-width: 1200px){
+@media only screen and (max-width: 1200px) {
     section {
         min-width: 500px;
         width: fit-content;

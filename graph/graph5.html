@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco-Benefit Project</title>
-    <link rel="stylesheet" type="text/css" href="../css/Group7.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
+    <link rel="stylesheet" type="text/css" href="../css/Group7.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+    <script src="../js/graph5.js"></script>
 </head>
 
 <body>
@@ -17,153 +19,14 @@
         <h1>GRAPH V - WAFFLE CHARTS (DA FINIRE)</h1>
     </header>
     <div class="content text-center">
-        <div id="waffle"></div>
-        <div id="legend"></div>
+        <div class="chart"></div>
+        <div class="legend"></div>
     </div>
+    <hr>
+    <div class="content text-center">
+        <div class="all-charts"></div>
+    </div>
+
 </body>
-
-<script>
-    var total = 0;
-    var width,
-        height,
-        widthSquares = 10,
-        heightSquares = 10,
-        squareSize = 20,
-        squareValue = 0,
-        gap = 2,
-        thewaffle = [];
-
-    var color = d3.scaleOrdinal(d3.schemeCategory10); //COLORI
-
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv").then(data => {
-        let neighborhood = 'BONDONE';
-        //MEANO no
-        //BONDONE ok
-        //SARDAGNA non contiene nessun albero
-        //ARGENTARIO ok
-        //S.GIUSEPPE-S.CHIARA ok
-        //POVO ok
-        //RAVINA-ROMAGNANO no
-        //MATTARELLO ok
-        //VILLAZZANO ok
-        //OLTREFERSINA ok
-        //GARDOLO ok
-        //CENTRO STORICO PIEDICASTELLO ok
-        
-        let thedata = []
-        data.forEach(function (row) {
-            if (row.Neighborhood === neighborhood) {
-                Object.keys(row).slice(1, 6).forEach(function (tree) {
-                    thedata.push({ 'Tree': tree, 'Abundance': row[tree] });
-                })
-            }
-        });
-
-        total = d3.sum(thedata, function (d) { return d.Abundance; });
-
-        //value of a square
-        squareValue = total / (widthSquares * heightSquares);
-        let mergedData = []
-        for (let i = 0; i < thedata.length; i++) {
-            let unit = parseFloat((thedata[i].Abundance / squareValue).toFixed(10));
-            mergedData[i] = [
-                thedata[i],
-                {"Integer": Math.floor(unit)},
-                {"Decimal": parseFloat((unit - Math.floor(unit)).toFixed(10))}
-            ].reduce(function (r, o) {
-                Object.keys(o).forEach(function (k) { r[k] = o[k]; });
-                return r;
-            }, {});
-        }
-        mergedData.sort(function (a, b) {
-            return b.Decimal- a.Decimal;
-        });
-
-        let tot = d3.sum(mergedData, function (d) { return d.Integer; });
-
-        for (let i = 0; i < 100 - tot; i++) {
-            mergedData[i].Integer += 1
-        }
-
-        //remap waffle
-        mergedData.forEach(function (d, i) {
-            console.log(d)
-            d.Abundance = +d.Abundance;
-            thewaffle = thewaffle.concat(
-                Array(d.Integer+ 1).join(1).split('').map(function () {
-                    return {
-                        squareValue: squareValue,
-                        Units: d.Integer,
-                        Abundance: d.Abundance,
-                        GroupIndex: i
-
-                    };
-
-                })
-            );
-        });
-
-        width = (squareSize * widthSquares) + widthSquares * gap + 25;
-        height = (squareSize * heightSquares) + heightSquares * gap + 25;
-
-        var waffle = d3.select("#waffle")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("transform", "rotate(90)")
-            .append("g")
-            .selectAll("div")
-            .data(thewaffle)
-            .enter()
-            .append("rect")
-            .attr("width", squareSize)
-            .attr("height", squareSize)
-            .attr("fill", function (d) {
-                return color(d.GroupIndex);
-            })
-            .attr("x", function (d, i) {
-                //group n squares for column
-                col = Math.floor(i / heightSquares);
-                return (col * squareSize) + (col * gap);
-            })
-            .attr("y", function (d, i) {
-                row = i % heightSquares;
-                return (heightSquares * squareSize) - ((row * squareSize) + (row * gap))
-            })
-            .append("title")
-            .text(function (d, i) {
-                return thedata[d.GroupIndex].Tree + ": " + d.Abundance + " (" + d.Units + "%)"
-            });
-
-        /*
-        var mydiv = $("#legend"); 
-        mydiv.css('margin-top', '50px').css('clear', 'none')
-        */
-       
-        //add legend with categorical waffle
-        var legend = d3.select("#legend")
-            .append("svg")
-            .attr('width', 300)
-            .attr('height', 200)
-            .append('g')
-            .attr("font-family", "Fira Sans")
-            .selectAll("div")
-            .data(thedata)
-            .enter()
-            .append("g")
-            .attr('transform', function (d, i) { return "translate(0," + i * 20 + ")"; });
-
-        legend.append("rect")
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", function (d, i) { return color(i) });
-
-        legend.append("text")
-            .attr("x", 25)
-            .attr("y", 13)
-            .text(d => d.Tree);
-
-    });
-</script>
 
 </html>
