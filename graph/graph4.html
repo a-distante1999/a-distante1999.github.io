@@ -72,6 +72,20 @@
                 .keys(subNeighborhoods)
                 (data)
 
+            //TOOLTIP
+
+
+            const tooltip = d3.select(element) //La definizione di questa classe è nel css
+                .append("div")
+                .attr("class", "tooltip")
+                .style("display", "none");
+
+            // Three function that change the tooltip when user hover / move / leave a cell
+
+
+
+
+
             // Show the bars
             svg.append("g")
                 .selectAll("g")
@@ -79,8 +93,6 @@
                 .join("g")
                 .attr("fill", d => color(d.key))
                 .attr("class", d => "myRect " + d.key)
-                // .attr("stroke", "black")    //Colore del bordo
-                // .attr("stroke-width", ".5") //Spessore bordo
                 .selectAll("rect")
                 .data(d => d)
                 .join("rect")
@@ -89,12 +101,22 @@
                 .attr("width", d => x(d[1]) - x(d[0]))
                 .attr("height", y.bandwidth())
                 .attr("stroke", "grey")
+                //.on("mousemove", mousemove)
+
 
 
                 .on("mouseover", function (event, d) { // What happens when user hover a bar
 
                     // what subgroup are we hovering?
                     const subGroupName = d3.select(this.parentNode).datum().key
+                    const subgroupValue = d.data[subGroupName];
+                    let valueCut = subgroupValue
+                    valueCut = parseFloat(valueCut).toFixed(2);
+                    let tree = subGroupName.replaceAll('_', ' ');
+
+                    tooltip
+                        .html("Tree: " + tree + "<br>" + "Percentage: " + (valueCut) + "%")
+                        .style("display", "block");
 
                     // Reduce opacity of all rect to 0.2
                     d3.selectAll(".myRect").style("opacity", 0.2)
@@ -102,13 +124,25 @@
                     // Highlight all rects of this subgroup with opacity 1. It is possible to select them since they have a specific class = their name.
                     d3.selectAll("." + subGroupName)
                         .style("opacity", 1)
+
+                })
+                .on("mousemove", function (event, d) { // When user do not hover anymore
+
+                    let height = parseFloat(tooltip.style('height')); //Serve ad agganciare il fumetto nell'angolo in basso a sx
+
+                    tooltip
+                        .style("left", (event.x) + "px")
+                        .style("top", (event.y - height) + "px")
                 })
                 .on("mouseleave", function (event, d) { // When user do not hover anymore
 
                     // Back to normal opacity: 1
                     d3.selectAll(".myRect")
                         .style("opacity", 1)
+                    tooltip.style("display", "none");
                 })
+
+
             console.log(data);
             // Legend
             if (bool == 0) {
