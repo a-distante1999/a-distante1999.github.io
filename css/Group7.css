@@ -12,9 +12,26 @@ header {
     padding-top: 1em;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,h2,h3{
     font-family: "Roboto Slab", sans-serif;
     text-align: center;
+}
+
+h1{
+    max-width: fit-content;
+    padding: 5px 15px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #7aa8b7;
+    border-radius: 6px;
+    outline: none;
+}
+
+h4,h5,h6 {
+    font-family: "Roboto Slab", sans-serif;
 }
 
 div.content {
@@ -44,6 +61,16 @@ header div {
 ul {
     padding-inline-start: 0px;
     list-style: none;
+}
+
+.button {
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #7aa8b7;
+    border-radius: 6px;
+    outline: none;
 }
 
 .text-center {
