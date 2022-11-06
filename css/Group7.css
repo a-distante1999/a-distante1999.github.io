@@ -1,6 +1,7 @@
 body {
     background-color: rgba(0, 0, 0, .05);
-    /*rgb(243, 243, 243)*/
+    padding: 0;
+    margin: 0;
 }
 
 header {
@@ -39,8 +40,7 @@ h6 {
 }
 
 div.content {
-    padding-bottom: 5em;
-    /*rgb(251, 251, 251)*/
+    padding-bottom: 3em;
 }
 
 section {
@@ -55,6 +55,10 @@ p,
 a {
     font-family: "Fira Sans", sans-serif;
     text-align: justify;
+}
+
+header p {
+    text-align: center;
 }
 
 header div {

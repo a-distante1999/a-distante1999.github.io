@@ -126,9 +126,9 @@ function DrawChartNeighborhoods(element) {
 
         const legend = d3.select(element)
             .append("svg")
-            .style('margin-top', '50px')
-            .attr('width', 300)
-            .attr('height', 200)
+            .style('padding-top', '2rem')
+            .attr('width', 270)
+            .attr('height', 100)
             .append('g')
             .selectAll("div")
             .data(subgroups)

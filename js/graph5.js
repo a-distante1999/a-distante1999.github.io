@@ -113,7 +113,7 @@ const waffleObject = {
         const legend = d3.select(selector)
             .html('')
             .append("svg")
-            .style('padding-top', '10px')
+            .style('padding-top', '2rem')
             .attr('width', 270)
             .attr('height', 100)
             .append('g')
@@ -171,7 +171,7 @@ const waffleObject = {
 $(document).ready(async function () {
     waffleObject.rawData = await d3.csv("/csv/geo_data_trees_neighborhoods.csv")
 
-    waffleObject.rawData.forEach(function (d, _) {
+    waffleObject.rawData.forEach(function (d) {
         waffleObject.drawChart('.all-charts', d.Neighborhood);
     });
 
