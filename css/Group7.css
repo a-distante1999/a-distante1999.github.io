@@ -72,6 +72,14 @@ li {
     padding: .5rem;
 }
 
+.font-fira {
+    font-family: "Fira Sans", sans-serif;
+}
+
+.font-roboto {
+    font-family: "Roboto Slab", sans-serif
+}
+
 .button {
     padding: 5px 15px;
     text-align: center;
@@ -84,7 +92,6 @@ li {
 
 .text-center {
     text-align: center;
-    padding-top: 50px;
 }
 
 .tooltip {
@@ -109,17 +116,6 @@ li {
     }
 }
 
-.neighborhoods {
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
-    height: 300px;
-    width: 300px;
-}
-
-.single-chart {
-    display: inline-block;
-    vertical-align: middle;
-    height: 300px;
-    width: 500px;
+.pt-50 {
+    padding-top: 50px;
 }

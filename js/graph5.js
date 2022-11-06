@@ -78,25 +78,26 @@ const waffleObject = {
             );
         });
 
-        width = (squareSize * widthSquares) + widthSquares * gap + 25;
-        height = (squareSize * heightSquares) + heightSquares * gap + 25;
+        width = (squareSize * widthSquares) + widthSquares * gap;
+        height = (squareSize * heightSquares) + heightSquares * gap;
 
         const waffle = d3.select(selector);
 
         if (clean) {
             waffle.html('')
         }
-            waffle
+
+
+        waffle
             .append("div")
-            .style("width", "280px")
-            .style("height", "270px")
+            .style("width", "250px")
             .style("float", "left")
             .text(neighborhood)
             .append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("transform", "rotate(90)")
-         
+
             .append("g")
             .selectAll("div")
             .data(thewaffle)
@@ -132,10 +133,10 @@ const waffleObject = {
         const legend = d3.select(selector)
             .html('')
             .append("svg")
-            .attr('width', 300)
-            .attr('height', 200)
+            .style('padding-top', '10px')
+            .attr('width', 270)
+            .attr('height', 100)
             .append('g')
-            .attr("font-family", "Fira Sans")
             .selectAll("div")
             .data(data)
             .enter()
@@ -150,7 +151,7 @@ const waffleObject = {
         legend.append("text")
             .attr("x", 25)
             .attr("y", 13)
-            .text(d => d.Tree);
+            .text(d => d.Tree.replaceAll('_', ' '));
     },
     //DISEGNA LA LISTA CON I BOTTONI
     drawNeighborhoods: function (selector) {
@@ -177,7 +178,6 @@ const waffleObject = {
                 }
 
                 const label = $(document.createElement("label"))
-                    .attr("font-family", "Fira Sans")
                     .attr('for', row.Neighborhood)
                     .html(row.Neighborhood + '<br>')
 

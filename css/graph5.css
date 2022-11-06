@@ -1,0 +1,8 @@
+.neighborhoods,
+.single-chart {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    height: 300px;
+    width: 300px;
+}
