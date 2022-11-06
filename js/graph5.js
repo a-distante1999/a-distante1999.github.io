@@ -99,7 +99,7 @@ const waffleObject = {
             })
             .append("title")
             .text(function (d, i) {
-                return d.Tree.replaceAll('_', ' ') + ": " + d.Abundance + " (" + d.Units + "%)"
+                return d.Tree + ": " + d.Abundance + " (" + d.Units + "%)"
             });
     },
     drawLegend: function (selector, neighborhood) {
@@ -131,7 +131,7 @@ const waffleObject = {
         legend.append("text")
             .attr("x", 25)
             .attr("y", 13)
-            .text(d => d.Tree.replaceAll('_', ' '));
+            .text(d => d.Tree);
     },
     //DISEGNA LA LISTA CON I BOTTONI
     drawNeighborhoods: function (selector) {
