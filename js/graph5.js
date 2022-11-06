@@ -1,10 +1,18 @@
 const waffleObject = {
     rawData: [],
-    waffleData: [],
-    neighborhoodData: [],
-    chartSelector: null,
-    legendSelector: null,
-    drawChart: function (neighborhood, clean) {
+    generateColor: d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']),
+    getNeighborhoodData: function (neighborhood) {
+        let data = []
+        this.rawData.forEach(function (row) {
+            if (row.Neighborhood === neighborhood) {
+                Object.keys(row).slice(1, 6).forEach(function (tree) {
+                    data.push({ 'Tree': tree, 'Abundance': parseInt(row[tree]) });
+                })
+            }
+        });
+        return data;
+    },
+    drawChart: function (selector, neighborhood, clean) {
         var total = 0;
         var width,
             height,
@@ -15,21 +23,11 @@ const waffleObject = {
             gap = 2,
             thewaffle = [];
 
-
-        var color = d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']); //COLORI
-
-        let waffleData = []
-        this.rawData.forEach(function (row) {
-            if (row.Neighborhood === neighborhood) {
-                Object.keys(row).slice(1, 6).forEach(function (tree) {
-                    waffleData.push({ 'Tree': tree, 'Abundance': parseInt(row[tree]) });
-                })
-            }
-        });
+        let waffleData = this.getNeighborhoodData(neighborhood);
 
         total = d3.sum(waffleData, function (d) { return d.Abundance; });
 
-        if (!total || !this.chartSelector) {
+        if (!total || !selector) {
             return;
         }
 
@@ -83,7 +81,7 @@ const waffleObject = {
         width = (squareSize * widthSquares) + widthSquares * gap + 25;
         height = (squareSize * heightSquares) + heightSquares * gap + 25;
 
-        const waffle = d3.select(this.chartSelector);
+        const waffle = d3.select(selector);
 
         if (clean) {
             waffle.html('')
@@ -101,9 +99,7 @@ const waffleObject = {
             .append("rect")
             .attr("width", squareSize)
             .attr("height", squareSize)
-            .attr("fill", function (d) {
-                return color(d.GroupIndex);
-            })
+            .attr("fill", d => this.generateColor(d.GroupIndex))
             .attr("x", function (d, i) {
                 //group n squares for column
                 col = Math.floor(i / heightSquares);
@@ -120,20 +116,23 @@ const waffleObject = {
 
         this.drawLegend()
     },
-    drawLegend: function () {
-        if (!this.legendSelector) {
+    drawLegend: function (selector, neighborhood) {
+        if (!selector) {
             return;
         }
 
+        let data = this.getNeighborhoodData(neighborhood);
+
         //add legend with categorical waffle
-        const legend = d3.select(this.legendSelector)
+        const legend = d3.select(selector)
+            .html('')
             .append("svg")
             .attr('width', 300)
             .attr('height', 200)
             .append('g')
             .attr("font-family", "Fira Sans")
             .selectAll("div")
-            .data(thedata)
+            .data(data)
             .enter()
             .append("g")
             .attr('transform', function (d, i) { return "translate(0," + i * 20 + ")"; });
@@ -141,7 +140,7 @@ const waffleObject = {
         legend.append("rect")
             .attr("width", 18)
             .attr("height", 18)
-            .style("fill", function (d, i) { return color(i) });
+            .style("fill", (d, i) => this.generateColor(i));
 
         legend.append("text")
             .attr("x", 25)
@@ -149,39 +148,48 @@ const waffleObject = {
             .text(d => d.Tree);
     },
     drawNeighborhoods: function (selector) {
-        self = this;
+        this.rawData.forEach((row, index) => {
+            // Estraggo i dati relativi alla circoscrizione
+            let data = this.getNeighborhoodData(row.Neighborhood);
+            // Verifico se la circoscrizione contiene alberi al suo interno
+            let total = d3.sum(data, function (d) { return d.Abundance; });
 
-        this.neighborhoodData.forEach(function (d, _) {
-            const input = $(document.createElement("input"))
-                .attr('type', 'radio')
-                .attr('name', 'neighborhood')
-                .attr('value', d)
-                .attr('id', d)
-                .on('change', (e) => self.drawChart($(e.currentTarget).attr('value'), true))
+            if (total > 0) {
+                // Se ci sono alberi allora creo il selettore
+                const input = $(document.createElement("input"))
+                    .attr('type', 'radio')
+                    .attr('name', 'neighborhood')
+                    .attr('value', row.Neighborhood)
+                    .attr('id', row.Neighborhood)
+                    .on('change', (e) => {
+                        this.drawChart('.chart', $(e.currentTarget).attr('value'), true)
+                        this.drawLegend('.legend', row.Neighborhood)
+                    })
 
-            const label = $(document.createElement("label"))
-                .attr("font-family", "Fira Sans")
-                .attr('for', d)
-                .html(d + '<br>')
+                if (index == 0) {
+                    input.attr('checked', '')
+                }
 
-            $(selector).append(input);
-            $(selector).append(label);
-        })
+                const label = $(document.createElement("label"))
+                    .attr("font-family", "Fira Sans")
+                    .attr('for', row.Neighborhood)
+                    .html(row.Neighborhood + '<br>')
+
+                $(selector).append(input);
+                $(selector).append(label);
+            }
+        });
     }
 };
 
 $(document).ready(async function () {
     waffleObject.rawData = await d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv")
 
-    waffleObject.chartSelector = '.all-charts';
-
     waffleObject.rawData.forEach(function (d, _) {
-        waffleObject.neighborhoodData.push(d.Neighborhood)
-        waffleObject.drawChart(d.Neighborhood);
+        waffleObject.drawChart('.all-charts', d.Neighborhood);
     });
 
     waffleObject.drawNeighborhoods('.neighborhoods')
 
-    waffleObject.chartSelector = '.chart';
-    waffleObject.legendSelector = '.legend';
+    $('.neighborhoods').find('input').first().trigger('change');
 });
