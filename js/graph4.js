@@ -7,7 +7,7 @@ const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right -
 
 function DrawChartNeighborhoodsPercentage(chartSelector, legendSelector) {
     d3.csv("/csv/geo_data_trees_neighborhoods_percentage.csv").then(function (data) {
-        const subNeighborhoods = data.columns.slice()
+        const subNeighborhoods = data.columns.slice(1)
         const Neighborhoods = data.map(d => (d.Neighborhood))
         const height = getHeight(data);
         const width = getWidth(chartSelector);
