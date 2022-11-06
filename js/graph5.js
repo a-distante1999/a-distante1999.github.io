@@ -93,18 +93,16 @@ const waffleObject = {
 
             waffle
             .append("div")
-            .style("width", "250px")
-            .style("height", "300px")
+            .style("width", "280px")
+            .style("height", "270px")
             .style("float", "left")
-           
             .text(neighborhood)
-
-           
             .append("svg")
             // .style("margin-left", "-100px")
             .attr("width", width)
             .attr("height", height)
             .attr("transform", "rotate(90)")
+         
             .append("g")
             .selectAll("div")
             .data(thewaffle)
