@@ -123,6 +123,28 @@ function DrawChartNeighborhoods(element) {
             .delay(function (d, i) {
                 return (i * 75)
             })
+
+        const legend = d3.select(element)
+            .append("svg")
+            .style('margin-top', '50px')
+            .attr('width', 300)
+            .attr('height', 200)
+            .append('g')
+            .selectAll("div")
+            .data(subgroups)
+            .enter()
+            .append("g")
+            .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
+
+        legend.append("rect")
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", (d, i) => color(i));
+
+        legend.append("text")
+            .attr("x", 25)
+            .attr("y", 13)
+            .text(d => d);
     });
 }
 

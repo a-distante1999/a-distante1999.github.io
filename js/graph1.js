@@ -64,22 +64,21 @@ function DrawChartCategories(element) {
 
             tooltip
                 .style("left", (event.x) + "px")
-                .style("top", (event.y - height) + "px")
+                .style("top", (event.y - (height * 3 / 2)) + "px")
         }
 
         const mouseleave = function (event, d) {
             tooltip.style("display", "none");
         }
-        
-        var myColor = d3.scaleSequential().domain([0,100])
-        .interpolator(d3.interpolateRainbow);
-        
+
+        const myColor = d3.scaleSequential().domain([0, 100])
+            .interpolator(d3.interpolateRainbow);
 
         // Show the bars
         svg.selectAll("mybar")
             .data(data)
             .join("rect")
-            .attr("fill", "#377eb8")
+            .attr("fill", d => myColor(Math.floor(d.Abundance) / 2329 * 100))
             .attr("x", d => x(0))
             .attr("y", d => y(d.Name))
             //.attr("width", d => x(d.Abundance))
