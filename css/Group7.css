@@ -84,6 +84,7 @@ li {
 
 .text-center {
     text-align: center;
+    padding-top: 50px;
 }
 
 .tooltip {
@@ -104,5 +105,21 @@ li {
         margin-left: auto;
         padding-left: 0em;
         padding-right: 0em;
+
     }
+}
+
+.neighborhoods {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+    height: 300px;
+    width: 300px;
+}
+
+.single-chart {
+    display: inline-block;
+    vertical-align: middle;
+    height: 300px;
+    width: 500px;
 }

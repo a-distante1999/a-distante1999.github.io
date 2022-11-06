@@ -115,7 +115,7 @@ const waffleObject = {
             })
             .append("title")
             .text(function (d, i) {
-                return d.Tree + ": " + d.Abundance + " (" + d.Units + "%)"
+                return d.Tree.replaceAll('_', ' ') + ": " + d.Abundance + " (" + d.Units + "%)"
             });
 
         this.drawLegend()
@@ -160,15 +160,14 @@ const waffleObject = {
                 .on('change', (e) => self.drawChart($(e.currentTarget).attr('value'), true))
 
             const label = $(document.createElement("label"))
+                .attr("font-family", "Fira Sans")
                 .attr('for', d)
                 .html(d + '<br>')
 
             $(selector).append(input);
             $(selector).append(label);
         })
-
     }
-
 };
 
 $(document).ready(async function () {
