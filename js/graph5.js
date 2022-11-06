@@ -13,66 +13,51 @@ const waffleObject = {
         return data;
     },
     drawChart: function (selector, neighborhood, clean) {
-        var total = 0;
-        var width,
+        let width,
             height,
             widthSquares = 10,
             heightSquares = 10,
             squareSize = 20,
-            squareValue = 0,
-            gap = 2,
-            thewaffle = [];
+            gap = 2;
 
-        let waffleData = this.getNeighborhoodData(neighborhood);
+        let data = this.getNeighborhoodData(neighborhood);
 
-        total = d3.sum(waffleData, function (d) { return d.Abundance; });
+        let total = d3.sum(data, function (d) { return d.Abundance; });
 
         if (!total || !selector) {
             return;
         }
 
         //value of a square
-        squareValue = total / (widthSquares * heightSquares);
+        let squareValue = total / (widthSquares * heightSquares);
 
-        waffleData.forEach(function (d, i) {
-            let unit = parseFloat((d.Abundance / squareValue).toFixed(10));
-            d['Integer'] = Math.floor(unit);
-            d['Decimal'] = parseFloat((unit - Math.floor(unit)).toFixed(10));
-        })
+        for (let i = 0; i < data.length; i++) {
+            let unit = parseFloat((data[i].Abundance / squareValue).toFixed(10));
+            let integer = Math.floor(unit);
 
-        let mergedData = []
-        for (let i = 0; i < waffleData.length; i++) {
-            let unit = parseFloat((waffleData[i].Abundance / squareValue).toFixed(10));
-            mergedData[i] = [
-                waffleData[i],
-                { "Integer": Math.floor(unit) },
-                { "Decimal": parseFloat((unit - Math.floor(unit)).toFixed(10)) }
-            ].reduce(function (r, o) {
-                Object.keys(o).forEach(function (k) { r[k] = o[k]; });
-                return r;
-            }, {});
+            data[i]['Integer'] = integer;
+            data[i]['Decimal'] = parseFloat((unit - integer).toFixed(10));
         }
-        mergedData.sort(function (a, b) {
+
+        data.sort(function (a, b) {
             return b.Decimal - a.Decimal;
         });
 
-        let tot = d3.sum(mergedData, function (d) { return d.Integer; });
+        let tot = d3.sum(data, function (d) { return d.Integer; });
 
         for (let i = 0; i < 100 - tot; i++) {
-            mergedData[i].Integer += 1
+            data[i].Integer += 1
         }
 
         //remap waffle
-        mergedData.forEach(function (d, i) {
-            d.Abundance = +d.Abundance;
-            thewaffle = thewaffle.concat(
+        let waffleData = [];
+        data.forEach(function (d, i) {
+            waffleData = waffleData.concat(
                 Array(d.Integer + 1).join(1).split('').map(function () {
                     return {
-                        squareValue: squareValue,
                         Units: d.Integer,
                         Abundance: d.Abundance,
-                        Tree: d.Tree,
-                        GroupIndex: i
+                        Tree: d.Tree
                     };
                 })
             );
@@ -87,7 +72,6 @@ const waffleObject = {
             waffle.html('')
         }
 
-
         waffle
             .append("div")
             .style("width", "250px")
@@ -96,15 +80,14 @@ const waffleObject = {
             .attr("width", width)
             .attr("height", height)
             .attr("transform", "rotate(90)")
-
             .append("g")
             .selectAll("div")
-            .data(thewaffle)
+            .data(waffleData)
             .enter()
             .append("rect")
             .attr("width", squareSize)
             .attr("height", squareSize)
-            .attr("fill", d => this.generateColor(d.GroupIndex))
+            .attr("fill", d => this.generateColor(d.Tree))
             .attr("x", function (d, i) {
                 //group n squares for column
                 col = Math.floor(i / heightSquares);
@@ -118,8 +101,6 @@ const waffleObject = {
             .text(function (d, i) {
                 return d.Tree.replaceAll('_', ' ') + ": " + d.Abundance + " (" + d.Units + "%)"
             });
-
-        this.drawLegend()
     },
     drawLegend: function (selector, neighborhood) {
         if (!selector) {
@@ -140,12 +121,12 @@ const waffleObject = {
             .data(data)
             .enter()
             .append("g")
-            .attr('transform', function (d, i) { return "translate(0," + i * 20 + ")"; });
+            .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
 
         legend.append("rect")
             .attr("width", 18)
             .attr("height", 18)
-            .style("fill", (d, i) => this.generateColor(i));
+            .style("fill", d => this.generateColor(d.Tree));
 
         legend.append("text")
             .attr("x", 25)
