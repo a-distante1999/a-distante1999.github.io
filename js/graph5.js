@@ -12,7 +12,10 @@ const waffleObject = {
         });
         return data;
     },
+
     drawChart: function (selector, neighborhood, clean) {
+
+
         var total = 0;
         var width,
             height,
@@ -86,9 +89,22 @@ const waffleObject = {
         if (clean) {
             waffle.html('')
         }
+        waffle
+
+            .append("a")
+            .text(neighborhood)
+            .attr("width", "50px")
 
         waffle
+
+            //.style("width", "350px")
+            // .style("margin-left", "0px")
+            //.style("margin-right", "0px")
+            //.style("height", "100px")
+            //.style("padding", "center")
+
             .append("svg")
+            .style("margin-left", "-100px")
             .attr("width", width)
             .attr("height", height)
             .attr("transform", "rotate(90)")
@@ -147,6 +163,8 @@ const waffleObject = {
             .attr("y", 13)
             .text(d => d.Tree);
     },
+
+    //DISEGNA LA LISTA CON I BOTTONI
     drawNeighborhoods: function (selector) {
         this.rawData.forEach((row, index) => {
             // Estraggo i dati relativi alla circoscrizione
