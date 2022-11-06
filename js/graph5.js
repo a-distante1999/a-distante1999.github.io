@@ -89,22 +89,19 @@ const waffleObject = {
         if (clean) {
             waffle.html('')
         }
-        waffle
 
-            .append("a")
+
+            waffle
+            .append("div")
+            .style("width", "250px")
+            .style("height", "300px")
+            .style("float", "left")
+           
             .text(neighborhood)
-            .attr("width", "50px")
 
-        waffle
-
-            //.style("width", "350px")
-            // .style("margin-left", "0px")
-            //.style("margin-right", "0px")
-            //.style("height", "100px")
-            //.style("padding", "center")
-
+           
             .append("svg")
-            .style("margin-left", "-100px")
+            // .style("margin-left", "-100px")
             .attr("width", width)
             .attr("height", height)
             .attr("transform", "rotate(90)")
