@@ -12,10 +12,7 @@ const waffleObject = {
         });
         return data;
     },
-
     drawChart: function (selector, neighborhood, clean) {
-
-
         var total = 0;
         var width,
             height,
@@ -160,7 +157,6 @@ const waffleObject = {
             .attr("y", 13)
             .text(d => d.Tree);
     },
-
     //DISEGNA LA LISTA CON I BOTTONI
     drawNeighborhoods: function (selector) {
         this.rawData.forEach((row, index) => {
