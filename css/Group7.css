@@ -106,7 +106,7 @@ li {
     background-color: white;
     transform: translate(7%, -7%) !important;
     font-family: "Fira Sans", sans-serif;
-    padding: 5px;
+    padding: 5px !important;
 }
 
 @media only screen and (max-width: 1200px) {
