@@ -80,17 +80,17 @@ function DrawChartCategories(chartSelector) {
         const mouseleave = function (event, d) {
             tooltip.style("display", "none");
         }
-
-        var myColor = d3.scaleSequential().domain([1, 600])
-            .interpolator(d3.interpolateYlGn);
-
+        
+        var myColor = d3.scaleSequential().domain([0,100])
+        .interpolator(d3.interpolateRainbow);
+        
 
         // Show the bars
         svg.selectAll("mybar")
             .data(data) //Quali sono i dati del grafico
             .join("rect")
             //.attr("fill", "rgb(12,240,233)") //Colore barretta
-            .attr("fill", function (d) { return myColor(Math.floor(d.Abundance)) })
+            .attr("fill", function(d){ return myColor(Math.floor( d.Abundance)/2329*100)})
             .attr("x", d => x(0))
             .attr("y", d => y(d.Name)) //Posizione della barra sull'asse y
             //.attr("width", d => x(d.Abundance))  Se metto solo questo, non fa l'animazione
