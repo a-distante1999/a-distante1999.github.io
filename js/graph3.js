@@ -48,7 +48,7 @@ const waffleObject = {
             .attr("text-anchor", "left")
             .text(category);
 
-        // X axis
+        // Add X axis
         const x = d3.scaleLinear()
             .domain([0, d3.max(data, d => d.Abundance)])
             .range([0, width]);
@@ -68,7 +68,7 @@ const waffleObject = {
             .selectAll('g')
             .style('display', labels ? 'block' : 'none');
 
-        // color palette = one color per subgroup
+        // Color palette = one color per subgroup
         const color = d3.scaleOrdinal()
             .domain(this.getCategories())
             .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
@@ -101,7 +101,6 @@ const waffleObject = {
             .attr("fill", d => color(category))
             .attr("x", d => x(0))
             .attr("y", d => y(d.Name))
-            //.attr("width", d => x(d.Abundance))
             .attr("height", d => y.bandwidth())
             .attr("stroke", "black")
             .attr("stroke-width", ".5")
@@ -113,10 +112,7 @@ const waffleObject = {
         svg.selectAll("rect")
             .transition()
             .duration(1000)
-            //.attr("x", d => x(0))
-            //.attr("y", d => y(d.Name))
             .attr("width", d => x(d.Abundance))
-            //.attr("height", d => y.bandwidth())
             .delay(function (d, i) {
                 return (i * 75)
             })

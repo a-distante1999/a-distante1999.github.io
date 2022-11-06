@@ -61,7 +61,6 @@ function DrawChartCategories(element) {
 
         const mousemove = function (event, d) {
             let height = parseFloat(tooltip.style('height'));
-
             tooltip
                 .style("left", (event.x) + "px")
                 .style("top", (event.y - (height * 3 / 2)) + "px")
@@ -81,7 +80,6 @@ function DrawChartCategories(element) {
             .attr("fill", d => myColor(Math.floor(d.Abundance) / 2329 * 100))
             .attr("x", d => x(0))
             .attr("y", d => y(d.Name))
-            //.attr("width", d => x(d.Abundance))
             .attr("height", d => y.bandwidth())
             .attr("stroke", "black")
             .attr("stroke-width", ".5")
@@ -93,10 +91,7 @@ function DrawChartCategories(element) {
         svg.selectAll("rect")
             .transition()
             .duration(1000)
-            //.attr("x", d => x(0))
-            //.attr("y", d => y(d.Name))
             .attr("width", d => x(d.Abundance))
-            //.attr("height", d => y.bandwidth())
             .delay(function (d, i) {
                 return (i * 75)
             })

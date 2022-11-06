@@ -14,7 +14,6 @@ function DrawChartNeighborhoodsPercentage(element) {
 
         // List of groups = species here = value of the first column called group -> I show them on the X axis
         const groups = data.map(d => (d.Neighborhood))
-
         const height = getHeight(data);
         const width = getWidth(element);
 
@@ -114,7 +113,6 @@ function DrawChartNeighborhoodsPercentage(element) {
             .join("rect")
             .attr("x", d => x(d[0]))
             .attr("y", d => y(d.data.Neighborhood))
-            //.attr("width", d => x(d[1]) - x(d[0]))
             .attr("height", y.bandwidth())
             .attr("stroke", "black")
             .attr("stroke-width", ".5")
@@ -126,10 +124,7 @@ function DrawChartNeighborhoodsPercentage(element) {
         svg.selectAll("rect")
             .transition()
             .duration(750)
-            //.attr("x", d => x(d[0]))
-            //.attr("y", d => y(d.data.Neighborhood))
             .attr("width", d => x(d[1]) - x(d[0]))
-            //.attr("height", y.bandwidth())
             .delay(function (d, i) {
                 return (i * 75)
             })

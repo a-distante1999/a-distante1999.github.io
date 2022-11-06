@@ -104,7 +104,6 @@ function DrawChartNeighborhoods(element) {
             .join("rect")
             .attr("x", d => x(d[0]))
             .attr("y", d => y(d.data.Neighborhood))
-            //.attr("width", d => x(d[1]) - x(d[0]))
             .attr("height", y.bandwidth())
             .attr("stroke", "black")
             .attr("stroke-width", ".5")
@@ -116,10 +115,7 @@ function DrawChartNeighborhoods(element) {
         svg.selectAll("rect")
             .transition()
             .duration(750)
-            //.attr("x", d => x(d[0]))
-            //.attr("y", d => y(d.data.Neighborhood))
             .attr("width", d => x(d[1]) - x(d[0]))
-            //.attr("height", y.bandwidth())
             .delay(function (d, i) {
                 return (i * 75)
             })
