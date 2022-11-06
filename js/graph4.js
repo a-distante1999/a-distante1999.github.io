@@ -6,7 +6,7 @@ const getHeight = (d) => parseFloat(d.length || d) * 30; //30 è l'altezza di og
 const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left; //
 
 function DrawChartNeighborhoodsPercentage(chartSelector, legendSelector) {
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods_percentage.csv").then(function (data) {
+    d3.csv("/csv/geo_data_trees_neighborhoods_percentage.csv").then(function (data) {
         const subNeighborhoods = data.columns.slice()
         const Neighborhoods = data.map(d => (d.Neighborhood))
         const height = getHeight(data);

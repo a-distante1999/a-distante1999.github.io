@@ -188,7 +188,7 @@ const waffleObject = {
 };
 
 $(document).ready(async function () {
-    waffleObject.rawData = await d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_neighborhoods.csv")
+    waffleObject.rawData = await d3.csv("/csv/geo_data_trees_neighborhoods.csv")
 
     waffleObject.rawData.forEach(function (d, _) {
         waffleObject.drawChart('.all-charts', d.Neighborhood);

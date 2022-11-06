@@ -6,7 +6,7 @@ const getHeight = (d) => parseFloat(d.length || d) * 30; //30 è l'altezza di og
 const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left; //
 
 function DrawChartCategories(chartSelector) {
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/csv/geo_data_trees_categories.csv").then(data => {
+    d3.csv("/csv/geo_data_trees_categories.csv").then(data => {
         // Trasformo i dati in int e float perchè all'inizio i dati sono considerati stringa
         data.forEach((d) => {
             d.Abundance = parseInt(d.Abundance);
@@ -80,17 +80,17 @@ function DrawChartCategories(chartSelector) {
         const mouseleave = function (event, d) {
             tooltip.style("display", "none");
         }
-        
-        var myColor = d3.scaleSequential().domain([1,600])
-        .interpolator(d3.interpolateYlGn);
-        
+
+        var myColor = d3.scaleSequential().domain([1, 600])
+            .interpolator(d3.interpolateYlGn);
+
 
         // Show the bars
         svg.selectAll("mybar")
             .data(data) //Quali sono i dati del grafico
             .join("rect")
             //.attr("fill", "rgb(12,240,233)") //Colore barretta
-            .attr("fill", function(d){ return myColor(Math.floor( d.Abundance))})
+            .attr("fill", function (d) { return myColor(Math.floor(d.Abundance)) })
             .attr("x", d => x(0))
             .attr("y", d => y(d.Name)) //Posizione della barra sull'asse y
             //.attr("width", d => x(d.Abundance))  Se metto solo questo, non fa l'animazione
