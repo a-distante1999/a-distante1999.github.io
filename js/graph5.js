@@ -91,7 +91,6 @@ const waffleObject = {
         waffle
             .append("div")
             .style("width", "250px")
-            .style("float", "left")
             .text(neighborhood)
             .append("svg")
             .attr("width", width)

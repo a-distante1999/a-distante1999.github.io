@@ -1,8 +1,15 @@
-.neighborhoods,
-.single-chart {
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
-    height: 300px;
-    width: 300px;
+.single-chart,
+.all-charts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.single-chart>div {
+    padding: 1.5rem;
+}
+
+.all-charts>div {
+    padding: 1rem;
 }

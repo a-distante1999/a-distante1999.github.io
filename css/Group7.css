@@ -91,7 +91,11 @@ li {
 }
 
 .text-center {
-    text-align: center;
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
 }
 
 .tooltip {
@@ -116,6 +120,10 @@ li {
     }
 }
 
-.pt-50 {
-    padding-top: 50px;
+.pt-5 {
+    padding-top: 5rem !important;
+}
+
+.pb-5 {
+    padding-bottom: 5rem !important;
 }
