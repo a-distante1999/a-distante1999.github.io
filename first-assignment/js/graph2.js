@@ -8,7 +8,7 @@ const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right -
 const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
 function DrawChartNeighborhoods(element) {
-    d3.csv("/csv/geo_data_trees_neighborhoods.csv").then(data => {
+    d3.csv("../csv/geo_data_trees_neighborhoods.csv").then(data => {
         // List of subgroups = header of the csv files = soil condition here
         const subgroups = data.columns.slice(1)
 

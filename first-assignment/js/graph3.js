@@ -120,7 +120,7 @@ const waffleObject = {
 };
 
 $(document).ready(async function () {
-    waffleObject.rawData = await d3.csv("/csv/geo_data_trees_neighborhoods.csv");
+    waffleObject.rawData = await d3.csv("../csv/geo_data_trees_neighborhoods.csv");
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {

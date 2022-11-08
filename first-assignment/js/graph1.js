@@ -6,7 +6,7 @@ const getHeight = (d) => parseFloat(d.length || d) * 30;
 const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left;
 
 function DrawChartCategories(element) {
-    d3.csv("/csv/geo_data_trees_categories.csv").then(data => {
+    d3.csv("../csv/geo_data_trees_categories.csv").then(data => {
         data.forEach((d) => {
             d.Abundance = parseInt(d.Abundance);
             d.Canopy = parseFloat(d.Canopy).toFixed(2);
