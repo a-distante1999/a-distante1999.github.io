@@ -1,18 +1,22 @@
 let currentWidth = 0;
+let minWidth = 0;
 
-const margin = { top: 40, right: 30, bottom: 30, left: 180 };
+const singleChart = '.single-container';
+const multiCharts = '.multi-container';
+const margin = { top: 30, right: 30, bottom: 0, left: 30 };
 
 const getHeight = (d) => parseFloat(d.length || d) * 30;
-const getWidth = (e) => parseFloat(d3.select(e).style('width')) - margin.right - margin.left;
 
 const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
-const waffleObject = {
+const object = {
     rawData: [],
-    getCategories: function () {
-        return waffleObject.rawData.columns.slice(1);
+    getSubgroups: function () {
+        return object.rawData.columns.slice(1);
     },
-    drawChart: function (selector, category, labels) {
+    drawChart: function (selector, category) {
+        const subgroups = this.getSubgroups()
+
         let data = []
         this.rawData.forEach((row, index) => {
             data[index] = { 'Name': row.Neighborhood };
@@ -23,39 +27,43 @@ const waffleObject = {
             });
         });
 
-        let newMargin = margin;
 
-        if (!labels) {
-            newMargin.left = newMargin.right;
+        // Incapsulo il selettore in un div
+        selector = d3.select(selector)
+            .append("div")
+            .attr("class", "container")
+            .node();
+
+
+        // Set chart dimensions
+        const height = getHeight(data);
+
+        // TODO: rivedere la width
+        const width = minWidth - 50 - margin.left - margin.right;
+
+        // Add tooltip
+        const tooltip = d3.select(selector)
+            .append("div")
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+        // Append the svg object
+        const svg = d3.select(selector)
+            .append("svg")
+            .attr("class", "bar-chart");
+
+        let title = null;
+
+        if (category) {
+            title = svg.append("text")
+                .attr("y", 10)
+                .attr("x", "50%")
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "middle")
+                .text(category);
         }
 
-        // set chart dimensions
-        const height = getHeight(data);
-        const width = getWidth(selector) / (this.getCategories().length + 3);
-
-        // append the svg object to the body of the page
-        const element = d3.select(selector)
-            .append("svg")
-            .attr("width", width + newMargin.left + newMargin.right)
-            .attr("height", height + newMargin.top + newMargin.bottom);
-
-        const svg = element.append("g")
-            .attr("transform", `translate(${newMargin.left},${newMargin.top})`);
-
-        const title = svg.append("text")
-            .attr("x", 0)
-            .attr("y", -10)
-            .attr("text-anchor", "left")
-            .text(category);
-
-        // Add X axis
-        const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Abundance)])
-            .range([0, width]);
-
-        svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickSizeOuter(0).ticks(3));
+        const chart = svg.append("g");
 
         // Add Y axis
         const y = d3.scaleBand()
@@ -63,71 +71,124 @@ const waffleObject = {
             .range([0, height])
             .padding([0.1]);
 
-        svg.append("g")
+        const yAxis = chart.append("g")
+            .attr("class", "y-axis")
             .call(d3.axisLeft(y).tickSizeOuter(0))
-            .selectAll('g')
-            .style('display', labels ? 'block' : 'none');
 
-        // Color palette = one color per subgroup
-        const color = d3.scaleOrdinal()
-            .domain(this.getCategories())
-            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+        const yWidth = !category ? yAxis.node().getBBox().width : 0;
 
-        const tooltip = d3.select(selector)
-            .append("div")
-            .attr("class", "tooltip")
-            .style("display", "none");
-
-        const mouseover = function (event, d) {
-            tooltip.html('Abundance: ' + d.Abundance)
-                .style("display", "block");
+        if (minWidth == 0) {
+            minWidth = (currentWidth - yWidth) / (subgroups.length);
         }
 
-        const mousemove = function (event, d) {
-            let height = parseFloat(tooltip.style('height'));
-            tooltip
-                .style("left", (event.x) + "px")
-                .style("top", (event.y - (height * 2)) + "px")
+        if (!category) {
+            // Mi serve per correggere successivamente l'altezza
+            this.yChart = svg;
+        }
+        else {
+            if (title) {
+                title.attr("transform", `translate(${yWidth}, 0)`)
+            }
+
+            // Add X axis
+            const x = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.Abundance)])
+                .range([0, width - yWidth]);
+
+            const xAxis = chart.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x).tickSizeOuter(0).ticks(3));
+
+            // Color palette
+            const color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+
+            // Tooltip timeout
+            let timeout = null;
+
+            // Clear tooltip timeout
+            const removeTimeout = () => {
+                if (timeout) {
+                    clearTimeout(timeout)
+                    timeout = null
+                }
+            }
+
+            const mouseover = (event, d) => {
+                // Show tooltip
+                tooltip.html('Abundance: ' + d.Abundance)
+                    .style("display", "block");
+            }
+
+            const mousemove = (event, d) => {
+                // Move tooltip near mouse pointer
+                tooltip
+                    .style("left", (event.x) + "px")
+                    .style("top", (event.y - (parseFloat(tooltip.style('height')) * 2)) + "px")
+            }
+
+            const mouseleave = (event, d) => {
+                removeTimeout();
+
+                // Add Tooltip timeout
+                timeout = setTimeout(() => {
+                    tooltip.style("display", "none");
+                }, 150);
+            }
+
+            // Show the bars
+            chart.append("g")
+                .selectAll("g")
+                .data(data)
+                .join("rect")
+                .attr("fill", d => color(category))
+                .attr("x", d => x(0))
+                .attr("y", d => y(d.Name))
+                .attr("height", d => y.bandwidth())
+                .attr("stroke", "black")
+                .attr("stroke-width", ".5")
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave)
+
+            // Animation
+            chart.selectAll("rect")
+                .transition()
+                .duration(1000)
+                .attr("width", d => x(d.Abundance))
+                .delay(function (d, i) {
+                    return (i * 75)
+                })
+
+            if (this.yChart) {
+                // Correggo l'altezza dell'asse delle Y
+                this.yChart.attr("height", chart.node().getBBox().height + margin.top + margin.bottom)
+            }
         }
 
-        const mouseleave = function (event, d) {
-            tooltip.style("display", "none");
-        }
+        // Fix svg dimension
+        svg.attr("width", chart.node().getBBox().width + margin.left + (category ? margin.right : 0))
+            .attr("height", chart.node().getBBox().height + margin.top + margin.bottom);
 
-        // Show the bars
-        svg.selectAll("mybar")
-            .data(data)
-            .join("rect")
-            .attr("fill", d => color(category))
-            .attr("x", d => x(0))
-            .attr("y", d => y(d.Name))
-            .attr("height", d => y.bandwidth())
-            .attr("stroke", "black")
-            .attr("stroke-width", ".5")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
-
-        // Animation
-        svg.selectAll("rect")
-            .transition()
-            .duration(1000)
-            .attr("width", d => x(d.Abundance))
-            .delay(function (d, i) {
-                return (i * 75)
-            })
+        // Fix y-axis position
+        chart.attr("transform", `translate(${yWidth + margin.left},${margin.top})`)
     }
 };
 
 $(document).ready(async function () {
-    waffleObject.rawData = await d3.csv("../csv/geo_data_trees_neighborhoods.csv");
+    object.rawData = await d3.csv("/first-assignment/csv/geo_data_trees_neighborhoods.csv");
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $('.all-charts').html('');
-            waffleObject.getCategories().forEach(function (category, i) {
-                waffleObject.drawChart('.all-charts', category, i === 0);
+            $(multiCharts).html('');
+            // Disegno l'asse delle Y
+            object.drawChart(multiCharts);
+            // Disegno tutti i grafici
+            object.getSubgroups().forEach(function (category) {
+                object.drawChart(multiCharts, category);
             });
         }
     });

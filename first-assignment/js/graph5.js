@@ -1,6 +1,14 @@
-const waffleObject = {
+const margin = { top: 30, right: 30, bottom: 0, left: 30 };
+
+const singleChart = '.single-container';
+const multiCharts = '.multi-container';
+const listNeighborhoods = '.list-neighborhoods';
+
+const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
+
+const object = {
     rawData: [],
-    generateColor: d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']),
+    getColor: d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']),
     getNeighborhoodData: function (neighborhood) {
         let data = []
         this.rawData.forEach(function (row) {
@@ -12,84 +20,149 @@ const waffleObject = {
         });
         return data;
     },
-    drawChart: function (selector, neighborhood, clean) {
-        let width,
-            height,
-            widthSquares = 10,
+    drawChart: function (selector, neighborhood, full) {
+        const widthSquares = 10,
             heightSquares = 10,
             squareSize = 20,
             gap = 2;
 
-        let data = this.getNeighborhoodData(neighborhood);
+        let neighborhoodData = this.getNeighborhoodData(neighborhood);
 
-        let total = d3.sum(data, function (d) { return d.Abundance; });
+        let total = d3.sum(neighborhoodData, function (d) { return d.Abundance; });
 
         if (!total || !selector) {
             return;
         }
 
-        //value of a square
+        // Valore del quadratino
         let squareValue = total / (widthSquares * heightSquares);
 
-        for (let i = 0; i < data.length; i++) {
+        let data = []
+        for (let i = 0; i < neighborhoodData.length; i++) {
+            // Copio i dati
+            data[i] = { ...neighborhoodData[i] }
+
             let unit = parseFloat((data[i].Abundance / squareValue).toFixed(10));
             let integer = Math.floor(unit);
 
+            // Aggiungo info ulteriori
             data[i]['Integer'] = integer;
             data[i]['Decimal'] = parseFloat((unit - integer).toFixed(10));
         }
 
+        // Ordino per parte decimale
         data.sort(function (a, b) {
             return b.Decimal - a.Decimal;
         });
 
         let tot = d3.sum(data, function (d) { return d.Integer; });
 
+        // Aggiungo gli elementi mancati per raggiungere il totale
         for (let i = 0; i < 100 - tot; i++) {
             data[i].Integer += 1
         }
 
-        //remap waffle
-        let waffleData = [];
+        // Creo i quadratini del waffle
+        let waffleSquares = [];
         data.forEach(function (d, i) {
-            waffleData = waffleData.concat(
+            waffleSquares = waffleSquares.concat(
                 Array(d.Integer + 1).join(1).split('').map(function () {
                     return {
                         Units: d.Integer,
                         Abundance: d.Abundance,
-                        Tree: d.Tree
+                        Tree: d.Tree,
+                        /*Random: numberToWords.toWords((Math.random() * 5).toFixed(0))*/
                     };
                 })
             );
         });
 
-        width = (squareSize * widthSquares) + widthSquares * gap;
-        height = (squareSize * heightSquares) + heightSquares * gap;
+        // Set chart dimensions
+        const width = (squareSize * widthSquares) + widthSquares * gap;
+        const height = (squareSize * heightSquares) + heightSquares * gap;
 
-        const waffle = d3.select(selector);
-
-        if (clean) {
-            waffle.html('')
+        if (!full) {
+            // Incapsulo il selettore in un div
+            selector = d3.select(selector)
+                .append("div")
+                .attr("class", "container")
+                .node();
         }
 
-        waffle
+        // Add tooltip
+        const tooltip = d3.select(selector)
             .append("div")
-            .style("width", "250px")
-            .text(neighborhood)
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+        let timeout = null;
+
+        const removeTimeout = () => {
+            if (timeout) {
+                clearTimeout(timeout)
+                timeout = null
+            }
+        }
+
+        const mouseover = (event, d) => {
+            removeTimeout();
+
+            d3.selectAll(".myRect").style("opacity", 0.2)
+
+            d3.selectAll("." + sanitizeString(d.Tree)).style("opacity", 1)
+
+            tooltip.html(d.Tree + ": " + d.Abundance + " (" + d.Units + "%)")
+                .style("display", "block");
+        }
+
+        const mousemove = (event, d) => {
+            let height = parseFloat(tooltip.style('height'));
+
+            tooltip
+                .style("left", (event.x) + "px")
+                .style("top", (event.y - (height * 2)) + "px")
+        }
+
+        const mouseleave = (event, d) => {
+            removeTimeout();
+
+            timeout = setTimeout(() => {
+                d3.selectAll(".myRect")
+                    .style("opacity", 1)
+
+                tooltip.style("display", "none")
+            }, 150)
+        }
+
+        d3.selectAll(".waffle-chart")
+            .style("display", "block")
+
+        d3.selectAll("." + sanitizeString(neighborhood))
+            .style("display", "none")
+
+        const chart = d3.select(selector)
             .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("transform", "rotate(90)")
-            .append("g")
+            .attr("class", d => "waffle-chart " + sanitizeString(neighborhood))
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+
+        const title = chart.append("text")
+            .attr("y", 10)
+            .attr("x", "50%")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .text(neighborhood);
+
+        chart.append("g")
+            .attr("transform", `translate(${width + (margin.left + margin.right) / 2},${margin.top}) rotate(90)`)
             .selectAll("div")
-            .data(waffleData)
+            .data(waffleSquares)
             .enter()
             .append("rect")
-            .attr("width", squareSize)
+            .attr("class", (d, i) => "myRect " + sanitizeString(d.Tree) /*+ " " + sanitizeString(d.Random)*/)
             .attr("height", squareSize)
-            .attr("fill", d => this.generateColor(d.Tree))
+            .attr("fill", d => this.getColor(d.Tree))
             .attr("x", function (d, i) {
-                //group n squares for column
                 col = Math.floor(i / heightSquares);
                 return (col * squareSize) + (col * gap);
             })
@@ -97,85 +170,102 @@ const waffleObject = {
                 row = i % heightSquares;
                 return (heightSquares * squareSize) - ((row * squareSize) + (row * gap))
             })
-            .append("title")
-            .text(function (d, i) {
-                return d.Tree + ": " + d.Abundance + " (" + d.Units + "%)"
-            });
-    },
-    drawLegend: function (selector, neighborhood) {
-        if (!selector) {
-            return;
-        }
+            .attr("width", squareSize) // Commentare per l'animazione
+            .attr("stroke", "black")
+            .attr("stroke-width", ".5")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
 
-        let data = this.getNeighborhoodData(neighborhood);
-
-        //add legend with categorical waffle
-        const legend = d3.select(selector)
-            .html('')
-            .append("svg")
-            .style('padding-top', '2rem')
-            .attr('width', 270)
-            .attr('height', 100)
-            .append('g')
-            .selectAll("div")
-            .data(data)
-            .enter()
-            .append("g")
-            .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
-
-        legend.append("rect")
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", d => this.generateColor(d.Tree));
-
-        legend.append("text")
-            .attr("x", 25)
-            .attr("y", 13)
-            .text(d => d.Tree);
-    },
-    //DISEGNA LA LISTA CON I BOTTONI
-    drawNeighborhoods: function (selector) {
-        this.rawData.forEach((row, index) => {
-            // Estraggo i dati relativi alla circoscrizione
-            let data = this.getNeighborhoodData(row.Neighborhood);
-            // Verifico se la circoscrizione contiene alberi al suo interno
-            let total = d3.sum(data, function (d) { return d.Abundance; });
-
-            if (total > 0) {
-                // Se ci sono alberi allora creo il selettore
-                const input = $(document.createElement("input"))
-                    .attr('type', 'radio')
-                    .attr('name', 'neighborhood')
-                    .attr('value', row.Neighborhood)
-                    .attr('id', row.Neighborhood)
-                    .on('change', (e) => {
-                        this.drawChart('.chart', $(e.currentTarget).attr('value'), true)
-                        this.drawLegend('.legend', row.Neighborhood)
-                    })
-
-                if (index == 0) {
-                    input.attr('checked', '')
-                }
-
-                const label = $(document.createElement("label"))
-                    .attr('for', row.Neighborhood)
-                    .html(row.Neighborhood + '<br>')
-
-                $(selector).append(input);
-                $(selector).append(label);
+        /*let randoms = []
+        waffleSquares.forEach((d) => {
+            if (!randoms.find(random => random == d.Random)) {
+                randoms.push(d.Random)
             }
         });
+
+        // Animazione
+        randoms.forEach((random) => {
+            // Animation
+            chart.selectAll("." + sanitizeString(random))
+                .transition()
+                .duration(100)
+                .attr("width", squareSize)
+                .delay(function (d, i) {
+                    return (i * 75)
+                })
+        })*/
+
+        if (full) {
+            const svg = d3.select(selector)
+                .append("svg")
+                .attr("class", d => "legend");
+
+            const legend = svg.append('g');
+
+            const rows = legend.selectAll("g")
+                .data(neighborhoodData)
+                .join("g")
+                .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
+
+
+            rows.append("rect")
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", (d) => this.getColor(d.Tree));
+
+            rows.append("text")
+                .attr("x", 25)
+                .attr("y", 15)
+                .text(d => d.Tree);
+
+            // Fix svg dimension
+            svg.attr("width", legend.node().getBBox().width)
+                .attr("height", legend.node().getBBox().height);
+        }
     }
 };
 
 $(document).ready(async function () {
-    waffleObject.rawData = await d3.csv("../csv/geo_data_trees_neighborhoods.csv")
+    object.rawData = await d3.csv("/first-assignment/csv/geo_data_trees_neighborhoods.csv")
 
-    waffleObject.rawData.forEach(function (d) {
-        waffleObject.drawChart('.all-charts', d.Neighborhood);
+    // Disegno la lista delle circoscrizioni
+    object.rawData.forEach((row, index) => {
+        // Estraggo i dati relativi alla circoscrizione
+        let data = object.getNeighborhoodData(row.Neighborhood);
+        // Verifico se la circoscrizione contiene alberi al suo interno
+        let total = d3.sum(data, function (d) { return d.Abundance; });
+
+        if (total > 0) {
+            // Se ci sono alberi allora creo il selettore
+            const input = $(document.createElement("input"))
+                .attr('type', 'radio')
+                .attr('name', 'neighborhood')
+                .attr('value', row.Neighborhood)
+                .attr('id', row.Neighborhood)
+                .on('change', (e) => {
+                    $(singleChart).html('');
+                    object.drawChart(singleChart, $(e.target).attr('value'), true)
+                })
+
+            if (index == 0) {
+                input.attr('checked', '')
+            }
+
+            const label = $(document.createElement("label"))
+                .attr('for', row.Neighborhood)
+                .html(row.Neighborhood + '<br>')
+
+            $(listNeighborhoods).append(input);
+            $(listNeighborhoods).append(label);
+        }
     });
 
-    waffleObject.drawNeighborhoods('.neighborhoods')
+    // Disegno i grafici di tutte le circoscrizioni
+    object.rawData.forEach(function (d) {
+        object.drawChart(multiCharts, d.Neighborhood);
+    });
 
-    $('.neighborhoods').find('input').first().trigger('change');
+    // Disegno la prima circoscrizione della lista
+    $(listNeighborhoods).find('input').first().trigger('change');
 });

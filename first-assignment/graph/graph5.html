@@ -6,32 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco-Benefit Project</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
-    <link rel="stylesheet" type="text/css" href="../../css-style/Group7.css">
-    <link rel="stylesheet" type="text/css" href="/css/graph5.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
-    <script src="../js/graph5.js"></script>
+    <link rel="stylesheet" type="text/css" href="/vendor/css/robotoSlab.css">
+    <link rel="stylesheet" type="text/css" href="/vendor/css/firaSans.css">
+    <link rel="stylesheet" type="text/css" href="/css/ecoBenefit.css">
+    <link rel="stylesheet" type="text/css" href="/first-assignment/css/graph5.css">
+    <script type="text/javascript" src="/vendor/js/d3.v7.min.js"></script>
+    <script type="text/javascript" src="/vendor/js/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="/vendor/js/numberToWords.min.js"></script> -->
+    <script type="text/javascript" src="/first-assignment/js/graph5.js"></script>
 </head>
 
 <body>
-    <header>
+    <header class="text-center">
         <h1>GRAPH V - WAFFLE CHARTS</h1>
-        <p>The 'Sardagna' district was excluded from the representations as it does not contain any of the trees
-            considered below.</p>
+        <p class="text-center mt-2 mb-2">
+            The 'Sardagna' district was excluded from the representations as it does not contain any of the trees
+            considered below.
+        </p>
     </header>
-    <div class="content text-center font-fira pb-5">
-        <div class="single-chart">
-            <div class="neighborhoods text-left"></div>
-            <div class="chart"></div>
-            <div class="legend"></div>
+    <section>
+        <div class="display-flex align-items-center justify-content-center">
+            <div class="list-neighborhoods"></div>
+            <div class="display-flex align-items-center justify-content-center single-container"></div>
         </div>
-    </div>
-    <hr>
-    <div class="content text-center font-fira pt-5">
-        <div class="all-charts"></div>
-    </div>
+        <hr>
+        <div class="display-flex justify-content-center multi-container"></div>
+    </section>
 </body>
 
 </html>
