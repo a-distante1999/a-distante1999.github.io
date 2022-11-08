@@ -1,0 +1,117 @@
+body {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 3rem 0;
+    margin: 0;
+}
+
+p,
+a,
+section {
+    font-family: "Fira Sans", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Roboto Slab", sans-serif;
+}
+
+ul {
+    padding-inline-start: 0;
+    list-style: none;
+}
+
+li {
+    padding: 0.5rem;
+}
+
+h1,
+.button {
+    max-width: fit-content;
+    margin: 0 auto;
+    padding: 0.25rem 0.75rem;
+    text-decoration: none;
+    color: white;
+    background-color: #7aa8b7;
+    border-radius: 6px;
+}
+
+.section {
+    max-width: 768px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.tooltip {
+    position: fixed;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    opacity: 1 !important;
+    background-color: white;
+    transform: translate(7%, -7%);
+    padding: 0.5rem !important;
+    z-index: 1 !important;
+}
+
+.legend {
+    padding-top: 2rem;
+}
+
+.display-flex {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.font-fira {
+    font-family: "Fira Sans", sans-serif !important;
+}
+
+.font-roboto {
+    font-family: "Roboto Slab", sans-serif !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-justify {
+    text-align: justify !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.pt-3 {
+    padding-top: 3rem !important;
+}
+
+.pb-3 {
+    padding-bottom: 3rem !important;
+}
+
+.mt-2 {
+    margin-top: 2rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 2rem !important;
+}
+
+@media only screen and (max-width: 768px) {
+    body {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+}

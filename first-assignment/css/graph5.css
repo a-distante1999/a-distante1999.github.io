@@ -1,15 +1,30 @@
-.single-chart,
-.all-charts {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+.display-flex,
+.single-container,
+.multi-container {
+    row-gap: 2rem;
+    column-gap: 5rem;
 }
 
-.single-chart>div {
-    padding: 1.5rem;
+.multi-container {
+    column-gap: 0;
 }
 
-.all-charts>div {
-    padding: 1rem;
+hr {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    margin: 3rem 1rem;
+}
+
+.legend {
+    padding-top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .multi-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    hr {
+        margin: 3rem 0;
+    }
 }

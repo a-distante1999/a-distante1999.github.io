@@ -1,10 +1,11 @@
-.all-charts {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+.multi-container .container:first-child .x-axis {
+    display: none;
 }
 
-.all-charts>div {
-    padding: 1rem;
+.multi-container .container:first-child .y-axis path {
+    display: none;
+}
+
+.multi-container .container:not(:first-child) .y-axis g {
+    display: none;
 }
