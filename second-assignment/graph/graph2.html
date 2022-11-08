@@ -37,14 +37,14 @@
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/PROVA_2.csv").then(function (dataTOT) {
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/heights.csv").then(function (dataTOT) {
 
         //var data = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9, 9, 5, 4, 3, 5, 4, 3]
 
 
 
         dataTOT.forEach(function (d, i) {
-            data[i] = parseInt(d.height);
+            data[i] = parseInt(d.Height);
         });
 
 
@@ -66,7 +66,7 @@
 
         // Show the Y scale
         var y = d3.scaleLinear()
-            .domain([0, d3.max(data)])
+            .domain([0, 50])
             .range([height, 0]);
         svg.call(d3.axisLeft(y))
 

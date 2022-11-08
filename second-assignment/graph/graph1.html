@@ -42,11 +42,11 @@
             `translate(${margin.left},${margin.top})`);
 
     // get the data
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/PROVA_2.csv").then(function (data) {
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/heights.csv").then(function (data) {
 
         // X axis: scale and draw:
         const x = d3.scaleLinear()
-            .domain([0, d3.max(data, function (d) { return +d.height })])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+            .domain([0, 50])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
             .range([0, width]);
         svg.append("g")
             .attr("transform", `translate(0,${height})`)
@@ -62,7 +62,7 @@
 
             // set the parameters for the histogram
             const histogram = d3.histogram()
-                .value(function (d) { return d.height; })   // I need to give the vector of value
+                .value(function (d) { return d.Height; })   // I need to give the vector of value
                 .domain(x.domain())  // then the domain of the graphic
                 .thresholds(x.ticks(nBin)); // then the numbers of bins
 
