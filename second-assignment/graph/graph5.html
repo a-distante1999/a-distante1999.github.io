@@ -49,7 +49,7 @@
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Read the data
-    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/4_ThreeNum.csv").then(function (data) {
+    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/quinto_graph_prova.csv").then(function (data) {
 
         // Add X axis
         const x = d3.scaleLinear()
@@ -73,7 +73,7 @@
 
         // Add a scale for bubble color
         const myColor = d3.scaleOrdinal()
-            .domain(["Asia", "Europe", "Americas", "Africa", "Oceania"])
+            //.domain(["Abete", "Pino", "Salice", "Betulla", "Ciliegio", "Pesca", "Quercia",])
             .range(d3.schemeSet2);
 
         // -1- Create a tooltip div that is hidden by default:
@@ -93,7 +93,7 @@
                 .duration(200)
             tooltip
                 .style("opacity", 1)
-                .html("Country: " + d.country)
+                .html("Country: " + d.Name)
                 .style("left", (event.x) / 2 + "px")
                 .style("top", (event.y) / 2 + 30 + "px")
         }
@@ -115,10 +115,10 @@
             .data(data)
             .join("circle")
             .attr("class", "bubbles")
-            .attr("cx", d => x(d.gdpPercap))
-            .attr("cy", d => y(d.lifeExp))
-            .attr("r", d => z(d.pop))
-            .style("fill", d => myColor(d.continent))
+            .attr("cx", d => x(d.Height))
+            .attr("cy", d => y(d.Carbon_storage_kg))
+            .attr("r", d => z(d.canopy_size))
+            .style("fill", d => myColor(d.Name))
             // -3- Trigger the functions
             .on("mouseover", showTooltip)
             .on("mousemove", moveTooltip)
