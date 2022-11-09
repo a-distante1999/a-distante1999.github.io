@@ -9,7 +9,7 @@ const getWidth = (e) => parseFloat(d3.select(e).style('width'));
 const object = {
     rawData: [],
     drawChart: function (selector) {
-        // Unisco i dati per specie di albero 
+        // Unisco i dati per specie di albero
         let data = [];
         this.rawData.forEach(row => {
             // Struttura base (il + è come fare parseFloat)
