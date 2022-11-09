@@ -27,13 +27,11 @@ const object = {
             });
         });
 
-
         // Incapsulo il selettore in un div
         selector = d3.select(selector)
             .append("div")
             .attr("class", "container")
             .node();
-
 
         // Set chart dimensions
         const height = getHeight(data);
