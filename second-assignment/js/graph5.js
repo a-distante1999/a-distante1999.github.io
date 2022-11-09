@@ -51,34 +51,25 @@ $(document).ready(function () {
         // -1- Create a tooltip div that is hidden by default:
         const tooltip = d3.select(".single-container")
             .append("div")
-            .style("opacity", 0)
             .attr("class", "tooltip")
-            .style("background-color", "black")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-            .style("color", "white")
+            .style("display", "none");
 
         // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
         const showTooltip = function (event, d) {
             tooltip
-                .transition()
-                .duration(200)
-            tooltip
-                .style("opacity", 1)
-                .html(d.Name)
-                .style("left", (event.x) / 2 + "px")
-                .style("top", (event.y) / 2 + 30 + "px")
+                .html(d["Name"])
+                .style("display", "block")
         }
+
         const moveTooltip = function (event, d) {
             tooltip
-                .style("left", (event.x) / 2 + "px")
-                .style("top", (event.y) / 2 + 30 + "px")
+                .style("left", (event.x) + "px")
+                .style("top", (event.y - (parseFloat(tooltip.style('height')) * 2)) + "px")
         }
+
         const hideTooltip = function (event, d) {
             tooltip
-                .transition()
-                .duration(200)
-                .style("opacity", 0)
+                .style("display", "none")
         }
 
         // Add dots
