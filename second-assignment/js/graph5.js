@@ -1,8 +1,3 @@
-/**
- * TODO: Fare la media di "Height (m)", "Carbon Storage (kg)" e "Canopy Cover (m2)" per ogni specie
- * TODO: Alla fine avro circa 200 palline (una per ogni specie) 
-*/
-
 $(document).ready(function () {
     // Set margins of the graph
     const margin = { top: 30, right: 30, bottom: 30, left: 60 };
@@ -20,15 +15,50 @@ $(document).ready(function () {
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Read the data
-    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (data) {
-        const groups = data.map(d => (d["Name"]));
-        const categories = groups.filter((value, index, self) => self.indexOf(value) === index).sort((a, b) => a > b)
+    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (rawData) {
+        // Unisco i dati per specie di albero 
+        let data = [];
+        rawData.forEach(row => {
+            // Struttura base
+            obj = {
+                "Name": row["Name"],
+                "Abundance": 1,
+                "Height": +row["Height (m)"],
+                "Carbon": +row["Carbon Storage (kg)"],
+                "Canopy": +row["Canopy Cover (m2)"]
+            }
 
-        console.log(categories)
+            // Cerco nei dati se esiste già quella specie di albero
+            if (element = data.find(d => d["Name"] == obj["Name"])) {
+                // Sommo i valori tra l'elemento già salvato e quello nuovo
+                Object.keys(element).slice(1).forEach((key) => {
+                    element[key] += +obj[key]
+                });
+            }
+            else {
+                // Aggiungo il nuovo elemento
+                data.push(obj);
+            }
+        });
+
+        // Eseguo la media dei valori
+        data.forEach(row => {
+            // Skippo le prime 2 chiavi che sono "Name" e "Abundance"
+            Object.keys(row).slice(2).forEach((key) => {
+                row[key] /= row["Abundance"]
+            });
+        })
+
+        // Valore massimo scala delle X
+        const xMax = d3.max(data, d => d["Height"]);
+        // Valore massimo scala delle Y
+        const yMax = d3.max(data, d => d["Carbon"]);
+        // Valore massimo scala delle Z
+        const zMax = d3.max(data, d => d["Canopy"]);
 
         // Add X axis
         const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d["Height (m)"])]) //SCALA ASSE X
+            .domain([0 - (xMax / 20), xMax + (xMax / 20)])
             .range([0, width]);
 
         svg.append("g")
@@ -37,7 +67,7 @@ $(document).ready(function () {
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d["Carbon Storage (kg)"])]) //SCALA ASSE Y
+            .domain([0 - (yMax / 20), yMax + (yMax / 20)])
             .range([height, 0]);
 
         svg.append("g")
@@ -45,13 +75,14 @@ $(document).ready(function () {
 
         // Add a scale for bubble size
         const z = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d["Canopy Cover (m2)"])])
+            .domain([0 - (zMax / 20), zMax + (zMax / 20)])
             .range([4, 20]);
 
+
         // Add a scale for bubble color
-        const myColor = d3.scaleOrdinal()
-            .domain(categories)
-            .range(d3.schemeSet2);
+        const color = function (i) {
+            return d3.interpolateWarm(i / data.length)
+        };
 
         // -1- Create a tooltip div that is hidden by default:
         const tooltip = d3.select(".single-container")
@@ -92,10 +123,10 @@ $(document).ready(function () {
             .attr("class", "bubbles")
             .attr("stroke", "black")
             .attr("stroke-width", "0")
-            .attr("cx", d => x(d["Height (m)"]))
-            .attr("cy", d => y(d["Carbon Storage (kg)"]))
-            .attr("r", d => z(d["Canopy Cover (m2)"]))
-            .style("fill", d => myColor(d["Name"]))
+            .attr("cx", d => x(d["Height"]))
+            .attr("cy", d => y(d["Carbon"]))
+            .attr("r", d => z(d["Canopy"]))
+            .style("fill", (d, i) => color(i))
             // -3- Trigger the functions
             .on("mouseover", showTooltip)
             .on("mousemove", moveTooltip)
