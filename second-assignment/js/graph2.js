@@ -1,48 +1,47 @@
 $(document).ready(function () {
+    // Set margins of the graph
+    const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
-    data = [];
-    // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 30, bottom: 30, left: 40 },
-        width = 400 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    // Set chart dimensions
+    const height = 600 - margin.top - margin.bottom;
+    const width = 600 - margin.left - margin.right;
 
     // append the svg object to the body of the page
-    var svg = d3.select(".single-container")
+    const svg = d3.select(".single-container")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/heights.csv").then(function (dataTOT) {
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        dataTOT.forEach(function (d, i) {
-            data[i] = parseInt(d.Height);
+    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (rawData) {
+        let data = [];
+        rawData.forEach(function (d, i) {
+            data[i] = parseInt(d["Height (m)"]);
         });
 
-
         // Compute summary statistics used for the box:
-        var data_sorted = data.sort(d3.ascending)
-        var q1 = d3.quantile(data_sorted, .25)
-        var median = d3.quantile(data_sorted, .5)
-        var q3 = d3.quantile(data_sorted, .75)
-        var interQuantileRange = q3 - q1
-        var min = q1 - 1.5 * interQuantileRange
-        var max = q1 + 1.5 * interQuantileRange
+        const dataSorted = data.sort(d3.ascending)
+        const q1 = d3.quantile(dataSorted, .25)
+        const median = d3.quantile(dataSorted, .5)
+        const q3 = d3.quantile(dataSorted, .75)
+        const interQuantileRange = q3 - q1
+        const min = q1 - 1.5 * interQuantileRange
+        const max = q1 + 1.5 * interQuantileRange
 
         // Show the Y scale
-        var y = d3.scaleLinear()
-            .domain([min * 1.1, max * 1.1])
+        const y = d3.scaleLinear()
+            .domain([min * 1.75, max * 1.25])
             .range([height, 0]);
+
         svg.call(d3.axisLeft(y))
 
         // a few features for the box
-        var center = 200
-        var width = 100
+        const center = 200
+        const width = 100
 
         // Show the main vertical line
-        svg
-            .append("line")
+        svg.append("line")
             .attr("x1", center)
             .attr("x2", center)
             .attr("y1", y(min))
@@ -50,8 +49,7 @@ $(document).ready(function () {
             .attr("stroke", "black")
 
         // Show the box
-        svg
-            .append("rect")
+        svg.append("rect")
             .attr("x", center - width / 2)
             .attr("y", y(q3))
             .attr("height", (y(q1) - y(q3)))
@@ -60,8 +58,7 @@ $(document).ready(function () {
             .style("fill", "#69b3a2")
 
         // show median, min and max horizontal lines
-        svg
-            .selectAll("toto")
+        svg.selectAll("toto")
             .data([min, median, max])
             .enter()
             .append("line")

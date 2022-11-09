@@ -1,9 +1,11 @@
 $(document).ready(function () {
+    // Set margins of the graph
+    const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
-    // set the dimensions and margins of the graph
-    const margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    // Set chart dimensions
+    const height = 600 - margin.top - margin.bottom;
+    const width = 600 - margin.left - margin.right;
+
     // append the svg object to the body of the page
     const svg = d3.select(".single-container")
         .append("svg")
@@ -12,23 +14,22 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
-    //Read the data
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/quarto_graph_prova.csv").then(function (data) {
-
+    // Read the data
+    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (data) {
         // Add X axis
         const x = d3.scaleLinear()
-            .domain([0, 0])
+            .domain([0, d3.max(data, d => +d["Height (m)"])])
             .range([0, width]);
+
         svg.append("g")
-            .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
             .attr("transform", `translate(0, ${height})`)
             .call(d3.axisBottom(x))
-            .attr("opacity", "0")
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, 500000])
+            .domain([0, d3.max(data, d => +d["Carbon Storage (kg)"])])
             .range([height, 0]);
+
         svg.append("g")
             .call(d3.axisLeft(y));
 
@@ -38,24 +39,9 @@ $(document).ready(function () {
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", function (d) { return x(d.Height); })
-            .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
+            .attr("cx", function (d) { return x(d["Height (m)"]); })
+            .attr("cy", function (d) { return y(d["Carbon Storage (kg)"]); })
             .attr("r", 1.5)
             .style("fill", "#69b3a2")
-
-        // new X axis
-        x.domain([0, 4000])
-        svg.select(".myXaxis")
-            .transition()
-            .duration(2000)
-            .attr("opacity", "1")
-            .call(d3.axisBottom(x));
-
-        svg.selectAll("circle")
-            .transition()
-            .delay(function (d, i) { return (i * 3) })
-            .duration(2000)
-            .attr("cx", function (d) { return x(d.Height); })
-            .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
     })
 })

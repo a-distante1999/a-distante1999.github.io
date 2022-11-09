@@ -1,10 +1,7 @@
 let currentWidth = 0;
 
 const singleChart = '.single-container';
-const margin = { top: 10, right: 30, bottom: 30, left: 40 };
-
-const getHeight = (d) => parseFloat(d.length || d) * 30;
-const getWidth = (e) => parseFloat(d3.select(e).style('width'));
+const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
 const object = {
     rawData: [],
@@ -16,8 +13,8 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = 400 * 2 - margin.top - margin.bottom;
-        const width = 460 * 2 - margin.left - margin.right;
+        const height = 600 - margin.top - margin.bottom;
+        const width = 600 - margin.left - margin.right;
 
         // Add the svg object
         const svg = d3.select(selector)
@@ -45,10 +42,9 @@ const object = {
 
         // A function that builds the graph for a specific value of bin
         function update(nBin) {
-
             // set the parameters for the histogram
             const histogram = d3.histogram()
-                .value(function (d) { return d.Height; })   // I need to give the vector of value
+                .value(function (d) { return d["Height (m)"]; })   // I need to give the vector of value
                 .domain(x.domain())  // then the domain of the graphic
                 .thresholds(x.ticks(nBin)); // then the numbers of bins
 
@@ -57,8 +53,8 @@ const object = {
 
             // Y axis: update now that we know the domain
             y.domain([0, d3.max(bins, function (d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
-            yAxis
-                .transition()
+
+            yAxis.transition()
                 .duration(1000)
                 .call(d3.axisLeft(y));
 
@@ -79,19 +75,16 @@ const object = {
 
         // Initialize with 20 bins
         update(20)
+
         // Listen to the button -> update if user change it
         d3.select("#nBin").on("input", function () {
             update(+this.value);
         });
-
-
-
     }
-
 }
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv("/second-assignment/csv/heights.csv");
+    object.rawData = await d3.csv("/second-assignment/csv/geo_data_trees_full.csv");
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
@@ -103,4 +96,3 @@ $(document).ready(async function () {
 
     $(window).resize();
 });
-

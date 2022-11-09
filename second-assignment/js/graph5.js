@@ -1,9 +1,10 @@
 $(document).ready(function () {
+    // Set margins of the graph
+    const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
-    // set the dimensions and margins of the graph
-    const margin = { top: 10, right: 20, bottom: 30, left: 50 },
-        width = 500 - margin.left - margin.right,
-        height = 420 - margin.top - margin.bottom;
+    // Set chart dimensions
+    const height = 600 - margin.top - margin.bottom;
+    const width = 600 - margin.left - margin.right;
 
     // append the svg object to the body of the page
     const svg = d3.select(".single-container")
@@ -14,35 +15,41 @@ $(document).ready(function () {
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Read the data
-    d3.csv("https://raw.githubusercontent.com/a-distante1999/a-distante1999.github.io/main/second-assignment/csv/quinto_graph_prova.csv").then(function (data) {
+    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (data) {
+        const groups = data.map(d => (d["Name"]));
+        const categories = groups.filter((value, index, self) => self.indexOf(value) === index).sort((a, b) => a > b)
+
+        console.log(categories)
 
         // Add X axis
         const x = d3.scaleLinear()
-            .domain([0, 20]) //SCALA ASSE X
+            .domain([0, d3.max(data, d => +d["Height (m)"])]) //SCALA ASSE X
             .range([0, width]);
+
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(d3.axisBottom(x));
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, 25]) //SCALA ASSE Y
+            .domain([0, d3.max(data, d => +d["Carbon Storage (kg)"])]) //SCALA ASSE Y
             .range([height, 0]);
+
         svg.append("g")
             .call(d3.axisLeft(y));
 
         // Add a scale for bubble size
         const z = d3.scaleLinear()
-            .domain([0, 10])
-            .range([4, 40]);
+            .domain([0, d3.max(data, d => +d["Canopy Cover (m2)"])])
+            .range([4, 20]);
 
         // Add a scale for bubble color
         const myColor = d3.scaleOrdinal()
-            .domain(["Abete", "Pino", "Salice", "Betulla", "Ciliegio", "Pesca", "Quercia",])
+            .domain(categories)
             .range(d3.schemeSet2);
 
         // -1- Create a tooltip div that is hidden by default:
-        const tooltip = d3.select("#my_dataviz")
+        const tooltip = d3.select(".single-container")
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
@@ -58,7 +65,7 @@ $(document).ready(function () {
                 .duration(200)
             tooltip
                 .style("opacity", 1)
-                .html("Country: " + d.Name)
+                .html(d.Name)
                 .style("left", (event.x) / 2 + "px")
                 .style("top", (event.y) / 2 + 30 + "px")
         }
@@ -80,10 +87,10 @@ $(document).ready(function () {
             .data(data)
             .join("circle")
             .attr("class", "bubbles")
-            .attr("cx", d => x(d.Height))
-            .attr("cy", d => y(d.Carbon_storage_kg))
-            .attr("r", d => z(d.canopy_size))
-            .style("fill", d => myColor(d.Name))
+            .attr("cx", d => x(d["Height (m)"]))
+            .attr("cy", d => y(d["Carbon Storage (kg)"]))
+            .attr("r", d => z(d["Canopy Cover (m2)"]))
+            .style("fill", d => myColor(d["Name"]))
             // -3- Trigger the functions
             .on("mouseover", showTooltip)
             .on("mousemove", moveTooltip)
