@@ -16,8 +16,8 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = 400 - margin.top - margin.bottom;
-        const width = 460 - margin.left - margin.right;
+        const height = 400 * 2 - margin.top - margin.bottom;
+        const width = 460 * 2 - margin.left - margin.right;
 
         // Add the svg object
         const svg = d3.select(selector)
@@ -27,7 +27,6 @@ const object = {
             .append("g")
             .attr("transform",
                 `translate(${margin.left},${margin.top})`);
-
 
         // X axis: scale and draw:
         const x = d3.scaleLinear()
@@ -76,20 +75,14 @@ const object = {
                 .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
                 .attr("height", function (d) { return height - y(d.length); })
                 .style("fill", "#69b3a2")
-
         }
-
-
-
 
         // Initialize with 20 bins
         update(20)
-
-        /*
-                // Listen to the button -> update if user change it
-                d3.select("#nBin").on("input", function () {
-                    update(+this.value);
-                });*/
+        // Listen to the button -> update if user change it
+        d3.select("#nBin").on("input", function () {
+            update(+this.value);
+        });
 
 
 
