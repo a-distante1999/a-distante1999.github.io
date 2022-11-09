@@ -1,7 +1,7 @@
 let currentWidth = 0;
 
 const singleChart = '.single-container';
-const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
 const getHeight = (d) => parseFloat(d.length || d) * 30;
 const getWidth = (e) => parseFloat(d3.select(e).style('width'));

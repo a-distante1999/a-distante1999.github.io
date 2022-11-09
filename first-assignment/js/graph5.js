@@ -1,4 +1,4 @@
-const margin = { top: 30, right: 30, bottom: 0, left: 30 };
+const margin = { top: 30, right: 15, bottom: 0, left: 15 };
 
 const singleChart = '.single-container';
 const multiCharts = '.multi-container';

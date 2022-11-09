@@ -3,7 +3,7 @@ let minWidth = 0;
 
 const singleChart = '.single-container';
 const multiCharts = '.multi-container';
-const margin = { top: 30, right: 30, bottom: 0, left: 30 };
+const margin = { top: 30, right: 0, bottom: 0, left: 0 };
 
 const getHeight = (d) => parseFloat(d.length || d) * 30;
 

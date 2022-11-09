@@ -1,12 +1,16 @@
 .display-flex,
 .single-container,
 .multi-container {
-    row-gap: 2rem;
+    row-gap: 3rem;
     column-gap: 5rem;
 }
 
 .multi-container {
     column-gap: 0;
+}
+
+.container>svg {
+    padding: 0 1rem;
 }
 
 hr {
@@ -19,11 +23,6 @@ hr {
 }
 
 @media only screen and (max-width: 768px) {
-    .multi-container {
-        margin-left: 0;
-        margin-right: 0;
-    }
-
     hr {
         margin: 3rem 0;
     }
