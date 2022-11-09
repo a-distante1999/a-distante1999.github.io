@@ -1,3 +1,8 @@
+/**
+ * TODO: Fare la media di "Height (m)", "Carbon Storage (kg)" e "Canopy Cover (m2)" per ogni specie
+ * TODO: Alla fine avro circa 200 palline (una per ogni specie) 
+*/
+
 $(document).ready(function () {
     // Set margins of the graph
     const margin = { top: 30, right: 30, bottom: 30, left: 60 };

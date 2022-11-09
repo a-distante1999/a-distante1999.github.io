@@ -1,3 +1,5 @@
+// TODO: fare un grafico per la top 6 di "abundace"
+
 $(document).ready(function () {
     // Set margins of the graph
     const margin = { top: 30, right: 30, bottom: 30, left: 60 };
