@@ -23,15 +23,8 @@ $(document).ready(function () {
 
         // Compute summary statistics used for the box:
         var data_sorted = data.sort(d3.ascending)
-
-        console.log(data_sorted)
-
         var q1 = d3.quantile(data_sorted, .25)
-
-
         var median = d3.quantile(data_sorted, .5)
-
-
         var q3 = d3.quantile(data_sorted, .75)
         var interQuantileRange = q3 - q1
         var min = q1 - 1.5 * interQuantileRange
@@ -39,7 +32,7 @@ $(document).ready(function () {
 
         // Show the Y scale
         var y = d3.scaleLinear()
-            .domain([0, 50])
+            .domain([min * 1.1, max * 1.1])
             .range([height, 0]);
         svg.call(d3.axisLeft(y))
 
