@@ -3,6 +3,9 @@ let currentWidth = 0;
 const singleChart = '.single-container';
 const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
+const getHeight = (d) => 600;
+const getWidth = (e) => parseFloat(d3.select(e).style('width'));
+
 const object = {
     rawData: [],
     drawChart: function (selector) {
@@ -13,8 +16,8 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = 600 - margin.top - margin.bottom;
-        const width = 600 - margin.left - margin.right;
+        const height = getHeight() - margin.top - margin.bottom;
+        const width = getWidth(selector) - margin.left - margin.right;
 
         // Add the svg object
         const svg = d3.select(selector)

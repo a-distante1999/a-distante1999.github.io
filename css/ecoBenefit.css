@@ -54,6 +54,7 @@ h1,
     transform: translate(7%, -7%);
     padding: 0.5rem !important;
     z-index: 1 !important;
+    text-align: left;
 }
 
 .legend {
