@@ -208,7 +208,6 @@ const object = {
                 .join("g")
                 .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
 
-
             rows.append("rect")
                 .attr("width", 18)
                 .attr("height", 18)
