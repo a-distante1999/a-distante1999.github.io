@@ -67,12 +67,19 @@ $(document).ready(function () {
         }
 
         const moveTooltip = function (event, d) {
+            d3.select(event.target)
+                .attr("stroke-width", "1");
+
             tooltip
                 .style("left", (event.x) + "px")
                 .style("top", (event.y - (parseFloat(tooltip.style('height')) * 2)) + "px")
         }
 
         const hideTooltip = function (event, d) {
+
+            d3.select(event.target)
+                .attr("stroke-width", "0");
+
             tooltip
                 .style("display", "none")
         }
@@ -83,6 +90,8 @@ $(document).ready(function () {
             .data(data)
             .join("circle")
             .attr("class", "bubbles")
+            .attr("stroke", "black")
+            .attr("stroke-width", "0")
             .attr("cx", d => x(d["Height (m)"]))
             .attr("cy", d => y(d["Carbon Storage (kg)"]))
             .attr("r", d => z(d["Canopy Cover (m2)"]))
