@@ -4,7 +4,6 @@ const listNeighborhoods = '.list-neighborhoods';
 
 const object = {
     rawData: [],
-    getColor: d3.scaleOrdinal().range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']),
     getNeighborhoodData: function (neighborhood) {
         let data = []
         this.rawData.forEach(function (row) {
@@ -91,6 +90,11 @@ const object = {
             .attr("class", "tooltip")
             .style("display", "none");
 
+        // Imposto l'ordine fisso (alfabetico) per avere sempre lo stesso colore
+        const color = d3.scaleOrdinal()
+            .domain(data.map(d => d.Tree).sort((a, b) => a > b ? 1 : -1))
+            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7'])
+
         let timeout = null;
 
         const removeTimeout = () => {
@@ -157,7 +161,7 @@ const object = {
             .append("rect")
             .attr("class", (d, i) => "myRect " + sanitizeString(d.Tree) /*+ " " + sanitizeString(d.Random)*/)
             .attr("height", squareSize)
-            .attr("fill", d => this.getColor(d.Tree))
+            .attr("fill", d => color(d.Tree))
             .attr("x", function (d, i) {
                 col = Math.floor(i / heightSquares);
                 return (col * squareSize) + (col * gap);
@@ -207,7 +211,7 @@ const object = {
             rows.append("rect")
                 .attr("width", 18)
                 .attr("height", 18)
-                .style("fill", (d) => this.getColor(d.Tree));
+                .style("fill", (d) => color(d.Tree));
 
             rows.append("text")
                 .attr("x", 25)
