@@ -28,6 +28,14 @@ const object = {
         data.sort((a, b) => (b.Abundance - a.Abundance))
 
         function update(nTrees) {
+            // Fix the number of trees
+            if (nTrees > data.length) {
+                nTrees = data.length;
+            }
+            else if (nTrees < 1) {
+                nTrees = 1;
+            }
+
             // Taglio e tengo solo i primi nTrees alberi
             let newData = data.slice(0, nTrees)
 
