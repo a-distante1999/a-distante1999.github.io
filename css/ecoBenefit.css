@@ -1,6 +1,6 @@
 body {
     background-color: rgba(0, 0, 0, 0.05);
-    margin: 0;
+    margin: 0 1rem;
 }
 
 p,
@@ -246,11 +246,6 @@ h1.button {
 }
 
 @media only screen and (max-width: 768px) {
-    body {
-        padding-right: 1rem;
-        padding-left: 1rem;
-    }
-
     .section {
         max-width: 100%;
     }
