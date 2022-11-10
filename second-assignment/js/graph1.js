@@ -49,7 +49,7 @@ const object = {
         function update(nBin) {
             // set the parameters for the histogram
             const histogram = d3.histogram()
-                .value(function (d) { return d["Height (m)"]; })   // I need to give the vector of value
+                .value(function (d) { return d.Height; })   // I need to give the vector of value
                 .domain(x.domain())  // then the domain of the graphic
                 .thresholds(x.ticks(nBin)); // then the numbers of bins
 
@@ -89,7 +89,7 @@ const object = {
 }
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv("/second-assignment/csv/geo_data_trees_full.csv");
+    object.rawData = await d3.csv("/second-assignment/csv/geo_data_trees_list.csv");
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {

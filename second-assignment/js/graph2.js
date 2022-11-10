@@ -14,10 +14,10 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (rawData) {
+    d3.csv("/second-assignment/csv/geo_data_trees_list.csv").then(function (rawData) {
         let data = [];
         rawData.forEach(function (d, i) {
-            data[i] = parseInt(d["Height (m)"]);
+            data[i] = parseInt(d.Height);
         });
 
         // Compute summary statistics used for the box:
