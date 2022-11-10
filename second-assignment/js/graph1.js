@@ -1,10 +1,4 @@
-let currentWidth = 0;
-
-const singleChart = '.single-container';
 const margin = { top: 30, right: 30, bottom: 30, left: 60 };
-
-const getHeight = (d) => 600;
-const getWidth = (e) => parseFloat(d3.select(e).style('width'));
 
 const object = {
     rawData: [],
@@ -16,7 +10,7 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = getHeight() - margin.top - margin.bottom;
+        const height = 600 - margin.top - margin.bottom;
         const width = getWidth(selector) - margin.left - margin.right;
 
         // Add the svg object
@@ -94,8 +88,8 @@ $(document).ready(async function () {
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $(singleChart).html('');
-            object.drawChart(singleChart);
+            $(singleContainer).html('');
+            object.drawChart(singleContainer);
         }
     });
 

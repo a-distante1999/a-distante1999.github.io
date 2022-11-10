@@ -1,12 +1,4 @@
-let currentWidth = 0;
-
-const singleChart = '.single-container';
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-
-const getHeight = (d) => parseFloat(d.length || d) * 30;
-const getWidth = (e) => parseFloat(d3.select(e).style('width'));
-
-const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
 const object = {
     rawData: [],
@@ -212,8 +204,8 @@ $(document).ready(async function () {
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $(singleChart).html('');
-            object.drawChart(singleChart, $('.percentage').length);
+            $(singleContainer).html('');
+            object.drawChart(singleContainer, $('.percentage').length);
         }
     });
 

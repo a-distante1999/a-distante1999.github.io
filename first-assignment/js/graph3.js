@@ -1,13 +1,6 @@
-let currentWidth = 0;
 let minWidth = 0;
 
-const singleChart = '.single-container';
-const multiCharts = '.multi-container';
 const margin = { top: 30, right: 0, bottom: 0, left: 0 };
-
-const getHeight = (d) => parseFloat(d.length || d) * 30;
-
-const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
 const object = {
     rawData: [],
@@ -181,12 +174,12 @@ $(document).ready(async function () {
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $(multiCharts).html('');
+            $(multiContainer).html('');
             // Disegno l'asse delle Y
-            object.drawChart(multiCharts);
+            object.drawChart(multiContainer);
             // Disegno tutti i grafici
             object.getSubgroups().forEach(function (category) {
-                object.drawChart(multiCharts, category);
+                object.drawChart(multiContainer, category);
             });
         }
     });

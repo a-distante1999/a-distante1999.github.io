@@ -1,10 +1,6 @@
 const margin = { top: 30, right: 15, bottom: 0, left: 15 };
 
-const singleChart = '.single-container';
-const multiCharts = '.multi-container';
 const listNeighborhoods = '.list-neighborhoods';
-
-const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
 const object = {
     rawData: [],
@@ -243,8 +239,8 @@ $(document).ready(async function () {
                 .attr('value', row.Neighborhood)
                 .attr('id', row.Neighborhood)
                 .on('change', (e) => {
-                    $(singleChart).html('');
-                    object.drawChart(singleChart, $(e.target).attr('value'), true)
+                    $(singleContainer).html('');
+                    object.drawChart(singleContainer, $(e.target).attr('value'), true)
                 })
 
             if (index == 0) {
@@ -262,7 +258,7 @@ $(document).ready(async function () {
 
     // Disegno i grafici di tutte le circoscrizioni
     object.rawData.forEach(function (d) {
-        object.drawChart(multiCharts, d.Neighborhood);
+        object.drawChart(multiContainer, d.Neighborhood);
     });
 
     // Disegno la prima circoscrizione della lista
