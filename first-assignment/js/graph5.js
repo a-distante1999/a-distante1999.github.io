@@ -147,7 +147,9 @@ const object = {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
 
+        // Add title
         const title = chart.append('text')
+            .attr('class', 'title')
             .attr('y', 10)
             .attr('x', '50%')
             .attr('text-anchor', 'middle')
