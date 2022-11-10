@@ -18,8 +18,8 @@ const object = {
         data.length = 25
 
         // Set chart dimensions
-        const height = getHeight(data);
-        const width = getWidth(selector) - margin.left - margin.right;
+        const height = getHorizontalChartHeight(data);
+        const width = getElementWidth(selector) - margin.left - margin.right;
 
         // Add tooltip
         const tooltip = d3.select(selector)

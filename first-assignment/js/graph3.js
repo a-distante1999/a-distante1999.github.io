@@ -21,8 +21,8 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = getHeight(data);
-        let width = getWidth(selector) / (subgroups.length + 3) - margin.left - margin.right;
+        const height = getHorizontalChartHeight(data);
+        let width = getElementWidth(selector) / (subgroups.length + 3) - margin.left - margin.right;
 
         if (width < minWidth) {
             width = minWidth - margin.left - margin.right;

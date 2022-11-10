@@ -11,7 +11,7 @@ const object = {
 
         // Set chart dimensions
         const height = 600 - margin.top - margin.bottom;
-        const width = getWidth(selector) - margin.left - margin.right;
+        const width = getElementWidth(selector) - margin.left - margin.right;
 
         // Add the svg object
         const svg = d3.select(selector)

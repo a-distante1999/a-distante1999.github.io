@@ -13,8 +13,8 @@ const object = {
         const groups = data.map(d => (d.Neighborhood))
 
         // Set chart dimensions
-        const height = getHeight(data);
-        const width = getWidth(selector) - margin.left - margin.right;
+        const height = getHorizontalChartHeight(data);
+        const width = getElementWidth(selector) - margin.left - margin.right;
 
         const tooltip = d3.select(selector)
             .append('div')

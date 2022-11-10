@@ -34,7 +34,7 @@ const object = {
             let newData = data.slice(0, nTrees)
 
             const height = 600 - margin.top - margin.bottom;
-            const width = getWidth(selector) - margin.left - margin.right;
+            const width = getElementWidth(selector) - margin.left - margin.right;
 
             // Valore massimo scala delle X
             const xMax = d3.max(newData, d => d.Height);
