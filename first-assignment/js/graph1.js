@@ -101,7 +101,7 @@ const object = {
             .selectAll('g')
             .data(data)
             .join('rect')
-            .attr('fill', d => color(Math.floor(d.Abundance) / 2329 * 100))
+            .attr('fill', d => color(Math.floor(d.Abundance) / d3.max(data, d => d.Abundance) * 100))
             .attr('x', d => x(0))
             .attr('y', d => y(d.Name))
             .attr('height', d => y.bandwidth())
