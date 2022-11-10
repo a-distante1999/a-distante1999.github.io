@@ -1,11 +1,7 @@
-.multi-container .container:first-child .x-axis {
-    display: none;
-}
-
-.multi-container .container:first-child .y-axis path {
-    display: none;
-}
-
 .multi-container .container:not(:first-child) .y-axis g {
     display: none;
+}
+
+.multi-container {
+    row-gap: 3rem;
 }
