@@ -1,10 +1,4 @@
-let currentWidth = 0;
-
-const singleChart = '.single-container';
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-
-const getHeight = (d) => parseFloat(d.length || d) * 30;
-const getWidth = (e) => parseFloat(d3.select(e).style('width'));
 
 const object = {
     rawData: [],
@@ -29,16 +23,16 @@ const object = {
 
         // Add tooltip
         const tooltip = d3.select(selector)
-            .append("div")
-            .attr("class", "tooltip")
-            .style("display", "none");
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('display', 'none');
 
         // Add the svg object
         const svg = d3.select(selector)
-            .append("svg")
-            .attr("class", "bar-chart");
+            .append('svg')
+            .attr('class', 'bar-chart');
 
-        const chart = svg.append("g");
+        const chart = svg.append('g');
 
         // Add Y axis
         const y = d3.scaleBand()
@@ -46,8 +40,8 @@ const object = {
             .range([0, height])
             .padding([0.1]);
 
-        const yAxis = chart.append("g")
-            .attr("class", "y-axis")
+        const yAxis = chart.append('g')
+            .attr('class', 'y-axis')
             .call(d3.axisLeft(y).tickSizeOuter(0));
 
         // Y axis width
@@ -58,9 +52,9 @@ const object = {
             .domain([0, d3.max(data, d => d.Abundance)])
             .range([0, width - yWidth]);
 
-        const xAxis = chart.append("g")
-            .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height})`)
+        const xAxis = chart.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(x).tickSizeOuter(0));
 
         // Color palette
@@ -83,15 +77,14 @@ const object = {
             removeTimeout();
 
             // Show tooltip
-            tooltip.html('Abundance: ' + d.Abundance + '<br>' + 'Canopy (avg.): ' + d.Canopy + ' m<sup>2</sup>')
-                .style("display", "block");
+            tooltip.html(`Abundance: ${d.Abundance}<br>Canopy (avg.): ${d.Canopy} m<sup>2</sup>`)
+                .style('display', 'block');
         }
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
-            tooltip
-                .style("left", (event.x) + "px")
-                .style("top", (event.y - (parseFloat(tooltip.style('height')) * 3 / 2)) + "px")
+            tooltip.style('left', `${event.x}px`)
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`)
         }
 
         const mouseleave = (event, d) => {
@@ -99,37 +92,37 @@ const object = {
 
             // Add Tooltip timeout
             timeout = setTimeout(() => {
-                tooltip.style("display", "none");
+                tooltip.style('display', 'none');
             }, 150);
         }
 
         // Show the bars
-        chart.append("g")
-            .selectAll("g")
+        chart.append('g')
+            .selectAll('g')
             .data(data)
-            .join("rect")
-            .attr("fill", d => color(Math.floor(d.Abundance) / 2329 * 100))
-            .attr("x", d => x(0))
-            .attr("y", d => y(d.Name))
-            .attr("height", d => y.bandwidth())
-            .attr("stroke", "black")
-            .attr("stroke-width", ".5")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
+            .join('rect')
+            .attr('fill', d => color(Math.floor(d.Abundance) / 2329 * 100))
+            .attr('x', d => x(0))
+            .attr('y', d => y(d.Name))
+            .attr('height', d => y.bandwidth())
+            .attr('stroke', 'black')
+            .attr('stroke-width', '.5')
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseleave', mouseleave)
 
         // Fix svg dimension
-        svg.attr("width", width + margin.left + margin.right)
-            .attr("height", chart.node().getBBox().height + margin.top + margin.bottom);
+        svg.attr('width', width + margin.left + margin.right)
+            .attr('height', chart.node().getBBox().height + margin.top + margin.bottom);
 
         // Fix y-axis position
-        chart.attr("transform", `translate(${yWidth + margin.left},${margin.top})`)
+        chart.attr('transform', `translate(${yWidth + margin.left},${margin.top})`)
 
         // Animation
-        chart.selectAll("rect")
+        chart.selectAll('rect')
             .transition()
             .duration(1000)
-            .attr("width", d => x(d.Abundance))
+            .attr('width', d => x(d.Abundance))
             .delay(function (d, i) {
                 return (i * 75)
             })
@@ -137,13 +130,13 @@ const object = {
 };
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv("/first-assignment/csv/geo_data_trees_categories.csv");
+    object.rawData = await d3.csv('/first-assignment/csv/geo_data_trees_categories.csv');
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $(singleChart).html('');
-            object.drawChart(singleChart);
+            $(singleContainer).html('');
+            object.drawChart(singleContainer);
         }
     });
 

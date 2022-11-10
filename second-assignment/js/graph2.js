@@ -7,14 +7,14 @@ $(document).ready(function () {
     const width = 600 - margin.left - margin.right;
 
     // append the svg object to the body of the page
-    const svg = d3.select(".single-container")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const svg = d3.select('.single-container')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    d3.csv("/second-assignment/csv/geo_data_trees_list.csv").then(function (rawData) {
+    d3.csv('/second-assignment/csv/geo_data_trees_list.csv').then(function (rawData) {
         let data = [];
         rawData.forEach(function (d, i) {
             data[i] = parseInt(d.Height);
@@ -41,31 +41,31 @@ $(document).ready(function () {
         const width = 100
 
         // Show the main vertical line
-        svg.append("line")
-            .attr("x1", center)
-            .attr("x2", center)
-            .attr("y1", y(min))
-            .attr("y2", y(max))
-            .attr("stroke", "black")
+        svg.append('line')
+            .attr('x1', center)
+            .attr('x2', center)
+            .attr('y1', y(min))
+            .attr('y2', y(max))
+            .attr('stroke', 'black')
 
         // Show the box
-        svg.append("rect")
-            .attr("x", center - width / 2)
-            .attr("y", y(q3))
-            .attr("height", (y(q1) - y(q3)))
-            .attr("width", width)
-            .attr("stroke", "black")
-            .style("fill", "#69b3a2")
+        svg.append('rect')
+            .attr('x', center - width / 2)
+            .attr('y', y(q3))
+            .attr('height', (y(q1) - y(q3)))
+            .attr('width', width)
+            .attr('stroke', 'black')
+            .style('fill', '#69b3a2')
 
         // show median, min and max horizontal lines
-        svg.selectAll("toto")
+        svg.selectAll('toto')
             .data([min, median, max])
             .enter()
-            .append("line")
-            .attr("x1", center - width / 2)
-            .attr("x2", center + width / 2)
-            .attr("y1", function (d) { return (y(d)) })
-            .attr("y2", function (d) { return (y(d)) })
-            .attr("stroke", "black")
+            .append('line')
+            .attr('x1', center - width / 2)
+            .attr('x2', center + width / 2)
+            .attr('y1', function (d) { return (y(d)) })
+            .attr('y2', function (d) { return (y(d)) })
+            .attr('stroke', 'black')
     });
 });

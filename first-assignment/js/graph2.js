@@ -1,12 +1,4 @@
-let currentWidth = 0;
-
-const singleChart = '.single-container';
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-
-const getHeight = (d) => parseFloat(d.length || d) * 30;
-const getWidth = (e) => parseFloat(d3.select(e).style('width'));
-
-const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
 
 const object = {
     rawData: [],
@@ -25,16 +17,16 @@ const object = {
         const width = getWidth(selector) - margin.left - margin.right;
 
         const tooltip = d3.select(selector)
-            .append("div")
-            .attr("class", "tooltip")
-            .style("display", "none");
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('display', 'none');
 
         // Add the svg object
         let svg = d3.select(selector)
-            .append("svg")
-            .attr("class", "bar-chart");
+            .append('svg')
+            .attr('class', 'bar-chart');
 
-        const chart = svg.append("g");
+        const chart = svg.append('g');
 
         // Add Y axis
         const y = d3.scaleBand()
@@ -42,8 +34,8 @@ const object = {
             .range([0, height])
             .padding([0.1]);
 
-        const yAxis = chart.append("g")
-            .attr("class", "y-axis")
+        const yAxis = chart.append('g')
+            .attr('class', 'y-axis')
             .call(d3.axisLeft(y).tickSizeOuter(0));
 
         // Y axis width
@@ -63,9 +55,9 @@ const object = {
             .domain([0, xMax])
             .range([0, width - yWidth])
 
-        const xAxis = chart.append("g")
-            .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height})`)
+        const xAxis = chart.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(x).tickSizeOuter(0));
 
         // Color palette
@@ -114,20 +106,19 @@ const object = {
             const subgroupValue = parseFloat(d.data[subgroupName]).toFixed(percentage ? 2 : 0);
 
             // Set opacity to other rects
-            d3.selectAll(".myRect").style("opacity", 0.2)
-            // Show "subgroupName" rect
-            d3.selectAll("." + sanitizeString(subgroupName)).style("opacity", 1)
+            d3.selectAll('.myRect').style('opacity', 0.2)
+            // Show 'subgroupName' rect
+            d3.selectAll(`.${sanitizeString(subgroupName)}`).style('opacity', 1)
 
             // Show tooltip
-            tooltip.html(subgroupName + ": " + subgroupValue + (percentage ? '%' : ''))
-                .style("display", "block");
+            tooltip.html(`${subgroupName}: ${subgroupValue}${percentage ? '%' : ''}`)
+                .style('display', 'block');
         }
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
-            tooltip
-                .style("left", (event.x) + "px")
-                .style("top", (event.y - (parseFloat(tooltip.style('height')) * 2)) + "px")
+            tooltip.style('left', `${event.x}px`)
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`)
         }
 
         const mouseleave = (event, d) => {
@@ -136,84 +127,84 @@ const object = {
             // Add Tooltip timeout
             timeout = setTimeout(() => {
                 // Show all rect
-                d3.selectAll(".myRect")
-                    .style("opacity", 1)
+                d3.selectAll('.myRect')
+                    .style('opacity', 1)
 
-                tooltip.style("display", "none");
+                tooltip.style('display', 'none');
             }, 150);
         }
 
         // Show the bars
-        chart.append("g")
-            .selectAll("g")
+        chart.append('g')
+            .selectAll('g')
             .data(stackedData)
-            .join("g")
-            .attr("fill", d => color(d.key))
-            .attr("class", d => "myRect " + sanitizeString(d.key))
-            .selectAll("rect")
+            .join('g')
+            .attr('fill', d => color(d.key))
+            .attr('class', d => `myRect ${sanitizeString(d.key)}`)
+            .selectAll('rect')
             .data(d => d)
-            .join("rect")
-            .attr("x", d => x(d[0]))
-            .attr("y", d => y(d.data.Neighborhood))
-            .attr("height", y.bandwidth())
-            .attr("stroke", "black")
-            .attr("stroke-width", ".5")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
+            .join('rect')
+            .attr('x', d => x(d[0]))
+            .attr('y', d => y(d.data.Neighborhood))
+            .attr('height', y.bandwidth())
+            .attr('stroke', 'black')
+            .attr('stroke-width', '.5')
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseleave', mouseleave)
 
         // Fix svg dimension
-        svg.attr("width", width + margin.left + margin.right)
-            .attr("height", chart.node().getBBox().height + margin.top + margin.bottom);
+        svg.attr('width', width + margin.left + margin.right)
+            .attr('height', chart.node().getBBox().height + margin.top + margin.bottom);
 
         // Fix y-axis position
-        chart.attr("transform", `translate(${yWidth + margin.left},${margin.top})`)
+        chart.attr('transform', `translate(${yWidth + margin.left},${margin.top})`)
 
         // Animation
-        chart.selectAll("rect")
+        chart.selectAll('rect')
             .transition()
             .duration(750)
-            .attr("width", d => x(d[1]) - x(d[0]))
+            .attr('width', d => x(d[1]) - x(d[0]))
             .delay(function (d, i) {
                 return (i * 75)
             })
 
         // Legenda
         svg = d3.select(selector)
-            .append("svg")
-            .attr("class", d => "legend");
+            .append('svg')
+            .attr('class', d => 'legend');
 
         const legend = svg.append('g');
 
-        const rows = legend.selectAll("g")
+        const rows = legend.selectAll('g')
             .data(subgroups)
-            .join("g")
-            .attr('transform', (d, i) => "translate(0," + i * 20 + ")");
+            .join('g')
+            .attr('transform', (d, i) => `translate(0,${i * 20})`);
 
-        rows.append("rect")
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", (_, i) => color(i));
+        rows.append('rect')
+            .attr('width', 18)
+            .attr('height', 18)
+            .style('fill', (_, i) => color(i));
 
-        rows.append("text")
-            .attr("x", 25)
-            .attr("y", 15)
+        rows.append('text')
+            .attr('x', 25)
+            .attr('y', 15)
             .text(d => d);
 
         // Fix svg dimension
-        svg.attr("width", legend.node().getBBox().width)
-            .attr("height", legend.node().getBBox().height);
+        svg.attr('width', legend.node().getBBox().width)
+            .attr('height', legend.node().getBBox().height);
     }
 };
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv("/first-assignment/csv/geo_data_trees_neighborhoods.csv");
+    object.rawData = await d3.csv('/first-assignment/csv/geo_data_trees_neighborhoods.csv');
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {
             currentWidth = window.innerWidth;
-            $(singleChart).html('');
-            object.drawChart(singleChart, $('.percentage').length);
+            $(singleContainer).html('');
+            object.drawChart(singleContainer, $('.percentage').length);
         }
     });
 
