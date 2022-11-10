@@ -122,11 +122,11 @@ const object = {
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Value");
+            .text("Tree");
         svg.append("text")
             .attr("transform", "translate(" + (width / 2) + " ," + (height * 1 + margin.bottom) + ")")
             .style("text-anchor", "middle")
-            .text("Date");
+            .text("Abundance");
 
         // Fix y-axis position
         chart.attr('transform', `translate(${yWidth + margin.left},${margin.top})`)
