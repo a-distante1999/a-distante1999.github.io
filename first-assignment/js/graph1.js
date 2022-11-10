@@ -1,4 +1,4 @@
-const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+const margin = { top: 0, right: 15, bottom: 0, left: 15 };
 
 const object = {
     rawData: [],
