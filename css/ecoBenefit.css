@@ -64,7 +64,7 @@ h1.button {
 }
 
 .section {
-    max-width: 768px;
+    max-width: 45%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -203,9 +203,55 @@ h1.button {
     margin-bottom: 0 !important;
 }
 
+@media only screen and (max-width: 2000px) {
+    .section {
+        max-width: 50%
+    }
+}
+
+@media only screen and (max-width: 1900px) {
+    .section {
+        max-width: 55%
+    }
+}
+
+@media only screen and (max-width: 1800px) {
+    .section {
+        max-width: 60%
+    }
+}
+
+@media only screen and (max-width: 1600px) {
+    .section {
+        max-width: 65%;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    .section {
+        max-width: 70%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .section {
+        max-width: 80%;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .section {
+        max-width: 90%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
     body {
         padding-right: 1rem;
         padding-left: 1rem;
+    }
+
+    .section {
+        max-width: 100%;
     }
 }

@@ -9,43 +9,33 @@ const getWidth = (e) => parseFloat(d3.select(e).style('width'));
 const object = {
     rawData: [],
     drawChart: function (selector) {
-        // Unisco i dati per specie di albero
         let data = [];
         this.rawData.forEach(row => {
-            // Struttura base (il + è come fare parseFloat)
-            let obj = {
-                "Name": row["Name"],
-                "Abundance": 1,
-                "Height": +row["Height (m)"],
-                "Carbon": +row["Carbon Storage (kg)"],
-                "Canopy": +row["Canopy Cover (m2)"]
-            }
-
-            // Cerco nei dati se esiste già quella specie di albero
-            if (element = data.find(d => d["Name"] == obj["Name"])) {
-                // Sommo i valori tra l'elemento già salvato e quello nuovo
-                Object.keys(element).slice(1).forEach((key) => {
-                    element[key] += +obj[key]
-                });
-            }
-            else {
-                // Aggiungo il nuovo elemento
-                data.push(obj);
-            }
-        });
-
-        // Eseguo la media dei valori
-        data.forEach(row => {
-            // Skippo le prime 2 chiavi che sono "Name" e "Abundance"
-            Object.keys(row).slice(2).forEach((key) => {
-                row[key] /= row["Abundance"]
+            // Copio i dati
+            let obj = { ...row };
+            // Converti i valori numerici
+            Object.keys(row).forEach((key) => {
+                let value = parseFloat(obj[key])
+                if (!isNaN(value)) {
+                    obj[key] = value;
+                }
             });
-        })
+            // Inserisco l'oggetto nella lista
+            data.push(obj);
+        });
 
         // Riordino i dati in base alla quantità
         data.sort((a, b) => (b.Abundance - a.Abundance))
 
         function update(nTrees) {
+            // Fix the number of trees
+            if (nTrees > data.length) {
+                nTrees = data.length;
+            }
+            else if (nTrees < 1) {
+                nTrees = 1;
+            }
+
             // Taglio e tengo solo i primi nTrees alberi
             let newData = data.slice(0, nTrees)
 
@@ -53,11 +43,11 @@ const object = {
             const width = getWidth(selector) - margin.left - margin.right;
 
             // Valore massimo scala delle X
-            const xMax = d3.max(newData, d => d["Height"]);
+            const xMax = d3.max(newData, d => d.Height);
             // Valore massimo scala delle Y
-            const yMax = d3.max(newData, d => d["Carbon"]);
+            const yMax = d3.max(newData, d => d.Carbon);
             // Valore massimo scala delle Z
-            const zMax = d3.max(newData, d => d["Canopy"]);
+            const zMax = d3.max(newData, d => d.Canopy);
 
             // append the svg object to the body of the page
             const svg = d3.select(selector)
@@ -136,9 +126,9 @@ const object = {
                 .attr("class", "bubbles")
                 .attr("stroke", "black")
                 .attr("stroke-width", "0")
-                .attr("cx", d => x(d["Height"]))
-                .attr("cy", d => y(d["Carbon"]))
-                .attr("r", d => z(d["Canopy"]))
+                .attr("cx", d => x(d.Height))
+                .attr("cy", d => y(d.Carbon))
+                .attr("r", d => z(d.Canopy))
                 .style("fill", (d, i) => color(i))
                 // -3- Trigger the functions
                 .on("mouseover", mouseover)
@@ -159,7 +149,7 @@ const object = {
 };
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv("/second-assignment/csv/geo_data_trees_full.csv");
+    object.rawData = await d3.csv("/second-assignment/csv/geo_data_trees_categories_v2.csv");
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {

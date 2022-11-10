@@ -17,10 +17,10 @@ $(document).ready(function () {
         .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
     // Read the data
-    d3.csv("/second-assignment/csv/geo_data_trees_full.csv").then(function (data) {
+    d3.csv("/second-assignment/csv/geo_data_trees_list.csv").then(function (data) {
         // Add X axis
         const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d["Height (m)"])])
+            .domain([0, d3.max(data, d => +d.Height)])
             .range([0, width]);
 
         svg.append("g")
@@ -29,7 +29,7 @@ $(document).ready(function () {
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d["Carbon Storage (kg)"])])
+            .domain([0, d3.max(data, d => +d.Carbon)])
             .range([height, 0]);
 
         svg.append("g")
@@ -41,8 +41,8 @@ $(document).ready(function () {
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", function (d) { return x(d["Height (m)"]); })
-            .attr("cy", function (d) { return y(d["Carbon Storage (kg)"]); })
+            .attr("cx", function (d) { return x(d.Height); })
+            .attr("cy", function (d) { return y(d.Carbon); })
             .attr("r", 1.5)
             .style("fill", "#69b3a2")
     })
