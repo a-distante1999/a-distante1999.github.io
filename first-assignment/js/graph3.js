@@ -14,7 +14,7 @@ const object = {
         this.rawData.forEach((row, index) => {
             data[index] = { 'Name': row.Neighborhood };
             Object.keys(row).forEach((d) => {
-                if (d == category) {
+                if (d === category) {
                     data[index]['Abundance'] = +row[d];
                 }
             });
@@ -68,7 +68,7 @@ const object = {
 
         const yWidth = !category ? yAxis.node().getBBox().width : 0;
 
-        if (minWidth == 0) {
+        if (!minWidth) {
             minWidth = (currentWidth - yWidth) / (subgroups.length);
         }
 
@@ -115,8 +115,7 @@ const object = {
 
             const mousemove = (event, d) => {
                 // Move tooltip near mouse pointer
-                tooltip
-                    .style("left", (event.x) + "px")
+                tooltip.style("left", (event.x) + "px")
                     .style("top", (event.y - (parseFloat(tooltip.style('height')) * 2)) + "px")
             }
 

@@ -21,7 +21,7 @@ const object = {
             squareSize = 20,
             gap = 2;
 
-        let neighborhoodData = this.getNeighborhoodData(neighborhood);
+        const neighborhoodData = this.getNeighborhoodData(neighborhood);
 
         let total = d3.sum(neighborhoodData, function (d) { return d.Abundance; });
 
@@ -95,8 +95,10 @@ const object = {
             .domain(data.map(d => d.Tree).sort((a, b) => a > b ? 1 : -1))
             .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7'])
 
+        // Tooltip timeout
         let timeout = null;
 
+        // Clear tooltip timeout
         const removeTimeout = () => {
             if (timeout) {
                 clearTimeout(timeout)
@@ -118,8 +120,7 @@ const object = {
         const mousemove = (event, d) => {
             let height = parseFloat(tooltip.style('height'));
 
-            tooltip
-                .style("left", (event.x) + "px")
+            tooltip.style("left", (event.x) + "px")
                 .style("top", (event.y - (height * 2)) + "px")
         }
 
@@ -159,15 +160,15 @@ const object = {
             .data(waffleSquares)
             .enter()
             .append("rect")
-            .attr("class", (d, i) => "myRect " + sanitizeString(d.Tree) /*+ " " + sanitizeString(d.Random)*/)
+            .attr("class", (d) => "myRect " + sanitizeString(d.Tree) /*+ " " + sanitizeString(d.Random)*/)
             .attr("height", squareSize)
             .attr("fill", d => color(d.Tree))
             .attr("x", function (d, i) {
-                col = Math.floor(i / heightSquares);
+                let col = Math.floor(i / heightSquares);
                 return (col * squareSize) + (col * gap);
             })
             .attr("y", function (d, i) {
-                row = i % heightSquares;
+                let row = i % heightSquares;
                 return (heightSquares * squareSize) - ((row * squareSize) + (row * gap))
             })
             .attr("width", squareSize) // Commentare per l'animazione
@@ -247,7 +248,7 @@ $(document).ready(async function () {
                     object.drawChart(singleContainer, $(e.target).attr('value'), true)
                 })
 
-            if (index == 0) {
+            if (!index) {
                 input.attr('checked', '')
             }
 

@@ -87,11 +87,10 @@ const object = {
 
             // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
             const mouseover = function (event, d) {
-                tooltip
-                    .html('Tree: ' + d.Name + '<br>' +
-                        'Abundance: ' + d.Abundance + '<br>' +
-                        'Canopy size (avg.): ' + d.Canopy.toFixed(2) + ' m<sup>2</sup>' + '<br>' +
-                        'Carbon storage (avg.): ' + d.Carbon.toFixed(2) + ' kg')
+                tooltip.html('Tree: ' + d.Name + '<br>' +
+                    'Abundance: ' + d.Abundance + '<br>' +
+                    'Canopy size (avg.): ' + d.Canopy.toFixed(2) + ' m<sup>2</sup>' + '<br>' +
+                    'Carbon storage (avg.): ' + d.Carbon.toFixed(2) + ' kg')
                     .style("display", "block")
             }
 
@@ -99,8 +98,7 @@ const object = {
                 d3.select(event.target)
                     .attr("stroke-width", "1");
 
-                tooltip
-                    .style("left", (event.x) + "px")
+                tooltip.style("left", (event.x) + "px")
                     .style("top", (event.y - (parseFloat(tooltip.style('height')) * 5 / 4)) + "px")
             }
 
@@ -108,8 +106,7 @@ const object = {
                 d3.select(event.target)
                     .attr("stroke-width", "0");
 
-                tooltip
-                    .style("display", "none")
+                tooltip.style("display", "none");
             }
 
             // Add dots
