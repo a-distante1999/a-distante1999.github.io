@@ -1,9 +1,7 @@
-const margin = { top: 0, right: 15, bottom: 0, left: 15 };
-
 const object = {
     rawData: [],
     drawChart: function (selector) {
-        // Copio i dati e li correggo
+        // Copy data and fix it
         let data = []
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
@@ -19,7 +17,7 @@ const object = {
 
         // Set chart dimensions
         const height = getHorizontalChartHeight(data);
-        const width = getElementWidth(selector) - margin.left - margin.right;
+        const width = getElementWidth(selector);
 
         // Add tooltip
         const tooltip = d3.select(selector)
@@ -27,12 +25,10 @@ const object = {
             .attr('class', 'tooltip')
             .style('display', 'none');
 
-        // Add the svg object
-        const svg = d3.select(selector)
+        // Add chart svg
+        const chart = d3.select(selector)
             .append('svg')
             .attr('class', 'bar-chart');
-
-        const chart = svg.append('g');
 
         // Add Y axis
         const y = d3.scaleBand()
@@ -44,18 +40,33 @@ const object = {
             .attr('class', 'y-axis')
             .call(d3.axisLeft(y).tickSizeOuter(0));
 
-        // Y axis width
-        const yWidth = yAxis.node().getBBox().width;
+        // Add Y label
+        const yLabel = chart.append('g')
+            .attr('class', 'y-label')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '15');
+
+        yLabel.append('text')
+            .text('Tree');
 
         // Add X axis
         const x = d3.scaleLinear()
             .domain([0, d3.max(data, d => d.Abundance)])
-            .range([0, width - yWidth]);
+            .range([0, width - getSVGWidth(yAxis) - getSVGHeight(yLabel)]);
 
         const xAxis = chart.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(x).tickSizeOuter(0));
+
+        // Add X label
+        const xLabel = chart.append('g')
+            .attr('class', 'x-label')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '15');
+
+        xLabel.append('text')
+            .text('Abundance');
 
         // Color palette
         const color = d3.scaleSequential()
@@ -98,6 +109,7 @@ const object = {
 
         // Show the bars
         chart.append('g')
+            .attr('class', 'bars')
             .selectAll('g')
             .data(data)
             .join('rect')
@@ -111,25 +123,16 @@ const object = {
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave)
 
+        // Fix labels position
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`)
+        xLabel.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(yAxis)) / 2},${getSVGHeight(chart)})`);
+
+        const box = chart.node().getBBox()
+
         // Fix svg dimension
-        svg.attr('width', width + margin.left + margin.right)
-            .attr('height', chart.node().getBBox().height + margin.top + margin.bottom);
-
-        //Label
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", margin.left)
-            .attr("x", 0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text("Tree");
-        svg.append("text")
-            .attr("transform", "translate(" + (width / 2) + " ," + (height * 1 + margin.bottom) + ")")
-            .style("text-anchor", "middle")
-            .text("Abundance");
-
-        // Fix y-axis position
-        chart.attr('transform', `translate(${yWidth + margin.left},${margin.top})`)
+        chart.attr('width', box.width + 5)
+            .attr('height', box.height + 5)
+            .attr('viewBox', `${box.x - 5} ${box.y - 5} ${box.width + 10} ${box.height + 10}`);
 
         // Animation
         chart.selectAll('rect')
@@ -138,7 +141,7 @@ const object = {
             .attr('width', d => x(d.Abundance))
             .delay(function (d, i) {
                 return (i * 75)
-            })
+            });
     }
 };
 
