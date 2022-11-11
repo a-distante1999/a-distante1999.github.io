@@ -8,6 +8,7 @@ const object = {
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
         });
+        console.log(data)
 
         // Set chart dimensions
         const height = 600 - margin.top - margin.bottom;
@@ -36,7 +37,6 @@ const object = {
         // Y axis: initialization
         const y = d3.scaleLinear()
             .range([height, 0]);
-
         const yAxis = svg.append('g');
 
         // A function that builds the graph for a specific value of bin

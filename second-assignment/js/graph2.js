@@ -6,7 +6,7 @@ const object = {
         // Copio i dati
         let data = []
         this.rawData.forEach((row, index) => {
-            data[index] = { ...row };
+            data[index] = parseInt(row.Height);
         });
 
         // Set chart dimensions
@@ -34,12 +34,11 @@ const object = {
         const y = d3.scaleLinear()
             .domain([min * 1.75, max * 1.25])
             .range([height, 0]);
-
         svg.call(d3.axisLeft(y))
 
         // a few features for the box
         const center = 200
-        // const width = 100
+        widthBox = 100
 
         // Show the main vertical line
         svg.append('line')
@@ -51,10 +50,10 @@ const object = {
 
         // Show the box
         svg.append('rect')
-            .attr('x', center - width / 2)
+            .attr('x', center - widthBox / 2)
             .attr('y', y(q3))
             .attr('height', (y(q1) - y(q3)))
-            .attr('width', width)
+            .attr('width', widthBox)
             .attr('stroke', 'black')
             .style('fill', '#69b3a2')
 
@@ -63,8 +62,8 @@ const object = {
             .data([min, median, max])
             .enter()
             .append('line')
-            .attr('x1', center - width / 2)
-            .attr('x2', center + width / 2)
+            .attr('x1', center - widthBox / 2)
+            .attr('x2', center + widthBox / 2)
             .attr('y1', function (d) { return (y(d)) })
             .attr('y2', function (d) { return (y(d)) })
             .attr('stroke', 'black')
