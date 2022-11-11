@@ -134,14 +134,14 @@
     x.domain([0, 60])
     svg.select(".myXaxis")
       .transition()
-      .duration(400)
+      .duration(50)
       .attr("opacity", "1")
       .call(d3.axisBottom(x));
   
     svg.selectAll("circle")
       .transition()
       .delay(function(d,i){return(i*3)})
-      .duration(400)
+      .duration(50)
       .attr("cx", function (d) { return x(d.Height); } )
       .attr("cy", function (d) { return y(d.Carbon_storage_kg); } )
 
