@@ -1,24 +1,25 @@
-$(document).ready(function () {
-    // Set margins of the graph
-    const margin = { top: 30, right: 30, bottom: 30, left: 60 };
+const margin = { top: 30, right: 30, bottom: 30, left: 60 };
 
-    // Set chart dimensions
-    const height = 600 - margin.top - margin.bottom;
-    const width = 600 - margin.left - margin.right;
-
-    // append the svg object to the body of the page
-    const svg = d3.select('.single-container')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    d3.csv('/second-assignment/csv/geo_data_trees_list.csv').then(function (rawData) {
-        let data = [];
-        rawData.forEach(function (d, i) {
-            data[i] = parseInt(d.Height);
+const object = {
+    rawData: [],
+    drawChart: function (selector) {
+        // Copio i dati
+        let data = []
+        this.rawData.forEach((row, index) => {
+            data[index] = { ...row };
         });
+
+        // Set chart dimensions
+        const height = 600 - margin.top - margin.bottom;
+        const width = 600 - margin.left - margin.right;
+
+        // append the svg object to the body of the page
+        const svg = d3.select(selector)
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
 
         // Compute summary statistics used for the box:
         const dataSorted = data.sort(d3.ascending)
@@ -38,7 +39,7 @@ $(document).ready(function () {
 
         // a few features for the box
         const center = 200
-        const width = 100
+        // const width = 100
 
         // Show the main vertical line
         svg.append('line')
@@ -67,5 +68,19 @@ $(document).ready(function () {
             .attr('y1', function (d) { return (y(d)) })
             .attr('y2', function (d) { return (y(d)) })
             .attr('stroke', 'black')
+    }
+}
+
+$(document).ready(async function () {
+    object.rawData = await d3.csv('/second-assignment/csv/geo_data_trees_list.csv');
+
+    $(window).resize(function () {
+        if (currentWidth !== window.innerWidth) {
+            currentWidth = window.innerWidth;
+            $(singleContainer).html('');
+            object.drawChart(singleContainer);
+        }
     });
+
+    $(window).resize();
 });
