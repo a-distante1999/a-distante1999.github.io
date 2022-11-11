@@ -1,5 +1,3 @@
-const margin = { top: 30, right: 15, bottom: 0, left: 15 };
-
 const listNeighborhoods = '.list-neighborhoods';
 
 const object = {
@@ -29,35 +27,35 @@ const object = {
             return;
         }
 
-        // Valore del quadratino
+        // Calculate square value
         let squareValue = total / (widthSquares * heightSquares);
 
+        // Copy data and fix it
         let data = []
         for (let i = 0; i < neighborhoodData.length; i++) {
-            // Copio i dati
             data[i] = { ...neighborhoodData[i] }
 
             let unit = parseFloat((data[i].Abundance / squareValue).toFixed(10));
             let integer = Math.floor(unit);
 
-            // Aggiungo info ulteriori
+            // Add info about values
             data[i]['Integer'] = integer;
             data[i]['Decimal'] = parseFloat((unit - integer).toFixed(10));
         }
 
-        // Ordino per parte decimale
+        // Order by decimal
         data.sort(function (a, b) {
             return b.Decimal - a.Decimal;
         });
 
         let tot = d3.sum(data, function (d) { return d.Integer; });
 
-        // Aggiungo gli elementi mancati per raggiungere il totale
+        // Add unit to reach total
         for (let i = 0; i < 100 - tot; i++) {
             data[i].Integer += 1
         }
 
-        // Creo i quadratini del waffle
+        // Create waffle squares
         let waffleSquares = [];
         data.forEach(function (d, i) {
             waffleSquares = waffleSquares.concat(
@@ -77,7 +75,7 @@ const object = {
         const height = (squareSize * heightSquares) + heightSquares * gap;
 
         if (!full) {
-            // Incapsulo il selettore in un div
+            // Wrap selector in a div
             selector = d3.select(selector)
                 .append('div')
                 .attr('class', 'container')
@@ -90,7 +88,7 @@ const object = {
             .attr('class', 'tooltip')
             .style('display', 'none');
 
-        // Imposto l'ordine fisso (alfabetico) per avere sempre lo stesso colore
+        // Set fixed order to keep same colors on each iteration
         const color = d3.scaleOrdinal()
             .domain(data.map(d => d.Tree).sort((a, b) => a > b ? 1 : -1))
             .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7'])
@@ -109,55 +107,59 @@ const object = {
         const mouseover = (event, d) => {
             removeTimeout();
 
+            // Set opacity to other rects
             d3.selectAll('.myRect').style('opacity', 0.2)
-
+            // Show 'subgroupName' rect
             d3.selectAll(`.${sanitizeString(d.Tree)}`).style('opacity', 1)
 
+            // Show tooltip
             tooltip.html(`${d.Tree}: ${d.Abundance} (${d.Units}%)`)
                 .style('display', 'block');
         }
 
         const mousemove = (event, d) => {
-            let height = parseFloat(tooltip.style('height'));
-
+            // Move tooltip near mouse pointer
             tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (height * 2)}px`)
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`)
         }
 
         const mouseleave = (event, d) => {
             removeTimeout();
 
+            // Add Tooltip timeout
             timeout = setTimeout(() => {
+                // Show all rect
                 d3.selectAll('.myRect')
-                    .style('opacity', 1)
+                    .style('opacity', 1);
 
-                tooltip.style('display', 'none')
-            }, 150)
+                tooltip.style('display', 'none');
+            }, 150);
         }
 
+        // Show all waffle chats
         d3.selectAll('.waffle-chart')
             .style('display', 'block')
 
+        // Hide same waffle chart
         d3.selectAll(`.${sanitizeString(neighborhood)}`)
             .style('display', 'none')
 
+        // Add chart svg
         const chart = d3.select(selector)
             .append('svg')
             .attr('class', d => `waffle-chart ${sanitizeString(neighborhood)}`)
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
 
         // Add title
-        const title = chart.append('text')
+        const title = chart.append('g')
             .attr('class', 'title')
-            .attr('y', 10)
-            .attr('x', '50%')
-            .attr('text-anchor', 'middle')
-            .attr('dominant-baseline', 'middle')
+            .attr('font-size', '15');
+
+        title.append('text')
             .text(neighborhood);
 
+        // Show squares
         chart.append('g')
-            .attr('transform', `translate(${width + (margin.left + margin.right) / 2},${margin.top}) rotate(90)`)
+            .attr('transform', `translate(${width},${getSVGHeight(title) / 2}) rotate(90)`)
             .selectAll('div')
             .data(waffleSquares)
             .enter()
@@ -180,6 +182,16 @@ const object = {
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave)
 
+        // Fix title position
+        title.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(title)) / 2},0)`);
+
+        const box = chart.node().getBBox()
+
+        // Fix svg dimension
+        chart.attr('width', box.width + 5)
+            .attr('height', box.height + 5)
+            .attr('viewBox', `${box.x - 5} ${box.y - 5} ${box.width + 10} ${box.height + 10}`);
+
         /*let randoms = []
         waffleSquares.forEach((d) => {
             if (!randoms.find(random => random == d.Random)) {
@@ -200,11 +212,10 @@ const object = {
         })*/
 
         if (full) {
-            const svg = d3.select(selector)
+            // Add legend svg
+            const legend = d3.select(selector)
                 .append('svg')
                 .attr('class', d => 'legend');
-
-            const legend = svg.append('g');
 
             const rows = legend.selectAll('g')
                 .data(neighborhoodData)
@@ -222,8 +233,8 @@ const object = {
                 .text(d => d.Tree);
 
             // Fix svg dimension
-            svg.attr('width', legend.node().getBBox().width)
-                .attr('height', legend.node().getBBox().height);
+            legend.attr('width', getSVGWidth(legend))
+                .attr('height', getSVGHeight(legend));
         }
     }
 };
