@@ -9,7 +9,7 @@ const object = {
             let obj = { ...row };
             // Converti i valori numerici
             Object.keys(row).forEach((key) => {
-                let value = parseFloat(obj[key])
+                let value = parseFloat(obj[key]);
                 if (!isNaN(value)) {
                     obj[key] = value;
                 }
@@ -19,7 +19,7 @@ const object = {
         });
 
         // Riordino i dati in base alla quantità
-        data.sort((a, b) => (b.Abundance - a.Abundance))
+        data.sort((a, b) => (b.Abundance - a.Abundance));
 
         function update(nTrees) {
             // Fix the number of trees
@@ -31,7 +31,7 @@ const object = {
             }
 
             // Taglio e tengo solo i primi nTrees alberi
-            let newData = data.slice(0, nTrees)
+            let newData = data.slice(0, nTrees);
 
             const height = 600 - margin.top - margin.bottom;
             const width = getElementWidth(selector) - margin.left - margin.right;
@@ -76,7 +76,7 @@ const object = {
 
             // Add a scale for bubble color
             const color = function (i) {
-                return d3.interpolateWarm(i / newData.length)
+                return d3.interpolateWarm(i / newData.length);
             };
 
             // -1- Create a tooltip div that is hidden by default:
@@ -88,23 +88,23 @@ const object = {
             // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
             const mouseover = function (event, d) {
                 tooltip.html(`Tree: ${d.Name}<br>Abundance: ${d.Abundance}<br>Canopy size (avg.): ${d.Canopy.toFixed(2)} m<sup>2</sup><br>Carbon storage (avg.): ${d.Carbon.toFixed(2)} kg`)
-                    .style('display', 'block')
-            }
+                    .style('display', 'block');
+            };
 
             const mousemove = function (event, d) {
                 d3.select(event.target)
                     .attr('stroke-width', '1');
 
                 tooltip.style('left', `${event.x}px`)
-                    .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 5 / 4)}px`)
-            }
+                    .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 5 / 4)}px`);
+            };
 
             const mouseleave = function (event, d) {
                 d3.select(event.target)
                     .attr('stroke-width', '0');
 
                 tooltip.style('display', 'none');
-            }
+            };
 
             // Add dots
             svg.append('g')
@@ -121,10 +121,10 @@ const object = {
                 // -3- Trigger the functions
                 .on('mouseover', mouseover)
                 .on('mousemove', mousemove)
-                .on('mouseleave', mouseleave)
+                .on('mouseleave', mouseleave);
         }
 
-        update(data.length)
+        update(data.length);
 
         // Listen to the button -> update if user change it
         d3.select('#nTrees')

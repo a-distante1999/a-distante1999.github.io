@@ -4,7 +4,7 @@ const object = {
     rawData: [],
     drawChart: function (selector) {
         // Copio i dati
-        let data = []
+        let data = [];
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
         });
@@ -19,8 +19,7 @@ const object = {
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // Add X axis
         var x = d3.scaleLinear()
@@ -30,8 +29,8 @@ const object = {
             .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
-            .attr("opacity", "0")
-        //add label 
+            .attr("opacity", "0");
+        //add label
         svg.append("text")
             .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
             .style("text-anchor", "middle")
@@ -67,29 +66,29 @@ const object = {
             .style("border", "solid")
             .style("border-width", "1px")
             .style("border-radius", "5px")
-            .style("padding", "10px")
+            .style("padding", "10px");
 
         // A function that change this tooltip when the user hover a point.
         // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
         const mouseover = function (event, d) {
             tooltip
-                .style("opacity", 1)
-        }
+                .style("opacity", 1);
+        };
 
         const mousemove = function (event, d) {
             tooltip
                 .html("Tree: " + d.Name.replace(/_/g, ' ') + "<br> Carbon storage (kg): " + d.Carbon_storage_kg)
                 .style("left", (event.x) / 2 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-                .style("top", (event.y) / 2 + "px")
-        }
+                .style("top", (event.y) / 2 + "px");
+        };
 
         // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
         const mouseleave = function (event, d) {
             tooltip
                 .transition()
                 .duration(200)
-                .style("opacity", 0)
-        }
+                .style("opacity", 0);
+        };
 
         // Add dots
         svg.append('g')
@@ -100,13 +99,13 @@ const object = {
             .attr("cx", function (d) { return x(d.Height); })
             .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
             .attr("r", 3)
-            .style("fill", function (d) { return color(d.Name) })
+            .style("fill", function (d) { return color(d.Name); })
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
+            .on("mouseleave", mouseleave);
 
         // new X axis
-        x.domain([0, 60])
+        x.domain([0, 60]);
         svg.select(".myXaxis")
             .transition()
             .duration(50)
@@ -115,15 +114,13 @@ const object = {
 
         svg.selectAll("circle")
             .transition()
-            .delay(function (d, i) { return (i * 0.1) })
+            .delay(function (d, i) { return (i * 0.1); })
             .duration(100)
             .attr("cx", function (d) { return x(d.Height); })
-            .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
+            .attr("cy", function (d) { return y(d.Carbon_storage_kg); });
 
     }
-}
-
-
+};
 
 $(document).ready(async function () {
     object.rawData = await d3.csv('../csv/graph3.csv');

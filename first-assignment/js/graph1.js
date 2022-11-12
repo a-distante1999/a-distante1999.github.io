@@ -2,7 +2,7 @@ const object = {
     rawData: [],
     drawChart: function (selector) {
         // Copy data and fix it
-        let data = []
+        let data = [];
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
             data[index].Abundance = parseInt(data[index].Abundance);
@@ -13,7 +13,7 @@ const object = {
         data.sort((a, b) => b.Abundance - a.Abundance);
 
         // Slice data
-        data.length = 25
+        data.length = 25;
 
         // Set chart dimensions
         const height = getHorizontalChartHeight(data);
@@ -79,10 +79,10 @@ const object = {
         // Clear tooltip timeout
         const removeTimeout = () => {
             if (timeout) {
-                clearTimeout(timeout)
-                timeout = null
+                clearTimeout(timeout);
+                timeout = null;
             }
-        }
+        };
 
         const mouseover = (event, d) => {
             removeTimeout();
@@ -90,13 +90,13 @@ const object = {
             // Show tooltip
             tooltip.html(`Abundance: ${d.Abundance}<br>Canopy (avg.): ${d.Canopy} m<sup>2</sup>`)
                 .style('display', 'block');
-        }
+        };
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
             tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`)
-        }
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`);
+        };
 
         const mouseleave = (event, d) => {
             removeTimeout();
@@ -105,7 +105,7 @@ const object = {
             timeout = setTimeout(() => {
                 tooltip.style('display', 'none');
             }, 150);
-        }
+        };
 
         // Show the bars
         chart.append('g')
@@ -121,13 +121,13 @@ const object = {
             .attr('stroke-width', '.5')
             .on('mouseover', mouseover)
             .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave)
+            .on('mouseleave', mouseleave);
 
         // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`)
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`);
         xLabel.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(yAxis)) / 2},${getSVGHeight(chart)})`);
 
-        const box = chart.node().getBBox()
+        const box = chart.node().getBBox();
 
         // Fix svg dimension
         chart.attr('width', box.width + 5)
@@ -140,7 +140,7 @@ const object = {
             .duration(1000)
             .attr('width', d => x(d.Abundance))
             .delay(function (d, i) {
-                return (i * 75)
+                return (i * 75);
             });
     }
 };
