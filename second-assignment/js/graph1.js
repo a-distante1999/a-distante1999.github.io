@@ -4,11 +4,11 @@ const object = {
     rawData: [],
     drawChart: function (selector) {
         // Copio i dati
-        let data = []
+        let data = [];
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
         });
-        console.log(data)
+        console.log(data);
 
         // Set chart dimensions
         const height = 600 - margin.top - margin.bottom;
@@ -59,28 +59,28 @@ const object = {
 
             // Join the rect with the bins data
             const u = svg.selectAll('rect')
-                .data(bins)
+                .data(bins);
 
             // Manage the existing bars and eventually the new ones:
             u.join('rect') // Add a new rect for each new elements
                 .transition() // and apply changes to all of them
                 .duration(1000)
                 .attr('x', 1)
-                .attr('transform', function (d) { return `translate(${x(d.x0)}, ${y(d.length)})` })
+                .attr('transform', function (d) { return `translate(${x(d.x0)}, ${y(d.length)})`; })
                 .attr('width', function (d) { return x(d.x1) - x(d.x0) - 1; })
                 .attr('height', function (d) { return height - y(d.length); })
-                .style('fill', '#69b3a2')
+                .style('fill', '#69b3a2');
         }
 
         // Initialize with 20 bins
-        update(20)
+        update(20);
 
         // Listen to the button -> update if user change it
         d3.select('#nBin').on('input', function () {
             update(+this.value);
         });
     }
-}
+};
 
 $(document).ready(async function () {
     object.rawData = await d3.csv('/second-assignment/csv/geo_data_trees_list.csv');

@@ -3,12 +3,12 @@ const listNeighborhoods = '.list-neighborhoods';
 const object = {
     rawData: [],
     getNeighborhoodData: function (neighborhood) {
-        let data = []
+        let data = [];
         this.rawData.forEach(function (row) {
             if (row.Neighborhood === neighborhood) {
                 Object.keys(row).slice(1, 6).forEach(function (tree) {
                     data.push({ 'Tree': tree, 'Abundance': parseInt(row[tree]) });
-                })
+                });
             }
         });
         return data;
@@ -31,9 +31,9 @@ const object = {
         let squareValue = total / (widthSquares * heightSquares);
 
         // Copy data and fix it
-        let data = []
+        let data = [];
         for (let i = 0; i < neighborhoodData.length; i++) {
-            data[i] = { ...neighborhoodData[i] }
+            data[i] = { ...neighborhoodData[i] };
 
             let unit = parseFloat((data[i].Abundance / squareValue).toFixed(10));
             let integer = Math.floor(unit);
@@ -52,7 +52,7 @@ const object = {
 
         // Add unit to reach total
         for (let i = 0; i < 100 - tot; i++) {
-            data[i].Integer += 1
+            data[i].Integer += 1;
         }
 
         // Create waffle squares
@@ -91,7 +91,7 @@ const object = {
         // Set fixed order to keep same colors on each iteration
         const color = d3.scaleOrdinal()
             .domain(data.map(d => d.Tree).sort((a, b) => a > b ? 1 : -1))
-            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7'])
+            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
 
         // Tooltip timeout
         let timeout = null;
@@ -99,29 +99,29 @@ const object = {
         // Clear tooltip timeout
         const removeTimeout = () => {
             if (timeout) {
-                clearTimeout(timeout)
-                timeout = null
+                clearTimeout(timeout);
+                timeout = null;
             }
-        }
+        };
 
         const mouseover = (event, d) => {
             removeTimeout();
 
             // Set opacity to other rects
-            d3.selectAll('.myRect').style('opacity', 0.2)
+            d3.selectAll('.myRect').style('opacity', 0.2);
             // Show 'subgroupName' rect
-            d3.selectAll(`.${sanitizeString(d.Tree)}`).style('opacity', 1)
+            d3.selectAll(`.${sanitizeString(d.Tree)}`).style('opacity', 1);
 
             // Show tooltip
             tooltip.html(`${d.Tree}: ${d.Abundance} (${d.Units}%)`)
                 .style('display', 'block');
-        }
+        };
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
             tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`)
-        }
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`);
+        };
 
         const mouseleave = (event, d) => {
             removeTimeout();
@@ -134,20 +134,20 @@ const object = {
 
                 tooltip.style('display', 'none');
             }, 150);
-        }
+        };
 
         // Show all waffle chats
         d3.selectAll('.waffle-chart')
-            .style('display', 'block')
+            .style('display', 'block');
 
         // Hide same waffle chart
         d3.selectAll(`.${sanitizeString(neighborhood)}`)
-            .style('display', 'none')
+            .style('display', 'none');
 
         // Add chart svg
         const chart = d3.select(selector)
             .append('svg')
-            .attr('class', d => `waffle-chart ${sanitizeString(neighborhood)}`)
+            .attr('class', d => `waffle-chart ${sanitizeString(neighborhood)}`);
 
         // Add title
         const title = chart.append('g')
@@ -173,19 +173,19 @@ const object = {
             })
             .attr('y', function (d, i) {
                 let row = i % heightSquares;
-                return (heightSquares * squareSize) - ((row * squareSize) + (row * gap))
+                return (heightSquares * squareSize) - ((row * squareSize) + (row * gap));
             })
             .attr('width', squareSize) // Commentare per l'animazione
             .attr('stroke', 'black')
             .attr('stroke-width', '.5')
             .on('mouseover', mouseover)
             .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave)
+            .on('mouseleave', mouseleave);
 
         // Fix title position
         title.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(title)) / 2},0)`);
 
-        const box = chart.node().getBBox()
+        const box = chart.node().getBBox();
 
         // Fix svg dimension
         chart.attr('width', box.width + 5)
@@ -240,7 +240,7 @@ const object = {
 };
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv('/first-assignment/csv/geo_data_trees_neighborhoods.csv')
+    object.rawData = await d3.csv('/first-assignment/csv/geo_data_trees_neighborhoods.csv');
 
     // Disegno la lista delle circoscrizioni
     object.rawData.forEach((row, index) => {
@@ -258,16 +258,16 @@ $(document).ready(async function () {
                 .attr('id', row.Neighborhood)
                 .on('change', (e) => {
                     $(singleContainer).html('');
-                    object.drawChart(singleContainer, $(e.target).attr('value'), true)
-                })
+                    object.drawChart(singleContainer, $(e.target).attr('value'), true);
+                });
 
             if (!index) {
-                input.attr('checked', '')
+                input.attr('checked', '');
             }
 
             const label = $(document.createElement('label'))
                 .attr('for', row.Neighborhood)
-                .html(`${row.Neighborhood}<br>`)
+                .html(`${row.Neighborhood}<br>`);
 
             $(listNeighborhoods).append(input);
             $(listNeighborhoods).append(label);

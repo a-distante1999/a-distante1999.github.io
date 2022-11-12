@@ -7,8 +7,8 @@ const object = {
         // Copy data
         let data = this.rawData.slice();
 
-        const subgroups = this.getSubgroups()
-        const groups = data.map(d => (d.Neighborhood))
+        const subgroups = this.getSubgroups();
+        const groups = data.map(d => (d.Neighborhood));
 
         // Set chart dimensions
         const height = getHorizontalChartHeight(data);
@@ -49,7 +49,7 @@ const object = {
             let tot = 0;
             $(Object.values(d)).each(function (_, element) {
                 tot += parseFloat(element) || 0;
-            })
+            });
             return tot;
         });
 
@@ -80,23 +80,23 @@ const object = {
         if (percentage) {
             // Normalize the data
             $(data).each(function (_, d) {
-                let tot = 0
+                let tot = 0;
                 for (let i in subgroups) {
                     let name = subgroups[i];
-                    tot += +d[name]
+                    tot += +d[name];
                 }
                 // Now normalize
                 for (let i in subgroups) {
                     let name = subgroups[i];
-                    d[name] = d[name] / tot * 100
+                    d[name] = d[name] / tot * 100;
                 }
-            })
+            });
         }
 
         // Stack per subgroup
         const stackedData = d3.stack()
             .keys(subgroups)
-            (data)
+            (data);
 
         // Tooltip timeout
         let timeout = null;
@@ -104,10 +104,10 @@ const object = {
         // Clear tooltip timeout
         const removeTimeout = () => {
             if (timeout) {
-                clearTimeout(timeout)
-                timeout = null
+                clearTimeout(timeout);
+                timeout = null;
             }
-        }
+        };
 
         const mouseover = (event, d) => {
             removeTimeout();
@@ -118,20 +118,20 @@ const object = {
             const subgroupValue = parseFloat(d.data[subgroupName]).toFixed(percentage ? 2 : 0);
 
             // Set opacity to other rects
-            d3.selectAll('.myRect').style('opacity', 0.2)
+            d3.selectAll('.myRect').style('opacity', 0.2);
             // Show 'subgroupName' rect
-            d3.selectAll(`.${sanitizeString(subgroupName)}`).style('opacity', 1)
+            d3.selectAll(`.${sanitizeString(subgroupName)}`).style('opacity', 1);
 
             // Show tooltip
             tooltip.html(`${subgroupName}: ${subgroupValue}${percentage ? '%' : ''}`)
                 .style('display', 'block');
-        }
+        };
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
             tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`)
-        }
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`);
+        };
 
         const mouseleave = (event, d) => {
             removeTimeout();
@@ -144,7 +144,7 @@ const object = {
 
                 tooltip.style('display', 'none');
             }, 150);
-        }
+        };
 
         // Show the bars
         chart.append('g')
@@ -164,13 +164,13 @@ const object = {
             .attr('stroke-width', '.5')
             .on('mouseover', mouseover)
             .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave)
+            .on('mouseleave', mouseleave);
 
         // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`)
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`);
         xLabel.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(yAxis)) / 2},${getSVGHeight(chart)})`);
 
-        const box = chart.node().getBBox()
+        const box = chart.node().getBBox();
 
         // Fix svg dimension
         chart.attr('width', box.width + 5)
@@ -183,7 +183,7 @@ const object = {
             .duration(1000)
             .attr('width', d => x(d[1]) - x(d[0]))
             .delay(function (d, i) {
-                return (i * 75)
+                return (i * 75);
             });
 
         // Add legend svg

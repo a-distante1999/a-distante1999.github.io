@@ -14,7 +14,7 @@ $(document).ready(function () {
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Read the data
     d3.csv('/second-assignment/csv/geo_data_trees_list.csv').then(function (data) {
@@ -25,7 +25,7 @@ $(document).ready(function () {
 
         svg.append('g')
             .attr('transform', `translate(0, ${height})`)
-            .call(d3.axisBottom(x))
+            .call(d3.axisBottom(x));
 
         // Add Y axis
         const y = d3.scaleLinear()
@@ -44,6 +44,6 @@ $(document).ready(function () {
             .attr('cx', function (d) { return x(d.Height); })
             .attr('cy', function (d) { return y(d.Carbon); })
             .attr('r', 1.5)
-            .style('fill', '#69b3a2')
-    })
-})
+            .style('fill', '#69b3a2');
+    });
+});
