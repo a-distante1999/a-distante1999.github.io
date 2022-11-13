@@ -34,7 +34,21 @@ const object = {
         const y = d3.scaleLinear()
             .domain([min * 1.75, max * 1.25])
             .range([height, 0]);
-        svg.call(d3.axisLeft(y));
+
+        // svg.call(d3.axisLeft(y));
+
+        const yAxis = svg.append('g')
+            .attr('class', 'y-axis')
+            .call(d3.axisLeft(y).tickSizeOuter(0));
+
+        // Add Y label
+        const yLabel = svg.append('g')
+            .attr('class', 'y-label')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '15');
+
+        yLabel.append('text')
+            .text('Height of Trees');
 
         // a few features for the box
         const center = 200;
@@ -67,6 +81,9 @@ const object = {
             .attr('y1', function (d) { return (y(d)); })
             .attr('y2', function (d) { return (y(d)); })
             .attr('stroke', 'black');
+
+        // Fix labels position
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) * 2},${(getSVGHeight(svg)) / 2}) rotate(-90)`);
     }
 };
 
