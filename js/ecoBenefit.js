@@ -19,4 +19,10 @@ const setViewBoxAttr = (de) => {
     de.attr('viewBox', `${box.x} ${box.y} ${box.width} ${box.height}`);
 };
 
+const getTreeColors = (categories) => {
+    return d3.scaleOrdinal()
+        .domain(categories.sort((a, b) => a > b ? 1 : -1))
+        .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+};
+
 const sanitizeString = (s) => s.replace(/([^a-z0-9]+)/gi, '-').toLowerCase();
