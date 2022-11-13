@@ -1,4 +1,4 @@
-const margin = { top: 30, right: 30, bottom: 30, left: 60 };
+const margin = { top: 50, right: 60, bottom: 50, left: 60 };
 
 const object = {
     rawData: [],
@@ -61,13 +61,35 @@ const object = {
                 .attr('transform', `translate(0, ${height})`)
                 .call(d3.axisBottom(x));
 
+            // Add X label
+            const xLabel = svg.append('g')
+                .attr('class', 'x-label')
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '15');
+
+            xLabel.append('text')
+                .text('Tree Size');
+
             // Add Y axis
             const y = d3.scaleLinear()
                 .domain([0 - (yMax / 20), yMax + (yMax / 20)])
                 .range([height, 0]);
 
-            svg.append('g')
+            // svg.append('g')
+            // .call(d3.axisLeft(y));
+
+            const yAxis = svg.append('g')
+                .attr('class', 'y-axis')
                 .call(d3.axisLeft(y));
+
+            // Add Y label
+            const yLabel = svg.append('g')
+                .attr('class', 'y-label')
+                .attr('text-anchor', 'middle')
+                .attr('font-size', '15');
+
+            yLabel.append('text')
+                .text('CO2');
 
             // Add a scale for bubble size
             const z = d3.scaleLinear()
@@ -122,6 +144,10 @@ const object = {
                 .on('mouseover', mouseover)
                 .on('mousemove', mousemove)
                 .on('mouseleave', mouseleave);
+
+            // Fix labels position
+            yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) * 1.3},${(getSVGHeight(svg)) / 2}) rotate(-90)`);
+            xLabel.attr('transform', `translate(${(getSVGWidth(svg) - getSVGWidth(yAxis)) / 2},${getSVGHeight(svg)})`);
         }
 
         update(data.length);
