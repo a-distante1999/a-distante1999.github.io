@@ -10,7 +10,7 @@ const object = {
         });
 
         // set the dimensions and margins of the graph
-        var margin = { top: 10, right: 30, bottom: 30, left: 80 },
+        var margin = { top: 10, right: 30, bottom: 70, left: 80 },
             width = 1160 - margin.left - margin.right,
             height = 700 - margin.top - margin.bottom;
         // append the svg object to the body of the page
@@ -32,8 +32,9 @@ const object = {
             .attr("opacity", "0");
         //add label
         svg.append("text")
-            .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
-            .style("text-anchor", "middle")
+        .attr("text-anchor", "end")
+        .attr("x", width/2 + margin.left)
+        .attr("y", height + margin.top + 50)
             .text("Tree Height");
 
         // Add Y axis
