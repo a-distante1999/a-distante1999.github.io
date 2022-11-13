@@ -97,13 +97,13 @@ const object = {
         const mouseover = (event, d) => {
             removeTimeout();
             tooltip
-                .style("opacity", 1);
+            tooltip.html(`Tree: ${d.Name}<br>Carbon storage (kg):  ${d.Carbon_storage_kg} m<sup>2</sup>`)
+                .style('display', 'block')
         };
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
             tooltip
-                .html("Tree: " + d.Name.replace(/_/g, ' ') + "<br> Carbon storage (kg): " + d.Carbon_storage_kg)
                 .style('left', `${event.x}px`)
                 .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`);
         };
@@ -152,9 +152,9 @@ const object = {
             .attr("r", 3)
             .style("fill", function (d) { 
                 return color(d.Name);})
-            .on("mouseover", mouseover)
+            .on("mouseenter", mouseover)
             .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
+            .on("mouseout", mouseleave)
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight );
 
