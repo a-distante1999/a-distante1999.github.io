@@ -46,6 +46,10 @@ ul.list-none > li:not(:last-child) {
     padding-bottom: 0.5rem;
 }
 
+svg {
+    display: block;
+}
+
 .button {
     padding: 0.25rem 0.75rem;
     color: white;
