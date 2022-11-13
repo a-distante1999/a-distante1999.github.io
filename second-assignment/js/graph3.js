@@ -96,7 +96,6 @@ const object = {
 
         const mouseover = (event, d) => {
             removeTimeout();
-            tooltip
             tooltip.html(`Tree: ${d.Name}<br>Carbon storage (kg):  ${d.Carbon_storage_kg} m<sup>2</sup>`)
                 .style('display', 'block')
         };
