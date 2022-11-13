@@ -64,7 +64,7 @@ const object = {
             .attr('font-size', '15');
 
         xLabel.append('text')
-            .text('Abundance');
+            .text('Abundance [unit]');
 
         // Color palette
         const color = d3.scaleSequential()

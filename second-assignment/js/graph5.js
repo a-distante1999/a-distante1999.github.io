@@ -68,7 +68,7 @@ const object = {
                 .attr('font-size', '15');
 
             xLabel.append('text')
-                .text('Tree Size');
+                .text('Height [m]');
 
             // Add Y axis
             const y = d3.scaleLinear()
@@ -89,7 +89,7 @@ const object = {
                 .attr('font-size', '15');
 
             yLabel.append('text')
-                .text('CO2');
+                .text('Carbon storage [kg]');
 
             // Add a scale for bubble size
             const z = d3.scaleLinear()

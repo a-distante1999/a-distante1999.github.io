@@ -68,7 +68,7 @@ const object = {
             .attr('font-size', '15');
 
         xLabel.append('text')
-            .text(percentage ? 'Percentage' : 'Abundance');
+            .text(percentage ? 'Percentage' : 'Abundance [Unit]');
 
         // Color palette
         const color = getTreeColors(subgroups);

@@ -47,7 +47,7 @@ const object = {
                 .attr('font-size', '15');
 
             yLabel.append('text')
-                .text('Abundance');
+                .text('Abundance [unit]');
 
             xAxis = chart.append('g')
                 .attr('class', 'x-axis')
@@ -59,7 +59,7 @@ const object = {
                 .attr('font-size', '15');
 
             xLabel.append('text')
-                .text('Height');
+                .text('Height [m]');
 
             bars = chart.append('g')
                 .attr('class', 'bars');

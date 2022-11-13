@@ -48,7 +48,7 @@ const object = {
             .attr('font-size', '15');
 
         yLabel.append('text')
-            .text('Height of Trees');
+            .text('Height [m]');
 
         // a few features for the box
         const center = 200;
