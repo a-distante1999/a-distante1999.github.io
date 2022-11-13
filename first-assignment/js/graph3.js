@@ -12,12 +12,15 @@ const object = {
         let data = [];
         this.rawData.forEach((row, index) => {
             data[index] = { 'Name': row.Neighborhood };
-            Object.keys(row).forEach((d) => {
+            Object.keys(row).forEach(d => {
                 if (d === category) {
-                    data[index]['Abundance'] = +row[d];
+                    data[index].Abundance = +row[d];
                 }
             });
         });
+
+        // Sort data
+        data.sort((a, b) => a.Name > b.Name ? -1 : 1);
 
         // Set chart dimensions
         const height = getHorizontalChartHeight(data);
@@ -55,7 +58,7 @@ const object = {
         // Add Y axis
         const y = d3.scaleBand()
             .domain(data.map(d => d.Name))
-            .range([0, height])
+            .range([height, 0])
             .padding([0.1]);
 
         const yAxis = chart.append('g')
@@ -132,25 +135,26 @@ const object = {
             yAxis.selectAll('g')
                 .remove();
         }
-
-        // Fix title position
-        title.attr('transform', full ? `translate(${(getSVGWidth(chart) - getSVGWidth(title) - getSVGWidth(yAxis)) / 2},0)` : `translate(${(getSVGWidth(xAxis) - getSVGWidth(title)) / 2},0)`);
-
-        const box = chart.node().getBBox();
-
-        // Fix svg dimension
-        chart.attr('width', box.width + 5)
-            .attr('height', box.height + 5)
-            .attr('viewBox', `${box.x - 5} ${box.y - 5} ${box.width + 10} ${box.height + 10}`);
+        else {
+            width = width + getSVGWidth(yAxis);
+        }
 
         // Animation
         chart.selectAll('rect')
             .transition()
             .duration(1000)
             .attr('width', d => x(d.Abundance))
-            .delay(function (d, i) {
-                return (i * 75);
-            });
+            .delay((d, i) => i * 75);
+
+        // Fix title position
+        title.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(title)) / 2},${-10})`);
+
+        // Set chart dimension
+        chart.attr('width', width)
+            .attr('height', height);
+
+        // Set chart viewBox
+        setViewBoxAttr(chart);
     }
 };
 
