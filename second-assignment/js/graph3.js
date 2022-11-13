@@ -52,10 +52,21 @@ const object = {
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text("Carbon storage");
+        
+        const colors = colorInterp();
+        function colorInterp(){
+            let value = [];
+            // 224 are the number of species, so each specie has his own color
+            for (let i = 0; i <224; i++) {
+                value[i]=d3.interpolateRainbow(i*1/224);
+            }
+            return value;
+        }
 
         // Color scale: give me a specie name, I return a color
-        const color = d3.scaleOrdinal().domain(data)
-            .range(d3.schemeSet3);
+        const color = d3.scaleOrdinal()
+                    .domain(data)
+                    .range(colors);
 
         // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
         // Its opacity is set to 0: we don't see it by default.
@@ -100,7 +111,8 @@ const object = {
             .attr("cx", function (d) { return x(d.Height); })
             .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
             .attr("r", 3)
-            .style("fill", function (d) { return color(d.Name); })
+            .style("fill", function (d) { 
+                return color(d.Name);})
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave);
