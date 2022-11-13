@@ -6,7 +6,7 @@ const object = {
         // Copio i dati
         let data = [];
         this.rawData.forEach((row, index) => {
-            data[index] = parseInt(row.Height);
+            data[index] = parseFloat(row.Height);
         });
 
         // Set chart dimensions

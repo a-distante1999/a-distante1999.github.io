@@ -43,7 +43,6 @@ const object = {
         // Add Y label
         const yLabel = chart.append('g')
             .attr('class', 'y-label')
-            .attr('text-anchor', 'middle')
             .attr('font-size', '15');
 
         yLabel.append('text')
@@ -52,7 +51,7 @@ const object = {
         // Add X axis
         const x = d3.scaleLinear()
             .domain([0, d3.max(data, d => d.Abundance)])
-            .range([0, width - getSVGWidth(yAxis) - getSVGHeight(yLabel)]);
+            .range([0, width]);
 
         const xAxis = chart.append('g')
             .attr('class', 'x-axis')
@@ -62,7 +61,6 @@ const object = {
         // Add X label
         const xLabel = chart.append('g')
             .attr('class', 'x-label')
-            .attr('text-anchor', 'middle')
             .attr('font-size', '15');
 
         xLabel.append('text')
@@ -123,25 +121,23 @@ const object = {
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave);
 
-        // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis)},${(getSVGHeight(chart) - getSVGHeight(xAxis) - getSVGHeight(xAxis)) / 2}) rotate(-90)`);
-        xLabel.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(yAxis)) / 2},${getSVGHeight(chart)})`);
-
-        const box = chart.node().getBBox();
-
-        // Fix svg dimension
-        chart.attr('width', box.width + 5)
-            .attr('height', box.height + 5)
-            .attr('viewBox', `${box.x - 5} ${box.y - 5} ${box.width + 10} ${box.height + 10}`);
-
         // Animation
         chart.selectAll('rect')
             .transition()
             .duration(1000)
             .attr('width', d => x(d.Abundance))
-            .delay(function (d, i) {
-                return (i * 75);
-            });
+            .delay((d, i) => i * 75);
+
+        // Fix labels position
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) - 10},${(getSVGHeight(yAxis) + getSVGWidth(yLabel)) / 2}) rotate(-90)`);
+        xLabel.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(xLabel)) / 2},${getSVGHeight(yAxis) + getSVGHeight(xLabel) + 10})`);
+
+        // Set chart dimension
+        chart.attr('width', width)
+            .attr('height', height);
+
+        // Set chart viewBox
+        setViewBoxAttr(chart);
     }
 };
 

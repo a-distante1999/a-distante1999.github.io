@@ -1,3 +1,5 @@
+const enableAnimation = false;
+
 const listNeighborhoods = '.list-neighborhoods';
 
 const object = {
@@ -64,7 +66,7 @@ const object = {
                         Units: d.Integer,
                         Abundance: d.Abundance,
                         Tree: d.Tree,
-                        /*Random: numberToWords.toWords((Math.random() * 5).toFixed(0))*/
+                        Random: numberToWords.toWords((Math.random() * 5).toFixed(0))
                     };
                 })
             );
@@ -164,18 +166,18 @@ const object = {
             .data(waffleSquares)
             .enter()
             .append('rect')
-            .attr('class', (d) => `myRect ${sanitizeString(d.Tree)}` /*+ ' ' + sanitizeString(d.Random)*/)
+            .attr('class', d => `myRect ${sanitizeString(d.Tree)} ${sanitizeString(d.Random)}`)
             .attr('height', squareSize)
             .attr('fill', d => color(d.Tree))
-            .attr('x', function (d, i) {
+            .attr('x', (d, i) => {
                 let col = Math.floor(i / heightSquares);
                 return (col * squareSize) + (col * gap);
             })
-            .attr('y', function (d, i) {
+            .attr('y', (d, i) => {
                 let row = i % heightSquares;
                 return (heightSquares * squareSize) - ((row * squareSize) + (row * gap));
             })
-            .attr('width', squareSize) // Commentare per l'animazione
+            .attr('width', squareSize)
             .attr('stroke', 'black')
             .attr('stroke-width', '.5')
             .on('mouseover', mouseover)
@@ -183,33 +185,33 @@ const object = {
             .on('mouseleave', mouseleave);
 
         // Fix title position
-        title.attr('transform', `translate(${(getSVGWidth(chart) - getSVGWidth(title)) / 2},0)`);
+        title.attr('transform', `translate(${(width - getSVGWidth(title)) / 2},${-5})`);
 
-        const box = chart.node().getBBox();
+        // Set chart dimension
+        chart.attr('width', width)
+            .attr('height', height);
 
-        // Fix svg dimension
-        chart.attr('width', box.width + 5)
-            .attr('height', box.height + 5)
-            .attr('viewBox', `${box.x - 5} ${box.y - 5} ${box.width + 10} ${box.height + 10}`);
+        // Set chart viewBox
+        setViewBoxAttr(chart);
 
-        /*let randoms = []
-        waffleSquares.forEach((d) => {
-            if (!randoms.find(random => random == d.Random)) {
-                randoms.push(d.Random)
-            }
-        });
+        // Animation
+        if (enableAnimation) {
+            let randoms = [];
+            waffleSquares.forEach((d) => {
+                if (!randoms.find(random => random === d.Random)) {
+                    randoms.push(d.Random);
+                }
+            });
 
-        // Animazione
-        randoms.forEach((random) => {
-            // Animation
-            chart.selectAll('.' + sanitizeString(random))
-                .transition()
-                .duration(100)
-                .attr('width', squareSize)
-                .delay(function (d, i) {
-                    return (i * 75)
-                })
-        })*/
+            randoms.forEach((random) => {
+                chart.selectAll('.' + sanitizeString(random))
+                    .attr('width', 0)
+                    .transition()
+                    .duration(100)
+                    .attr('width', squareSize)
+                    .delay((d, i) => i * 75);
+            });
+        }
 
         if (full) {
             // Add legend svg
@@ -225,7 +227,7 @@ const object = {
             rows.append('rect')
                 .attr('width', 18)
                 .attr('height', 18)
-                .style('fill', (d) => color(d.Tree));
+                .style('fill', d => color(d.Tree));
 
             rows.append('text')
                 .attr('x', 25)
@@ -233,8 +235,11 @@ const object = {
                 .text(d => d.Tree);
 
             // Fix svg dimension
-            legend.attr('width', getSVGWidth(legend))
-                .attr('height', getSVGHeight(legend));
+            legend.attr('width', width)
+                .attr('height', getBBoxHeight(legend));
+
+            // Set chart viewBox
+            setViewBoxAttr(legend);
         }
     }
 };
