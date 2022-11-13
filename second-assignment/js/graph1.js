@@ -1,4 +1,4 @@
-const margin = { top: 30, right: 30, bottom: 30, left: 60 };
+const margin = { top: 50, right: 60, bottom: 50, left: 60 };
 
 const object = {
     rawData: [],
@@ -34,10 +34,31 @@ const object = {
             .attr('transform', `translate(0,${height})`)
             .call(d3.axisBottom(x));
 
+        // Add X label
+        const xLabel = svg.append('g')
+            .attr('class', 'x-label')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '15');
+
+        xLabel.append('text')
+            .text('Height of Trees');
+
         // Y axis: initialization
         const y = d3.scaleLinear()
             .range([height, 0]);
-        const yAxis = svg.append('g');
+
+        const yAxis = svg.append('g')
+            .attr('class', 'y-axis')
+            .call(d3.axisLeft(y).tickSizeOuter(0));
+
+        // Add Y label
+        const yLabel = svg.append('g')
+            .attr('class', 'y-label')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '15');
+
+        yLabel.append('text')
+            .text('Number of Trees');
 
         // A function that builds the graph for a specific value of bin
         function update(nBin) {
@@ -71,6 +92,10 @@ const object = {
                 .attr('height', function (d) { return height - y(d.length); })
                 .style('fill', '#69b3a2');
         }
+
+        // Fix labels position
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) * 2},${(getSVGHeight(svg)) / 2}) rotate(-90)`);
+        xLabel.attr('transform', `translate(${(getSVGWidth(svg) - getSVGWidth(yAxis)) / 2},${getSVGHeight(svg)})`);
 
         // Initialize with 20 bins
         update(20);
