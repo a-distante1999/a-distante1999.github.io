@@ -1,5 +1,3 @@
-const margin = { top: 30, right: 30, bottom: 30, left: 60 };
-
 const object = {
     rawData: [],
     drawChart: function (selector) {
@@ -10,16 +8,8 @@ const object = {
         });
 
         // Set chart dimensions
-        const height = 600 - margin.top - margin.bottom;
-        const width = 600 - margin.left - margin.right;
-
-        // append the svg object to the body of the page
-        const svg = d3.select(selector)
-            .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+        const height = 600;
+        const width = getElementWidth(selector);
 
         // Compute summary statistics used for the box:
         const dataSorted = data.sort(d3.ascending);
@@ -30,21 +20,23 @@ const object = {
         const min = q1 - 1.5 * interQuantileRange;
         const max = q1 + 1.5 * interQuantileRange;
 
-        // Show the Y scale
+        // Add chart svg
+        const chart = d3.select(selector)
+            .append('svg')
+            .attr('class', 'boxplot-chart');
+
+        // Add Y axis
         const y = d3.scaleLinear()
             .domain([min * 1.75, max * 1.25])
             .range([height, 0]);
 
-        // svg.call(d3.axisLeft(y));
-
-        const yAxis = svg.append('g')
+        const yAxis = chart.append('g')
             .attr('class', 'y-axis')
             .call(d3.axisLeft(y).tickSizeOuter(0));
 
         // Add Y label
-        const yLabel = svg.append('g')
+        const yLabel = chart.append('g')
             .attr('class', 'y-label')
-            .attr('text-anchor', 'middle')
             .attr('font-size', '15');
 
         yLabel.append('text')
@@ -52,10 +44,12 @@ const object = {
 
         // a few features for the box
         const center = 200;
-        widthBox = 100;
+        const widthBox = 100;
+
+        const box = chart.append('g');
 
         // Show the main vertical line
-        svg.append('line')
+        box.append('line')
             .attr('x1', center)
             .attr('x2', center)
             .attr('y1', y(min))
@@ -63,7 +57,7 @@ const object = {
             .attr('stroke', 'black');
 
         // Show the box
-        svg.append('rect')
+        box.append('rect')
             .attr('x', center - widthBox / 2)
             .attr('y', y(q3))
             .attr('height', (y(q1) - y(q3)))
@@ -71,11 +65,10 @@ const object = {
             .attr('stroke', 'black')
             .style('fill', '#69b3a2');
 
-        // show median, min and max horizontal lines
-        svg.selectAll('toto')
+        // Show median, min and max horizontal lines
+        box.selectAll('g')
             .data([min, median, max])
-            .enter()
-            .append('line')
+            .join('line')
             .attr('x1', center - widthBox / 2)
             .attr('x2', center + widthBox / 2)
             .attr('y1', function (d) { return (y(d)); })
@@ -83,7 +76,14 @@ const object = {
             .attr('stroke', 'black');
 
         // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) * 2},${(getSVGHeight(svg)) / 2}) rotate(-90)`);
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) - 10},${(getSVGHeight(yAxis) + getSVGWidth(yLabel)) / 2}) rotate(-90)`);
+
+        // Set chart dimension
+        chart.attr('width', width)
+            .attr('height', height);
+
+        // Set chart viewBox
+        setViewBoxAttr(chart);
     }
 };
 
