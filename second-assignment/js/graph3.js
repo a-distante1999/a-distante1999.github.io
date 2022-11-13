@@ -1,88 +1,87 @@
-const margin = { top: 30, right: 30, bottom: 30, left: 60 };
-
 const object = {
     rawData: [],
+    getCategories: function () {
+        let categories = [];
+
+        this.rawData.forEach(function (row) {
+            // Copio i dati
+            let obj = { 'Name': row.Name, 'Abundance': 1 };
+
+            // Cerco nei dati se esiste già quella specie di albero
+            let element = categories.find((e) => e.Name === obj.Name);
+
+            if (element) {
+                element.Abundance++;
+            }
+            else {
+                // Aggiungo il nuovo elemento
+                categories.push(obj);
+            }
+        });
+
+        return categories.sort((a, b) => a.Abundance > b.Abundance ? -1 : 1).map(d => d.Name);
+    },
     drawChart: function (selector) {
+        const dotSize = 3, dotSelectedSize = 7;
+
+        const subgroups = this.getCategories();
+
         // Copio i dati
         let data = [];
         this.rawData.forEach((row, index) => {
             data[index] = { ...row };
         });
 
-        // set the dimensions and margins of the graph
-        var margin = { top: 10, right: 30, bottom: 70, left: 80 },
-            width = 1160 - margin.left - margin.right,
-            height = 700 - margin.top - margin.bottom;
-        // append the svg object to the body of the page
-        var svg = d3.select(selector)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // Set chart dimensions
+        const height = 600;
+        const width = getElementWidth(selector);
 
-        // Add X axis
-        var x = d3.scaleLinear()
-            .domain([0, 0])
-            .range([0, width]);
-        svg.append("g")
-            .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
-            .attr("opacity", "0");
-        
-            //add label
-        svg.append("text")
-        .attr("text-anchor", "end")
-        .attr("x", width/2 + margin.left)
-        .attr("y", height + margin.top + 50)
-            .text("Tree Height (m)");
+        // Add tooltip
+        const tooltip = d3.select(selector)
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('display', 'none');
+
+        // Add chart svg
+        const chart = d3.select(selector)
+            .append('svg')
+            .attr('class', 'scatterplot-chart');
 
         // Add Y axis
-        var y = d3.scaleLinear()
-            .domain([0, 8000])
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => +d.Carbon)])
             .range([height, 0]);
-        svg.append("g")
-            .call(d3.axisLeft(y));
 
-        // Add the text label for the Y axis
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
-            .attr("x", 0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text("Carbon storage");
-        
-        const colors = colorInterp();
-        function colorInterp(){
-            let value = [];
-            // 224 are the number of species, so each specie has his own color
-            for (let i = 0; i <224; i++) {
-                value[i]=d3.interpolateRainbow(i*1/224);
-            }
-            return value;
-        }
+        const yAxis = chart.append('g')
+            .attr('class', 'y-axis')
+            .call(d3.axisLeft(y).tickSizeOuter(0));
 
-        // Color scale: give me a specie name, I return a color
-        const color = d3.scaleOrdinal()
-                    .domain(data)
-                    .range(colors);
+        // Add Y label
+        const yLabel = chart.append('g')
+            .attr('class', 'y-label')
+            .attr('font-size', '15');
 
-        // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
-        // Its opacity is set to 0: we don't see it by default.
-        var tooltip = d3.select(selector)
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px");
+        yLabel.append('text')
+            .text('Carbon storage (kg)');
 
-        // A function that change this tooltip when the user hover a point.
-        // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+        // Add X axis
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(data, d => +d.Height)])
+            .range([0, width]);
+
+        const xAxis = chart.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickSizeOuter(0));
+
+        // Add X label
+        const xLabel = chart.append('g')
+            .attr('class', 'x-label')
+            .attr('font-size', '15');
+
+        xLabel.append('text')
+            .text('Height (m)');
+
         // Tooltip timeout
         let timeout = null;
 
@@ -96,87 +95,81 @@ const object = {
 
         const mouseover = (event, d) => {
             removeTimeout();
-            tooltip.html(`Tree: ${d.Name}<br>Carbon storage (kg):  ${d.Carbon_storage_kg} m<sup>2</sup>`)
-                .style('display', 'block')
+
+            // Set opacity to other circle
+            d3.selectAll('.myDot')
+                .style('opacity', 0.2)
+                .attr("r", dotSize);
+
+            // Show 'subgroupName' circle
+            d3.selectAll(`.${sanitizeString(d.Name)}`)
+                .style('opacity', 1)
+                .attr("r", dotSelectedSize);
+
+            // Show tooltip
+            tooltip.html("Tree: " + d.Name + "<br> Carbon storage (kg): " + d.Carbon)
+                .style('display', 'block');
         };
 
         const mousemove = (event, d) => {
             // Move tooltip near mouse pointer
-            tooltip
-                .style('left', `${event.x}px`)
+            tooltip.style('left', `${event.x}px`)
                 .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`);
         };
 
         const mouseleave = (event, d) => {
+            removeTimeout();
+
+            // Add Tooltip timeout
+            timeout = setTimeout(() => {
+                // Show all rect
+                d3.selectAll('.myDot')
+                    .style('opacity', 1)
+                    .attr("r", dotSize);
+
                 tooltip.style('display', 'none');
+            }, 150);
         };
-       
-        // Highlight the specie that is hovered
-        const highlight = function(event,d){
 
-            selected_specie = d.Name
+        // Color palette
+        const color = function (d) {
+            return d3.interpolateWarm(subgroups.indexOf(d.Name) / subgroups.length);
+        };
 
-            d3.selectAll(".dot")
-            .transition()
-            .duration(200)
-            .style("fill", "lightgrey")
-            .attr("r", 3)
-
-            d3.selectAll("." + selected_specie)
-            .transition()
-            .duration(10)
-            .style("fill", color(selected_specie))
-            .attr("r", 7)
-        }
-
-        // Highlight the specie that is hovered
-        const doNotHighlight = function(event,d){
-            d3.selectAll(".dot")
-            .transition()
-            .duration(10)
-            .style("fill", function (d) { 
-                return color(d.Name);})
-            .attr("r", 3 )
-        }
-
-        // Add dots
-        svg.append('g')
-            .selectAll("dot")
+        // Show the dots
+        chart.append('g')
+            .attr('class', 'dots')
+            .selectAll('g')
             .data(data)
-            .enter()
-            .append("circle")
-            .attr("class", function (d) { return "dot " + d.Name } )
-            .attr("cx", function (d) { return x(d.Height); })
-            .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
-            .attr("r", 3)
-            .style("fill", function (d) { 
-                return color(d.Name);})
-            .on("mouseenter", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseout", mouseleave)
-            .on("mouseover", highlight)
-            .on("mouseleave", doNotHighlight );
+            .join('circle')
+            .attr('class', d => `myDot ${sanitizeString(d.Name)}`)
+            .attr('cx', d => x(d.Height))
+            .attr('cy', d => y(d.Carbon))
+            .attr('r', dotSelectedSize)
+            .attr('fill', d => color(d))
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseleave', mouseleave);
 
-        // new X axis
-        x.domain([0, 60]);
-        svg.select(".myXaxis")
-            .transition()
-            .duration(50)
-            .attr("opacity", "1")
-            .call(d3.axisBottom(x));
+        // Fix labels position
+        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) - 10},${(getSVGHeight(yAxis) + getSVGWidth(yLabel)) / 2}) rotate(-90)`);
+        xLabel.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(xLabel)) / 2},${getSVGHeight(yAxis) + getSVGHeight(xLabel) + 10})`);
 
-        svg.selectAll("circle")
-            .transition()
-            .delay(function (d, i) { return (i * 0.1); })
-            .duration(100)
-            .attr("cx", function (d) { return x(d.Height); })
-            .attr("cy", function (d) { return y(d.Carbon_storage_kg); });
+        // Set chart dimension
+        chart.attr('width', width)
+            .attr('height', height);
 
+        // Set chart viewBox
+        setViewBoxAttr(chart);
+
+        // Set correct dots size
+        chart.selectAll('.myDot')
+            .attr('r', dotSize);
     }
 };
 
 $(document).ready(async function () {
-    object.rawData = await d3.csv('../csv/graph3.csv');
+    object.rawData = await d3.csv('/second-assignment/csv/geo_data_trees_list.csv');
 
     $(window).resize(function () {
         if (currentWidth !== window.innerWidth) {

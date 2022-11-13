@@ -71,9 +71,7 @@ const object = {
             .text(percentage ? 'Percentage' : 'Abundance');
 
         // Color palette
-        const color = d3.scaleOrdinal()
-            .domain(subgroups)
-            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+        const color = getTreeColors(subgroups);
 
         if (percentage) {
             // Normalize the data

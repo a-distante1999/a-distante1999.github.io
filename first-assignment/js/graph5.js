@@ -91,9 +91,7 @@ const object = {
             .style('display', 'none');
 
         // Set fixed order to keep same colors on each iteration
-        const color = d3.scaleOrdinal()
-            .domain(data.map(d => d.Tree).sort((a, b) => a > b ? 1 : -1))
-            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+        const color = getTreeColors(data.map(d => d.Tree));
 
         // Tooltip timeout
         let timeout = null;

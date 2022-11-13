@@ -79,7 +79,7 @@ const object = {
 
         // Add X axis
         const x = d3.scaleLinear()
-            .domain([0, 50])
+            .domain([0, d3.max(data, d => +d.Height)])
             .range([0, width]);
 
         // Set the parameters for the histogram

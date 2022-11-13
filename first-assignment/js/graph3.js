@@ -76,9 +76,7 @@ const object = {
             .call(d3.axisBottom(x).tickSizeOuter(0).ticks(3));
 
         // Color palette
-        const color = d3.scaleOrdinal()
-            .domain(subgroups)
-            .range(['#A63CB3', '#FD4B84', '#FA9832', '#31EE82', '#28A2DC', '#5366D7']);
+        const color = getTreeColors(subgroups);
 
         // Tooltip timeout
         let timeout = null;

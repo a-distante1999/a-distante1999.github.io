@@ -19,7 +19,7 @@ const object = {
         });
 
         // Riordino i dati in base alla quantità
-        data.sort((a, b) => (b.Abundance - a.Abundance));
+        data.sort((a, b) => (b.Abundance - a.Abundance ? -1 : 1));
 
         function update(nTrees) {
             // Fix the number of trees
@@ -96,7 +96,7 @@ const object = {
                 .domain([0 - (zMax / 20), zMax + (zMax / 20)])
                 .range([4, 20]);
 
-            // Add a scale for bubble color
+            // Color palette
             const color = function (i) {
                 return d3.interpolateWarm(i / newData.length);
             };
