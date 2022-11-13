@@ -30,12 +30,13 @@ const object = {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .attr("opacity", "0");
-        //add label
+        
+            //add label
         svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", width/2 + margin.left)
         .attr("y", height + margin.top + 50)
-            .text("Tree Height");
+            .text("Tree Height (m)");
 
         // Add Y axis
         var y = d3.scaleLinear()
@@ -82,25 +83,62 @@ const object = {
 
         // A function that change this tooltip when the user hover a point.
         // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-        const mouseover = function (event, d) {
+        // Tooltip timeout
+        let timeout = null;
+
+        // Clear tooltip timeout
+        const removeTimeout = () => {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+        };
+
+        const mouseover = (event, d) => {
+            removeTimeout();
             tooltip
                 .style("opacity", 1);
         };
 
-        const mousemove = function (event, d) {
+        const mousemove = (event, d) => {
+            // Move tooltip near mouse pointer
             tooltip
                 .html("Tree: " + d.Name.replace(/_/g, ' ') + "<br> Carbon storage (kg): " + d.Carbon_storage_kg)
-                .style("left", (event.x) / 2 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-                .style("top", (event.y) / 2 + "px");
+                .style('left', `${event.x}px`)
+                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`);
         };
 
-        // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-        const mouseleave = function (event, d) {
-            tooltip
-                .transition()
-                .duration(200)
-                .style("opacity", 0);
+        const mouseleave = (event, d) => {
+                tooltip.style('display', 'none');
         };
+       
+        // Highlight the specie that is hovered
+        const highlight = function(event,d){
+
+            selected_specie = d.Name
+
+            d3.selectAll(".dot")
+            .transition()
+            .duration(200)
+            .style("fill", "lightgrey")
+            .attr("r", 3)
+
+            d3.selectAll("." + selected_specie)
+            .transition()
+            .duration(10)
+            .style("fill", color(selected_specie))
+            .attr("r", 7)
+        }
+
+        // Highlight the specie that is hovered
+        const doNotHighlight = function(event,d){
+            d3.selectAll(".dot")
+            .transition()
+            .duration(10)
+            .style("fill", function (d) { 
+                return color(d.Name);})
+            .attr("r", 3 )
+        }
 
         // Add dots
         svg.append('g')
@@ -108,6 +146,7 @@ const object = {
             .data(data)
             .enter()
             .append("circle")
+            .attr("class", function (d) { return "dot " + d.Name } )
             .attr("cx", function (d) { return x(d.Height); })
             .attr("cy", function (d) { return y(d.Carbon_storage_kg); })
             .attr("r", 3)
@@ -115,7 +154,9 @@ const object = {
                 return color(d.Name);})
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave);
+            .on("mouseleave", mouseleave)
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight );
 
         // new X axis
         x.domain([0, 60]);
