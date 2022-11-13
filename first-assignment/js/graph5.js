@@ -202,7 +202,7 @@ const object = {
             });
 
             randoms.forEach((random) => {
-                chart.selectAll('.' + sanitizeString(random))
+                chart.selectAll(`.${sanitizeString(random)}`)
                     .attr('width', 0)
                     .transition()
                     .duration(100)

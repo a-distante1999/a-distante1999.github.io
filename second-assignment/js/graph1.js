@@ -14,6 +14,7 @@ const object = {
         const height = 600;
         const width = getElementWidth(selector);
 
+        // Fix the number of bins
         if (nBin < 1) {
             nBin = 1;
         }
@@ -98,7 +99,8 @@ const object = {
         xAxis.call(d3.axisBottom(x).tickSizeOuter(0));
 
         // Show the bars
-        bars.selectAll('rect').data(bins)
+        bars.selectAll('rect')
+            .data(bins)
             .join('rect')
             .attr('fill', '#69b3a2')
             .attr('y', d => height)

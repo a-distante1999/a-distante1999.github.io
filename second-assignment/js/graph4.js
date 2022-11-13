@@ -104,7 +104,7 @@ const object = {
             removeTimeout();
 
             // Show tooltip
-            tooltip.html("Carbon storage (kg): " + d.Carbon + "<br/>Height (m): " + d.Height)
+            tooltip.html(`Carbon storage (kg): ${d.Carbon}<br/>Height (m): ${d.Height}`)
                 .style('display', 'block');
         };
 

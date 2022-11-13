@@ -107,7 +107,7 @@ const object = {
                 .attr("r", dotSelectedSize);
 
             // Show tooltip
-            tooltip.html("Tree: " + d.Name + "<br> Carbon storage (kg): " + d.Carbon)
+            tooltip.html(`Tree: ${d.Name}<br> Carbon storage (kg): ${d.Carbon}`)
                 .style('display', 'block');
         };
 
