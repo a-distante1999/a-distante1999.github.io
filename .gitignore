@@ -1,3 +1,9 @@
+# IDE
 .idea
 .vscode
+
+# macOS
 .DS_Store
+
+# Trash
+*.log
