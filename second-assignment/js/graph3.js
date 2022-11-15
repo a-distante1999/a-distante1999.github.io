@@ -133,7 +133,7 @@ const object = {
 
         // Color palette
         const color = function (d) {
-            return d3.interpolateWarm(subgroups.indexOf(d.Name) / subgroups.length);
+            return d3.interpolateRainbow(subgroups.indexOf(d.Name) / subgroups.length);
         };
 
         // Show the dots
