@@ -8,6 +8,17 @@ $(document).ready(function () {
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
+    const Tooltip = d3.select(singleContainer)
+    .append("div")
+    .attr("class", "Tooltip")
+    .attr('style', 'position: absolute; opacity: 0;')
+    .style("opacity", 0)
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
     let data = new Map()
     const colorScale = d3.scaleThreshold()
         .domain([200, 400, 600, 800, 1000, 1200, 1400, 1600])
@@ -31,7 +42,16 @@ $(document).ready(function () {
                 .transition()
                 .duration(200)
                 .style("opacity", 1)
+            Tooltip.style('opacity', 1)
         }
+
+        var mousemove = function (event, d) {
+            Tooltip
+                .html(d.properties.nome + "<br>" + "Oxigen: " + d.total + "<br>" + "Number of trees: " + d.tree + "<br>" + "Area: " + d.properties.area + "<br>" )
+                .style("left", (event.x) / 2 + "px")
+                .style("top", (event.y) / 2 - 30 + "px")
+        }
+
         let mouseLeave = function (d) {
             d3.selectAll(".Country")
                 .transition()
@@ -40,6 +60,7 @@ $(document).ready(function () {
             d3.select(this)
                 .transition()
                 .duration(200)
+            Tooltip.style('opacity', 0)
         }
 
         const projection = d3.geoIdentity()
@@ -62,6 +83,7 @@ $(document).ready(function () {
             .attr("class", function (d) { return "Country" })
             .style("opacity", 1)
             .on("mouseover", mouseOver)
+            .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
     })
 });
