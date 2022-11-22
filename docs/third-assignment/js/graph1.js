@@ -8,18 +8,15 @@ $(document).ready(function () {
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
-    // Map and projection
-    const projection = d3.geoNaturalEarth1()
-        .scale(100000)
-        .center([11.15677965172273, 46.11660863851066])
-        .translate([width / 2, height / 2]);
-
-
     /* .scale(width / 1.3 / Math.PI)
      .translate([width / 2, height / 2])*/
 
     // Load external data and boot
     d3.json("../circoscrizioni.json").then(function (data) {
+
+        // Map and projection
+        const projection = d3.geoIdentity()
+        .fitSize([width, height], data);
 
         // Draw the map
         svg.append("g")
