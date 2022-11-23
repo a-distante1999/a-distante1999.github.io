@@ -199,25 +199,4 @@ $(document).ready(function () {
                  .attr("fill-opacity", 1)*/
         })
     })
-
-
-
-
-
-
-    // Load external data and boot
-
-
-    /*
-    d3.json("../geo_data_trees.geojson").then(function (rawData) {
-        for (var i = 0; i < 3; i++) {
-            points[i] = [{ long: rawData.features[i].geometry.coordinates[0], 'lat': rawData.features[i].geometry.coordinates[1] }]
-        }
-    })*/
-
-
-
-
-
-
 });

@@ -8,17 +8,19 @@ $(document).ready(function () {
     let height = +svg.attr("height");
 
     const Tooltip = d3.select(singleContainer)
-    .append("div")
-    .attr("class", "Tooltip")
-    .attr('style', 'position: absolute; opacity: 0;')
-    .style("opacity", 0)
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+        .append("div")
+        .attr("class", "Tooltip")
+        .attr('style', 'position: absolute; opacity: 0;')
+        .style("opacity", 0)
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
 
     let data = new Map()
+    let data1 = new Map()
+
     const colorScale = d3.scaleThreshold()
         .domain([200, 400, 600, 800, 1000, 1200, 1400, 1600])
         .range(d3.schemeGreens[9]);
@@ -26,14 +28,14 @@ $(document).ready(function () {
     Promise.all([
         d3.json("../circoscrizioni.json"),
         d3.csv("../neighborhood.csv", function (d) {
-            
+
             data.set(d.numero_cir, +d.density)
-            
+            data1.set(d.numero_cir, +d.tree)
+
         })
     ]).then(function (loadData) {
 
         let topo = loadData[0]
-
         let mouseOver = function (d) {
             d3.selectAll(".Country")
                 .transition()
@@ -47,9 +49,9 @@ $(document).ready(function () {
             Tooltip.style('opacity', 1)
         }
 
-        var mousemove = function (event, d) {
+        var mousemove = function (event, data) {
             Tooltip
-                .html(d.properties.nome + "<br>" + "Density: " + d.total + "<br>" + "Number of trees: " + d.tree + "<br>" + "Area: " + d.properties.area + "<br>")
+                .html(data.properties.nome + "<br>" + "Density: " + data.total + "<br>" + "Abundance: " + data1.tree + "<br>" + "Area: " + data.properties.area + " m<sup>2</sup>" + "<br>")
                 .style("left", (event.x) / 2 + "px")
                 .style("top", (event.y) / 2 - 30 + "px")
         }

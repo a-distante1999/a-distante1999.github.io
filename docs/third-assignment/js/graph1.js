@@ -7,6 +7,7 @@ $(document).ready(function () {
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
+    //Create tooltip
     const Tooltip = d3.select(singleContainer)
         .append("div")
         .attr("class", "Tooltip")
@@ -15,7 +16,7 @@ $(document).ready(function () {
         .style("background-color", "white")
         .style("border", "solid")
         .style("border-width", "2px")
-        .style("border-radius", "5px")
+        .style("border-radius", "0.5rem")
         .style("padding", "5px")
 
     // Create color palette
@@ -50,10 +51,11 @@ $(document).ready(function () {
             Tooltip.style('opacity', 1)
 
         }
+        console.log(loadData)
 
         var mousemove = function (event, d) {
             Tooltip
-                .html(d.properties.nome + "<br>" + "number of trees: " + d.total + "<br>")
+                .html(d.properties.nome + "<br>" + "Abundance: " + d.total + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
                 .style("left", (event.x) / 2 + "px")
                 .style("top", (event.y) / 2 - 30 + "px")
         }
