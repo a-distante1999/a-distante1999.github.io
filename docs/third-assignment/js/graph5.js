@@ -2,7 +2,7 @@ $(document).ready(function () {
     // The svg
     const svg = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 1000)
+        .attr("width", 1850)
         .attr("height", 800);
     const svg1 = d3.select(singleContainer)
         .append("svg")
@@ -200,39 +200,42 @@ $(document).ready(function () {
                 .attr("cy", d => projection([d.long, d.lat])[1])
                 .attr("r", 0.5)
                 .style("fill", "#000000")
-                .attr("fill-opacity", 1)
+                .attr("fill-opacity", 0.3)
 
 
-            svg1.append("circle").attr("cx", 200).attr("cy", 70).attr("r", 6).style("fill", "#E20202")
-            svg1.append("text").attr("x", 220).attr("y", 70).text("Celtis Australis").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 70).attr("r", 6).style("fill", "#E20202")
+            svg.append("text").attr("x", 120).attr("y", 70).text("Celtis Australis").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 200).attr("cy", 100).attr("r", 6).style("fill", "#E2D102")
-            svg1.append("text").attr("x", 220).attr("y", 100).text("Aesculus hippocastanum").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 100).attr("r", 6).style("fill", "#E2D102")
+            svg.append("text").attr("x", 120).attr("y", 100).text("Aesculus hippocastanum").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 200).attr("cy", 130).attr("r", 6).style("fill", "#91E202")
-            svg1.append("text").attr("x", 220).attr("y", 130).text("Carpinus betulus").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 130).attr("r", 6).style("fill", "#91E202")
+            svg.append("text").attr("x", 120).attr("y", 130).text("Carpinus betulus").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 200).attr("cy", 160).attr("r", 6).style("fill", "#02E272")
-            svg1.append("text").attr("x", 220).attr("y", 160).text("Tilia cordata").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 160).attr("r", 6).style("fill", "#02E272")
+            svg.append("text").attr("x", 120).attr("y", 160).text("Tilia cordata").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 200).attr("cy", 190).attr("r", 6).style("fill", "#02CAE2")
-            svg1.append("text").attr("x", 220).attr("y", 190).text("Platanus x hispanica").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 190).attr("r", 6).style("fill", "#02CAE2")
+            svg.append("text").attr("x", 120).attr("y", 190).text("Platanus x hispanica").style("font-size", "15px").attr("alignment-baseline", "middle")
 
             //SECONDA COLONNA
-            svg1.append("circle").attr("cx", 450).attr("cy", 70).attr("r", 6).style("fill", "#0249E2")
-            svg1.append("text").attr("x", 470).attr("y", 70).text("Tilia x europaea").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 220).attr("r", 6).style("fill", "#0249E2")
+            svg.append("text").attr("x", 120).attr("y", 220).text("Tilia x europaea").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 450).attr("cy", 100).attr("r", 6).style("fill", "#DF02E2")
-            svg1.append("text").attr("x", 470).attr("y", 100).text("Acer campestre").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 250).attr("r", 6).style("fill", "#DF02E2")
+            svg.append("text").attr("x", 120).attr("y", 250).text("Acer campestre").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 450).attr("cy", 130).attr("r", 6).style("fill", "#E2026B")
-            svg1.append("text").attr("x", 470).attr("y", 130).text("Cupressus").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 280).attr("r", 6).style("fill", "#E2026B")
+            svg.append("text").attr("x", 120).attr("y", 280).text("Cupressus").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 450).attr("cy", 160).attr("r", 6).style("fill", "#951897")
-            svg1.append("text").attr("x", 470).attr("y", 160).text("Sophora japonica").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 310).attr("r", 6).style("fill", "#951897")
+            svg.append("text").attr("x", 120).attr("y", 310).text("Sophora japonica").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-            svg1.append("circle").attr("cx", 450).attr("cy", 190).attr("r", 6).style("fill", "#FFFFFF")
-            svg1.append("text").attr("x", 470).attr("y", 190).text("Prunus cerasifera").style("font-size", "15px").attr("alignment-baseline", "middle")
+            svg.append("circle").attr("cx", 100).attr("cy", 340).attr("r", 6).style("fill", "#FFFFFF")
+            svg.append("text").attr("x", 120).attr("y", 340).text("Prunus cerasifera").style("font-size", "15px").attr("alignment-baseline", "middle")
+
+            svg.append("circle").attr("cx", 100).attr("cy", 370).attr("r", 6).style("fill", "#000000")
+            svg.append("text").attr("x", 120).attr("y", 370).text("Others").style("font-size", "15px").attr("alignment-baseline", "middle")
 
         })
     })
