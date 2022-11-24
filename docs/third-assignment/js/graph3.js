@@ -2,22 +2,22 @@ $(document).ready(function () {
     // The svg
     const svg = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 600)
-        .attr("height", 400);
+        .attr("width", 700)
+        .attr("height", 500);
 
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
     const Tooltip = d3.select(singleContainer)
-    .append("div")
-    .attr("class", "Tooltip")
-    .attr('style', 'position: absolute; opacity: 0;')
-    .style("opacity", 0)
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+        .append("div")
+        .attr("class", "Tooltip")
+        .attr('style', 'position: absolute; opacity: 0;')
+        .style("opacity", 0)
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
 
     let data = new Map()
     const colorScale = d3.scaleThreshold()
@@ -47,9 +47,9 @@ $(document).ready(function () {
 
         var mousemove = function (event, d) {
             Tooltip
-                .html(d.properties.nome + "<br>" + "Oxigen: " + d.total + "<br>" + "Number of trees: " + d.tree + "<br>" + "Area: " + d.properties.area + "<br>" )
-                .style("left", (event.x) / 2 + "px")
-                .style("top", (event.y) / 2 - 30 + "px")
+                .html(d.properties.nome + "<br>" + "Oxygen: " + d.total + "<br>" + "Abundance: " + d.properties.treeAbundance + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
+                .style("left", (event.x) / 1.5 + "px")
+                .style("top", (event.y) / 1.5 + "px")
         }
 
         let mouseLeave = function (d) {

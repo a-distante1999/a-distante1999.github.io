@@ -2,8 +2,8 @@ $(document).ready(function () {
     // Create svg
     const svg = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 600)
-        .attr("height", 400);
+        .attr("width", 700)
+        .attr("height", 500);
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
@@ -56,8 +56,8 @@ $(document).ready(function () {
         var mousemove = function (event, d) {
             Tooltip
                 .html(d.properties.nome + "<br>" + "Abundance: " + d.total + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
-                .style("left", (event.x) / 2 + "px")
-                .style("top", (event.y) / 2 - 30 + "px")
+                .style("left", (event.x) / 1.5 + "px")
+                .style("top", (event.y) / 1.5 + "px")
         }
 
         let mouseLeave = function (d) {

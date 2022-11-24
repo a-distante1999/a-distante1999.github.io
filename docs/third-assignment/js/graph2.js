@@ -2,8 +2,8 @@ $(document).ready(function () {
     // The svg
     const svg = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 600)
-        .attr("height", 400);
+        .attr("width", 700)
+        .attr("height", 500);
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
@@ -30,8 +30,6 @@ $(document).ready(function () {
         d3.csv("../neighborhood.csv", function (d) {
 
             data.set(d.numero_cir, +d.density)
-            data1.set(d.numero_cir, +d.tree)
-
         })
     ]).then(function (loadData) {
 
@@ -49,11 +47,11 @@ $(document).ready(function () {
             Tooltip.style('opacity', 1)
         }
 
-        var mousemove = function (event, data) {
+        var mousemove = function (event, d) {
             Tooltip
-                .html(data.properties.nome + "<br>" + "Density: " + data.total + "<br>" + "Abundance: " + data1.tree + "<br>" + "Area: " + data.properties.area + " m<sup>2</sup>" + "<br>")
-                .style("left", (event.x) / 2 + "px")
-                .style("top", (event.y) / 2 - 30 + "px")
+                .html(d.properties.nome + "<br>" + "Density: " + d.total + "<br>" + "Abundance: " + d.properties.treeAbundance + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
+                .style("left", (event.x) / 1.5 + "px")
+                .style("top", (event.y) / 1.5 + "px")
         }
 
         let mouseLeave = function (d) {
@@ -82,7 +80,7 @@ $(document).ready(function () {
             .style("stroke", "#000")
 
 
-            .attr("fill", function (d, i) {
+            .attr("fill", function (d) {
                 d.total = data.get(d.properties.numero_cir) || 0;
                 return colorScale(d.total);
             })
