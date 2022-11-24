@@ -83,10 +83,9 @@ $(document).ready(function () {
         }
 
         //Choose projection
-        const projection = d3.geoIdentity().reflectY(true) 
-
-            .fitSize([width, height], topo);
-
+        const projection = d3.geoIdentity().reflectY(true)
+          .fitSize([width, height], topo);
+        
         // Draw the map
         svg.append("g")
             .selectAll("path")
