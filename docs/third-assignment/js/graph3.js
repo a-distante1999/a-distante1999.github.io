@@ -63,7 +63,7 @@ $(document).ready(function () {
             Tooltip.style('opacity', 0)
         }
 
-        const projection = d3.geoIdentity()
+        const projection = d3.geoIdentity().reflectY(true) 
             .fitSize([width, height], topo);
 
         svg.append("g")

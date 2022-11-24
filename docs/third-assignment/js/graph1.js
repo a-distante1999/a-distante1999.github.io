@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    //guardare cartina che è schiacciato il disegno
+
+    //aumentare dimensione max 75 caratteri per riga
+    //spiegare le scelte fatte
+    //legenta sui colori con i valori sotto
+    //unità di misura
+    
+    
     // Create svg
     const svg = d3.select(singleContainer)
         .append("svg")
@@ -75,7 +83,8 @@ $(document).ready(function () {
         }
 
         //Choose projection
-        const projection = d3.geoIdentity()
+        const projection = d3.geoIdentity().reflectY(true) 
+
             .fitSize([width, height], topo);
 
         // Draw the map

@@ -18,7 +18,7 @@ $(document).ready(function () {
         d3.json("../circoscrizioni.json").then(function (data) {
 
             // Choose projection
-            const projection = d3.geoIdentity()
+            const projection = d3.geoIdentity().reflectY(true) 
                 .fitSize([width, height], data);
 
             // Draw the map
