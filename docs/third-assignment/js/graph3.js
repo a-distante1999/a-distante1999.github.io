@@ -8,6 +8,11 @@ $(document).ready(function () {
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
+    const legend = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1000)
+        .attr("height", 500);
+
     const Tooltip = d3.select(singleContainer)
         .append("div")
         .attr("class", "Tooltip")
@@ -21,8 +26,8 @@ $(document).ready(function () {
 
     let data = new Map()
     const colorScale = d3.scaleThreshold()
-        .domain([200, 400, 600, 800, 1000, 1200, 1400, 1600])
-        .range(d3.schemeBlues[9]);
+        .domain([200, 400, 600, 800, 1000])
+        .range(d3.schemeBlues[6]);
 
     Promise.all([
         d3.json("../circoscrizioni.json"),
@@ -63,7 +68,7 @@ $(document).ready(function () {
             Tooltip.style('opacity', 0)
         }
 
-        const projection = d3.geoIdentity().reflectY(true) 
+        const projection = d3.geoIdentity().reflectY(true)
             .fitSize([width, height], topo);
 
         svg.append("g")
@@ -85,5 +90,26 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
+
+        //LEGEND
+        //Primo blocco
+        legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(0)).attr('stroke', 'black')
+        legend.append("text").attr("x", 45).attr("y", 115).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 186).attr("y", 115).text("200").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Secondo blocco
+        legend.append("rect").attr("x", 200).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(200)).attr('stroke', 'black')
+        legend.append("text").attr("x", 337).attr("y", 115).text("400").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Terzo blocco
+        legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(400)).attr('stroke', 'black')
+        legend.append("text").attr("x", 487).attr("y", 115).text("600").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Quarto blocco
+        legend.append("rect").attr("x", 350 + 150).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(600)).attr('stroke', 'black')
+        legend.append("text").attr("x", 637).attr("y", 115).text("800").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Quinto blocco
+        legend.append("rect").attr("x", 350 + 300).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(800)).attr('stroke', 'black')
+        legend.append("text").attr("x", 783).attr("y", 115).text("1000").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Sesto blocco
+        legend.append("rect").attr("x", 350 + 450).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(1000)).attr('stroke', 'black')
+        legend.append("text").attr("x", 930).attr("y", 115).text("Oltre 1000").style("font-size", "15px").attr("alignment-baseline", "middle")
     })
 });

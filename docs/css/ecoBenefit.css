@@ -9,6 +9,10 @@ section {
     font-family: "Fira Sans", sans-serif;
 }
 
+section1 {
+    font-family: "Fira Sans", sans-serif;
+}
+
 h1,
 h2,
 h3,
@@ -42,7 +46,7 @@ ul.list-none {
     list-style: none;
 }
 
-ul.list-none > li:not(:last-child) {
+ul.list-none>li:not(:last-child) {
     padding-bottom: 0.5rem;
 }
 
