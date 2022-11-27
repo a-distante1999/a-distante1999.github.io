@@ -111,6 +111,6 @@ $(document).ready(function () {
         legend.append("text").attr("x", 783).attr("y", 115).text("1000").style("font-size", "15px").attr("alignment-baseline", "middle")
         //Sesto blocco
         legend.append("rect").attr("x", 350 + 450).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(1000)).attr('stroke', 'black')
-        legend.append("text").attr("x", 930).attr("y", 115).text("Oltre 1000").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 930).attr("y", 115).text("> 1000").style("font-size", "15px").attr("alignment-baseline", "middle")
     })
 });
