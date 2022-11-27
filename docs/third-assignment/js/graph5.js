@@ -276,6 +276,8 @@ $(document).ready(function () {
                     a = 0;
                 }
             });
+            svg.style("transform", "scale(0.7,1)" )
+
         })
     })
 });

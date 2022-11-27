@@ -95,6 +95,7 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
+            svg.style("transform", "scale(0.7,1)" )
 
 
         legend.append("text").attr("x", 430).attr("y", 140).text("Tree density [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")

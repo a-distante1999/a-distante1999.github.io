@@ -42,6 +42,8 @@ $(document).ready(function () {
                 .attr("r", 0.4)
                 .style("fill", "#46975B")
                 .attr("fill-opacity", 1)
+                svg.style("transform", "scale(0.7,1)" )
+
         })
     })
 });
