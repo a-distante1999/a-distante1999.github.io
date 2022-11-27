@@ -7,10 +7,10 @@ $(document).ready(function () {
     let width = +svg.attr("width");
     let height = +svg.attr("height");
 
-    // Definisco array dei punti
+    // Variable for coordinates of each tree
     let points = [];
 
-    // Definisco bottoni
+    // Button defining
     const buttonCeltis = document.getElementById("Celtis")
     const buttonAesculus = document.getElementById("Aesculus")
     const buttonCarpinus = document.getElementById("Carpinus")
@@ -23,15 +23,18 @@ $(document).ready(function () {
     const buttonPrunus = document.getElementById("Prunus")
     const buttonOthers = document.getElementById("Others")
 
-    // Definisco variabile ausiliaria
+    // Auxiliary variable definition
     let a = 0;
 
+    // Load data
     d3.json("../geo_data_trees.geojson").then(function (rawData) {
         d3.json("../circoscrizioni.json").then(function (data) {
 
+            // Choose projection
             const projection = d3.geoIdentity().reflectY(true)
                 .fitSize([width, height], data);
 
+            // Draw empty map at each event click
             svg.append("g")
                 .selectAll("path")
                 .data(data.features)
@@ -41,6 +44,9 @@ $(document).ready(function () {
                     .projection(projection)
                 )
                 .style("stroke", "#ffff")
+
+            // When a click event occurs, it checks which checkbox is active and draws the 
+            // points referring to that particular neighborhood
 
             addEventListener("click", function (e) {
                 points

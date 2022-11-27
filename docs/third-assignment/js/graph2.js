@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // The svg
+
     const svg = d3.select(singleContainer)
         .append("svg")
         .attr("width", 700)
@@ -25,7 +25,6 @@ $(document).ready(function () {
 
 
     let data = new Map()
-    let data1 = new Map()
 
     const colorScale = d3.scaleThreshold()
         .domain([200, 400, 600, 800, 1000])
@@ -56,8 +55,8 @@ $(document).ready(function () {
         var mousemove = function (event, d) {
             Tooltip
                 .html(d.properties.nome + "<br>" + "Density: " + d.total + "<br>" + "Abundance: " + d.properties.treeAbundance + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
-                .style("left", (event.x) / 1.5 + "px")
-                .style("top", (event.y) / 1.5 + "px")
+                .style("left", (event.x) / 1.3 + "px")
+                .style("top", (event.y) / 1.3 + "px")
         }
 
         let mouseLeave = function (d) {
@@ -83,7 +82,7 @@ $(document).ready(function () {
             .attr("d", d3.geoPath()
                 .projection(projection)
             )
-            .style("stroke", "#000")
+            .style("stroke", "#000000")
 
 
             .attr("fill", function (d) {
@@ -99,24 +98,23 @@ $(document).ready(function () {
 
 
         legend.append("text").attr("x", 430).attr("y", 140).text("Tree density [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //LEGEND
-        //Primo blocco
+
         legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(0)).attr('stroke', 'black')
         legend.append("text").attr("x", 45).attr("y", 115).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
         legend.append("text").attr("x", 186).attr("y", 115).text("200").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Secondo blocco
+
         legend.append("rect").attr("x", 200).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(200)).attr('stroke', 'black')
         legend.append("text").attr("x", 337).attr("y", 115).text("400").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Terzo blocco
+
         legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(400)).attr('stroke', 'black')
         legend.append("text").attr("x", 487).attr("y", 115).text("600").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Quarto blocco
+
         legend.append("rect").attr("x", 350 + 150).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(600)).attr('stroke', 'black')
         legend.append("text").attr("x", 637).attr("y", 115).text("800").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Quinto blocco
+
         legend.append("rect").attr("x", 350 + 300).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(800)).attr('stroke', 'black')
         legend.append("text").attr("x", 783).attr("y", 115).text("1000").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Sesto blocco
+
         legend.append("rect").attr("x", 350 + 450).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(1000)).attr('stroke', 'black')
         legend.append("text").attr("x", 930).attr("y", 115).text("> 1000").style("font-size", "15px").attr("alignment-baseline", "middle")
     })

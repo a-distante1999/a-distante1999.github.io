@@ -1,12 +1,4 @@
 $(document).ready(function () {
-    //guardare cartina che è schiacciato il disegno
-
-    //aumentare dimensione max 75 caratteri per riga
-    //spiegare le scelte fatte
-    //legenta sui colori con i valori sotto
-    //unità di misura
-
-
     // Create svg
     const svg = d3.select(singleContainer)
         .append("svg")
@@ -50,8 +42,7 @@ $(document).ready(function () {
         // Load data for the map
         let topo = loadData[0]
 
-        // Create tooltip
-
+        // Insert tooltip
         let mouseOver = function (d) {
             d3.selectAll(".Country")
                 .transition()
@@ -69,8 +60,8 @@ $(document).ready(function () {
         var mousemove = function (event, d) {
             Tooltip
                 .html(d.properties.nome + "<br>" + "Abundance: " + d.total + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
-                .style("left", (event.x) / 1.5 + "px")
-                .style("top", (event.y) / 1.5 + "px")
+                .style("left", (event.x) / 1.3 + "px")
+                .style("top", (event.y) / 1 + "px")
         }
 
         let mouseLeave = function (d) {
@@ -115,30 +106,33 @@ $(document).ready(function () {
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
 
-        legend.append("text").attr("x", 330).attr("y", 140).text("NUMBER OF TREES [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
+
         //LEGEND
-        //Primo blocco
+
+        //Label
+        legend.append("text").attr("x", 330).attr("y", 140).text("NUMBER OF TREES [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
+
+        //1° block
         legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
         legend.append("text").attr("x", 45).attr("y", 115).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
         legend.append("text").attr("x", 140).attr("y", 110).text("300").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Secondo blocco
+        //2° block
         legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(300)).attr('stroke', 'black')
         legend.append("text").attr("x", 240).attr("y", 110).text("600").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Terzo blocco
+        //3° block
         legend.append("rect").attr("x", 250).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(600)).attr('stroke', 'black')
         legend.append("text").attr("x", 340).attr("y", 110).text("900").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Quarto blocco
+        //4° block
         legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(900)).attr('stroke', 'black')
         legend.append("text").attr("x", 440).attr("y", 110).text("1200").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Quinto blocco
+        //5° block
         legend.append("rect").attr("x", 450).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1200)).attr('stroke', 'black')
         legend.append("text").attr("x", 535).attr("y", 110).text("1500").style("font-size", "15px").attr("alignment-baseline", "middle")
-        //Sesto blocco
+        //6° block
         legend.append("rect").attr("x", 550).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1500)).attr('stroke', 'black')
         legend.append("text").attr("x", 635).attr("y", 110).text("1800").style("font-size", "15px").attr("alignment-baseline", "middle")
-
+        //7° block
         legend.append("rect").attr("x", 650).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1800)).attr('stroke', 'black')
         legend.append("text").attr("x", 725).attr("y", 110).text(">3000").style("font-size", "15px").attr("alignment-baseline", "middle")
-
     })
 });
