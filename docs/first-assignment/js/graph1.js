@@ -61,10 +61,12 @@ const object = {
         // Add X label
         const xLabel = chart.append('g')
             .attr('class', 'x-label')
-            .attr('font-size', '15');
+            .attr('font-size', '15')
+            
 
         xLabel.append('text')
-            .text('Abundance [unit]');
+            .text('Abundance [unit]')
+            .attr("y", 30);
 
         // Color palette
         const color = d3.scaleSequential()

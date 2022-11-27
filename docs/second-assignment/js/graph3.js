@@ -62,7 +62,8 @@ const object = {
             .attr('font-size', '15');
 
         yLabel.append('text')
-            .text('Carbon storage [kg]');
+            .text('Carbon storage [kg]')
+            .attr("y", -30);;
 
         // Add X axis
         const x = d3.scaleLinear()
@@ -80,7 +81,8 @@ const object = {
             .attr('font-size', '15');
 
         xLabel.append('text')
-            .text('Height [m]');
+            .text('Height [m]')
+            .attr("y", 30);;
 
         // Tooltip timeout
         let timeout = null;
