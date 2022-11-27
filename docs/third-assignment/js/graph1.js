@@ -91,6 +91,7 @@ $(document).ready(function () {
             .attr("d", d3.geoPath()
                 .projection(projection)
             )
+  
             .style("stroke", "#000000")
 
             // Set the color of each country
@@ -105,7 +106,7 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
-
+            svg.style("transform", "scale(0.7,1)" )
 
         //LEGEND
 
