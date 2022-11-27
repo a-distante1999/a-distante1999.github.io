@@ -16,7 +16,7 @@ $(document).ready(function () {
     const legend = d3.select(singleContainer)
         .append("svg")
         .attr("width", 800)
-        .attr("height", 500);
+        .attr("height", 150);
 
     let width = +svg.attr("width");
     let height = +svg.attr("height");

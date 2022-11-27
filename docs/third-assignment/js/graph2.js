@@ -10,7 +10,7 @@ $(document).ready(function () {
     const legend = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1000)
-        .attr("height", 500);
+        .attr("height", 150);
 
     const Tooltip = d3.select(singleContainer)
         .append("div")
@@ -97,6 +97,8 @@ $(document).ready(function () {
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
 
+
+        legend.append("text").attr("x", 430).attr("y", 140).text("Tree density [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //LEGEND
         //Primo blocco
         legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(0)).attr('stroke', 'black')

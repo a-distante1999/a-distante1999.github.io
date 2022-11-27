@@ -19,6 +19,8 @@ h1{
 
 h4{
     font-size: 20px;
+    text-align: left;
+    word-spacing: 0.4rem;
 
 }
 
@@ -30,16 +32,13 @@ li{
     font-size: 24px;
     word-spacing: 0.7rem;
     text-align: justify;
-    line-height: 2.5rem;
-   
-
+    line-height: 2.5rem;  
 }
+
 .section-int{
     text-align: justify;
-    
     margin-left: 16rem;
     margin-right: 16rem;
-
 }
 
 section1 {
@@ -258,50 +257,62 @@ h1.button {
     margin-bottom: 0 !important;
 }
 
-@media only screen and (max-width: 2000px) {
-    .section {
-        max-width: 50%
-    }
-}
-
-@media only screen and (max-width: 1900px) {
-    .section {
-        max-width: 55%
-    }
-}
-
-@media only screen and (max-width: 1800px) {
-    .section {
-        max-width: 60%
-    }
-}
-
-@media only screen and (max-width: 1600px) {
-    .section {
-        max-width: 65%;
-    }
-}
-
-@media only screen and (max-width: 1400px) {
-    .section {
-        max-width: 70%;
-    }
-}
 
 @media only screen and (max-width: 1200px) {
-    .section {
-        max-width: 80%;
-    }
-}
-
-@media only screen and (max-width: 992px) {
-    .section {
+    .section-int {
         max-width: 90%;
+        text-align: justify;
+        margin-left: 7rem;
+        margin-right: 7rem;
+    }
+    .description{
+        margin-left: 7rem;
+        margin-right: 7rem;
+        margin-bottom: 5rem;
+        font-size: 1.2em;
+        word-spacing: 0.4rem;
+        text-align: justify;
+        line-height: 1.8rem;
     }
 }
 
 @media only screen and (max-width: 768px) {
-    .section {
+    .section-int {
         max-width: 100%;
+        text-align: justify;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+    .intro{
+        font-size: 1em;
+        word-spacing: 0.4rem;
+        text-align: justify;
+        line-height: 1.8rem;
+    }
+    h3{
+        font-size: 19px;
+    }
+    
+    h1{
+        font-size: 22px;
+    }
+    
+    h4{
+        font-size: 17px;
+        text-align: left;
+        word-spacing: 0.4rem; 
+    }
+    
+    li{
+        font-size: 1em;
+    }
+    .description{
+        margin-left: 3rem;
+        margin-right: 3rem;
+        margin-bottom: 5rem;
+        font-size: 1em;
+        word-spacing: 0.4rem;
+        text-align: justify;
+        line-height: 1.8rem;
     }
 }
