@@ -115,25 +115,24 @@ $(document).ready(function () {
 
         //1° block
         legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
-        legend.append("text").attr("x", 45).attr("y", 110).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
-        legend.append("text").attr("x", 140).attr("y", 110).text("300").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 80).attr("y", 110).text("0-300").style("font-size", "15px").attr("alignment-baseline", "middle")
         //2° block
         legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(300)).attr('stroke', 'black')
-        legend.append("text").attr("x", 240).attr("y", 110).text("600").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 170).attr("y", 110).text("300-600").style("font-size", "15px").attr("alignment-baseline", "middle")
         //3° block
         legend.append("rect").attr("x", 250).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(600)).attr('stroke', 'black')
-        legend.append("text").attr("x", 340).attr("y", 110).text("900").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 270).attr("y", 110).text("600-900").style("font-size", "15px").attr("alignment-baseline", "middle")
         //4° block
         legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(900)).attr('stroke', 'black')
-        legend.append("text").attr("x", 440).attr("y", 110).text("1200").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 370).attr("y", 110).text("900-1200").style("font-size", "15px").attr("alignment-baseline", "middle")
         //5° block
         legend.append("rect").attr("x", 450).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1200)).attr('stroke', 'black')
-        legend.append("text").attr("x", 535).attr("y", 110).text("1500").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 470).attr("y", 110).text("1200-1500").style("font-size", "15px").attr("alignment-baseline", "middle")
         //6° block
         legend.append("rect").attr("x", 550).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1500)).attr('stroke', 'black')
-        legend.append("text").attr("x", 635).attr("y", 110).text("1800").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 565).attr("y", 110).text("1500-1800").style("font-size", "15px").attr("alignment-baseline", "middle")
         //7° block
         legend.append("rect").attr("x", 650).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1800)).attr('stroke', 'black')
-        legend.append("text").attr("x", 725).attr("y", 110).text(">3000").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 680).attr("y", 110).text(">1800").style("font-size", "15px").attr("alignment-baseline", "middle")
     })
 });

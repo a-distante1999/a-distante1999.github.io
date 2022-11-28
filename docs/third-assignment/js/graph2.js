@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     const legend = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 800)
+        .attr("width", 900)
         .attr("height", 150);
 
     const Tooltip = d3.select(singleContainer)
@@ -100,29 +100,28 @@ $(document).ready(function () {
 
 
         //Label
-        legend.append("text").attr("x", 330).attr("y", 140).text("Density of trees [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 400).attr("y", 140).text("Density of trees [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
 
         //1° block
-        legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
-        legend.append("text").attr("x", 45).attr("y", 110).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
-        legend.append("text").attr("x", 132).attr("y", 110).text("5e-04").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 30).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
+        legend.append("text").attr("x", 60).attr("y", 110).text("0-[5e-04]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //2° block
-        legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(5e-04)).attr('stroke', 'black')
-        legend.append("text").attr("x", 233).attr("y", 110).text("1e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(5e-04)).attr('stroke', 'black')
+        legend.append("text").attr("x", 160).attr("y", 110).text("[5e-04]-[1e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //3° block
-        legend.append("rect").attr("x", 250).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1e-03)).attr('stroke', 'black')
-        legend.append("text").attr("x", 323).attr("y", 110).text("1.5e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 270).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(1e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 275).attr("y", 110).text("[1e-03]-[1.5e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //4° block
-        legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1.5e-03)).attr('stroke', 'black')
-        legend.append("text").attr("x", 433).attr("y", 110).text("2e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 390).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(1.5e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 395).attr("y", 110).text("[1.5e-03]-[2e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //5° block
-        legend.append("rect").attr("x", 450).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(2e-03)).attr('stroke', 'black')
-        legend.append("text").attr("x", 523).attr("y", 110).text("2.5e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 510).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(2e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 515).attr("y", 110).text("[2e-03]-[2.5e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //6° block
-        legend.append("rect").attr("x", 550).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(2.5e-03)).attr('stroke', 'black')
-        legend.append("text").attr("x", 632).attr("y", 110).text("3e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 630).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(2.5e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 635).attr("y", 110).text("[2.5e-03]-[3e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
         //7° block
-        legend.append("rect").attr("x", 650).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(3e-03)).attr('stroke', 'black')
-        legend.append("text").attr("x", 725).attr("y", 110).text(">3e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("rect").attr("x", 750).attr("y", 70).attr('width', 120).attr('height', 25).style("fill", colorScale(3e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 780).attr("y", 110).text(">[3e-03]").style("font-size", "15px").attr("alignment-baseline", "middle")
     })
 });
