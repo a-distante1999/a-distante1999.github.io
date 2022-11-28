@@ -32,7 +32,7 @@ $(document).ready(function () {
 
     Promise.all([
         d3.json("../circoscrizioni.json"),
-        d3.csv("../neighborhood.csv", function (d) {
+        d3.csv("../values.csv", function (d) {
             data.set(d.numero_cir, +d.oxygen)
         })
     ]).then(function (loadData) {
@@ -91,7 +91,7 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
-            svg.style("transform", "scale(0.7,1)" )
+        svg.style("transform", "scale(0.7,1)")
 
         legend.append("text").attr("x", 430).attr("y", 140).text("Oxygen Production [kg/yr]").style("font-size", "15px").attr("alignment-baseline", "middle")
 

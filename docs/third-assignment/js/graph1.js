@@ -61,7 +61,7 @@ $(document).ready(function () {
             Tooltip
                 .html(d.properties.nome + "<br>" + "Abundance: " + d.total + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
                 .style("left", (event.x) / 1.3 + "px")
-                .style("top", (event.y) / 1 + "px")
+                .style("top", (event.y) / 1.3 + "px")
         }
 
         let mouseLeave = function (d) {
@@ -91,7 +91,7 @@ $(document).ready(function () {
             .attr("d", d3.geoPath()
                 .projection(projection)
             )
-  
+
             .style("stroke", "#000000")
 
             // Set the color of each country
@@ -106,16 +106,16 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
-            svg.style("transform", "scale(0.7,1)" )
+        svg.style("transform", "scale(0.7,1)")
 
         //LEGEND
 
         //Label
-        legend.append("text").attr("x", 330).attr("y", 140).text("NUMBER OF TREES [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 330).attr("y", 140).text("Number of trees [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
 
         //1° block
         legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
-        legend.append("text").attr("x", 45).attr("y", 115).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 45).attr("y", 110).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
         legend.append("text").attr("x", 140).attr("y", 110).text("300").style("font-size", "15px").attr("alignment-baseline", "middle")
         //2° block
         legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(300)).attr('stroke', 'black')

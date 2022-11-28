@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     const legend = d3.select(singleContainer)
         .append("svg")
-        .attr("width", 1000)
+        .attr("width", 800)
         .attr("height", 150);
 
     const Tooltip = d3.select(singleContainer)
@@ -27,12 +27,13 @@ $(document).ready(function () {
     let data = new Map()
 
     const colorScale = d3.scaleThreshold()
-        .domain([200, 400, 600, 800, 1000])
-        .range(d3.schemeGreens[6]);
+        .domain([5e-04, 1e-03, 1.5e-03, 2e-03, 2.5e-03, 3e-03])
+
+        .range(d3.schemeGreens[7]);
 
     Promise.all([
         d3.json("../circoscrizioni.json"),
-        d3.csv("../neighborhood.csv", function (d) {
+        d3.csv("../values.csv", function (d) {
 
             data.set(d.numero_cir, +d.density)
         })
@@ -54,7 +55,7 @@ $(document).ready(function () {
 
         var mousemove = function (event, d) {
             Tooltip
-                .html(d.properties.nome + "<br>" + "Density: " + d.total + "<br>" + "Abundance: " + d.properties.treeAbundance + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
+                .html(d.properties.nome + "<br>" + "Density: " + d.total.toFixed(5) + "<br>" + "Abundance: " + d.properties.treeAbundance + "<br>" + "Area: " + d.properties.area + " m<sup>2</sup>" + "<br>")
                 .style("left", (event.x) / 1.3 + "px")
                 .style("top", (event.y) / 1.3 + "px")
         }
@@ -95,28 +96,33 @@ $(document).ready(function () {
             .on("mouseover", mouseOver)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseLeave)
-            svg.style("transform", "scale(0.7,1)" )
+        svg.style("transform", "scale(0.7,1)")
 
 
-        legend.append("text").attr("x", 430).attr("y", 140).text("Tree density [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //Label
+        legend.append("text").attr("x", 330).attr("y", 140).text("Density of trees [unit]").style("font-size", "15px").attr("alignment-baseline", "middle")
 
-        legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(0)).attr('stroke', 'black')
-        legend.append("text").attr("x", 45).attr("y", 115).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
-        legend.append("text").attr("x", 186).attr("y", 115).text("200").style("font-size", "15px").attr("alignment-baseline", "middle")
-
-        legend.append("rect").attr("x", 200).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(200)).attr('stroke', 'black')
-        legend.append("text").attr("x", 337).attr("y", 115).text("400").style("font-size", "15px").attr("alignment-baseline", "middle")
-
-        legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(400)).attr('stroke', 'black')
-        legend.append("text").attr("x", 487).attr("y", 115).text("600").style("font-size", "15px").attr("alignment-baseline", "middle")
-
-        legend.append("rect").attr("x", 350 + 150).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(600)).attr('stroke', 'black')
-        legend.append("text").attr("x", 637).attr("y", 115).text("800").style("font-size", "15px").attr("alignment-baseline", "middle")
-
-        legend.append("rect").attr("x", 350 + 300).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(800)).attr('stroke', 'black')
-        legend.append("text").attr("x", 783).attr("y", 115).text("1000").style("font-size", "15px").attr("alignment-baseline", "middle")
-
-        legend.append("rect").attr("x", 350 + 450).attr("y", 70).attr('width', 150).attr('height', 30).style("fill", colorScale(1000)).attr('stroke', 'black')
-        legend.append("text").attr("x", 930).attr("y", 115).text("> 1000").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //1° block
+        legend.append("rect").attr("x", 50).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(0)).attr('stroke', 'black')
+        legend.append("text").attr("x", 45).attr("y", 110).text("0").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legend.append("text").attr("x", 132).attr("y", 110).text("5e-04").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //2° block
+        legend.append("rect").attr("x", 150).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(5e-04)).attr('stroke', 'black')
+        legend.append("text").attr("x", 233).attr("y", 110).text("1e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //3° block
+        legend.append("rect").attr("x", 250).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 323).attr("y", 110).text("1.5e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //4° block
+        legend.append("rect").attr("x", 350).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(1.5e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 433).attr("y", 110).text("2e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //5° block
+        legend.append("rect").attr("x", 450).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(2e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 523).attr("y", 110).text("2.5e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //6° block
+        legend.append("rect").attr("x", 550).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(2.5e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 632).attr("y", 110).text("3e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
+        //7° block
+        legend.append("rect").attr("x", 650).attr("y", 70).attr('width', 100).attr('height', 25).style("fill", colorScale(3e-03)).attr('stroke', 'black')
+        legend.append("text").attr("x", 725).attr("y", 110).text(">3e-03").style("font-size", "15px").attr("alignment-baseline", "middle")
     })
 });
