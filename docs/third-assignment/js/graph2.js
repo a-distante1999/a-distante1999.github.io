@@ -32,8 +32,8 @@ $(document).ready(function () {
         .range(d3.schemeGreens[7]);
 
     Promise.all([
-        d3.json("../circoscrizioni.json"),
-        d3.csv("../values.csv", function (d) {
+        d3.json("../json/circoscrizioni.json"),
+        d3.csv("../csv/values.csv", function (d) {
 
             data.set(d.numero_cir, +d.density)
         })

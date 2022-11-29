@@ -33,8 +33,8 @@ $(document).ready(function () {
 
     // Load external data and boot
     Promise.all([
-        d3.json("../circoscrizioni.json"),
-        d3.csv("../neighborhood.csv", function (d) {
+        d3.json("../json/circoscrizioni.json"),
+        d3.csv("../csv/values.csv", function (d) {
             data.set(d.numero_cir, +d.tree)
         })
     ]).then(function (loadData) {

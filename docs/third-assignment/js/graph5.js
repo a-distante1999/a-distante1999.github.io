@@ -27,8 +27,8 @@ $(document).ready(function () {
     let a = 0;
 
     // Load data
-    d3.json("../geo_data_trees.geojson").then(function (rawData) {
-        d3.json("../circoscrizioni.json").then(function (data) {
+    d3.json("../json/geo_data_trees.geojson").then(function (rawData) {
+        d3.json("../json/circoscrizioni.json").then(function (data) {
 
             // Choose projection
             const projection = d3.geoIdentity().reflectY(true)
@@ -276,7 +276,7 @@ $(document).ready(function () {
                     a = 0;
                 }
             });
-            svg.style("transform", "scale(0.7,1)" )
+            svg.style("transform", "scale(0.7,1)")
 
         })
     })

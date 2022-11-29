@@ -11,14 +11,14 @@ $(document).ready(function () {
     let points = [];
 
     // Load data
-    d3.json("../geo_data_trees.geojson").then(function (rawData) {
+    d3.json("../json/geo_data_trees.geojson").then(function (rawData) {
         for (let i = 0; i < 12512; i++) {
             points[i] = { long: parseFloat(rawData.features[i].geometry.coordinates[0]), lat: parseFloat(rawData.features[i].geometry.coordinates[1]) }
         }
-        d3.json("../circoscrizioni.json").then(function (data) {
+        d3.json("../json/circoscrizioni.json").then(function (data) {
 
             // Choose projection
-            const projection = d3.geoIdentity().reflectY(true) 
+            const projection = d3.geoIdentity().reflectY(true)
                 .fitSize([width, height], data);
 
             // Draw the map
@@ -42,7 +42,7 @@ $(document).ready(function () {
                 .attr("r", 0.4)
                 .style("fill", "#46975B")
                 .attr("fill-opacity", 1)
-                svg.style("transform", "scale(0.7,1)" )
+            svg.style("transform", "scale(0.7,1)")
 
         })
     })
