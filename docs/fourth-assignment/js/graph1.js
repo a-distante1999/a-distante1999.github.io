@@ -13,6 +13,12 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
+    const legend = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 150);
+
+
     //Read the data
     d3.csv("../prova.csv").then(function (data) {
 
@@ -77,6 +83,9 @@ $(document).ready(function () {
             .attr("r", 2)
             .style("fill", function (d) { return color(d.yr) })
 
+        legend.append("text").attr("x", 700).attr("y", 30).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
+        svg.append("text").attr("x", 700).attr("y", 30).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
+            .attr('transform', `rotate(-90)`)
     })
 
 })
