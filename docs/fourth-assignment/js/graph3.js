@@ -1,173 +1,83 @@
-const minWidth = 200;
+$(document).ready(function () {
+    // set the dimensions and margins of the graph
+const margin = {top: 60, right: 30, bottom: 20, left:110},
+width = 460 - margin.left - margin.right,
+height = 400 - margin.top - margin.bottom;
 
-const object = {
-    rawData: [],
-    getSubgroups: function () {
-        return object.rawData.columns.slice(1);
-    },
-    drawChart: function (selector, category, full) {
-        const subgroups = this.getSubgroups();
+// append the svg object to the body of the page
+const svg = d3.select(multiContainer)
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform",
+      `translate(${margin.left}, ${margin.top})`);
 
-        // Filter data by neighborhood
-        let data = [];
-        this.rawData.forEach((row, index) => {
-            data[index] = { 'Name': row.Neighborhood };
-            Object.keys(row).forEach(d => {
-                if (d === category) {
-                    data[index].Abundance = +row[d];
-                }
-            });
-        });
+//read data
+d3.csv("https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv").then(function(data) {
 
-        // Sort data
-        data.sort((a, b) => a.Name > b.Name ? -1 : 1);
+// Get the different categories and count them
+const categories = data.columns
+const n = categories.length
 
-        // Set chart dimensions
-        const height = getHorizontalChartHeight(data);
-        let width = getElementWidth(selector) / (subgroups.length + 3);
+// Add X axis
+const x = d3.scaleLinear()
+.domain([-10, 140])
+.range([ 0, width ]);
+svg.append("g")
+.attr("transform", `translate(0, ${height})`)
+.call(d3.axisBottom(x));
 
-        if (width < minWidth) {
-            width = minWidth;
-        }
+// Create a Y scale for densities
+const y = d3.scaleLinear()
+.domain([0, 0.4])
+.range([ height, 0]);
 
-        // Wrap selector in a div
-        selector = d3.select(selector)
-            .append('div')
-            .attr('class', 'container')
-            .node();
+// Create the Y axis for names
+const yName = d3.scaleBand()
+.domain(categories)
+.range([0, height])
+.paddingInner(1)
+svg.append("g")
+.call(d3.axisLeft(yName));
 
-        // Add tooltip
-        const tooltip = d3.select(selector)
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('display', 'none');
+// Compute kernel density estimation for each column:
+const kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40)) // increase this 40 for more accurate density.
+const allDensity = []
+for (i = 0; i < n; i++) {
+  key = categories[i]
+  density = kde( data.map(function(d){  return d[key]; }) )
+  allDensity.push({key: key, density: density})
+}
 
-        // Add chart svg
-        const chart = d3.select(selector)
-            .append('svg')
-            .attr('class', 'bar-chart');
+// Add areas
+svg.selectAll("areas")
+.data(allDensity)
+.join("path")
+  .attr("transform", function(d){return(`translate(0, ${(yName(d.key)-height)})`)})
+  .datum(function(d){return(d.density)})
+  .attr("fill", "#69b3a2")
+  .attr("stroke", "#000")
+  .attr("stroke-width", 1)
+  .attr("d",  d3.line()
+      .curve(d3.curveBasis)
+      .x(function(d) { return x(d[0]); })
+      .y(function(d) { return y(d[1]); })
+  )
 
-        // Add title
-        const title = chart.append('g')
-            .attr('class', 'title')
-            .attr('font-size', '15');
+})
 
-        title.append('text')
-            .text(category);
-
-        // Add Y axis
-        const y = d3.scaleBand()
-            .domain(data.map(d => d.Name))
-            .range([height, 0])
-            .padding([0.1]);
-
-        const yAxis = chart.append('g')
-            .attr('class', 'y-axis')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
-
-        // Add X axis
-        const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Abundance)])
-            .range([0, width]);
-
-        const xAxis = chart.append('g')
-            .attr('class', 'x-axis')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickSizeOuter(0).ticks(3));
-
-        // Color palette
-        const color = getTreeColors(subgroups);
-
-        // Tooltip timeout
-        let timeout = null;
-
-        // Clear tooltip timeout
-        const removeTimeout = () => {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-        };
-
-        const mouseover = (event, d) => {
-            removeTimeout();
-
-            // Show tooltip
-            tooltip.html(`Abundance: ${d.Abundance}`)
-                .style('display', 'block');
-        };
-
-        const mousemove = (event, d) => {
-            // Move tooltip near mouse pointer
-            tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`);
-        };
-
-        const mouseleave = (event, d) => {
-            removeTimeout();
-
-            // Add Tooltip timeout
-            timeout = setTimeout(() => {
-                tooltip.style('display', 'none');
-            }, 150);
-        };
-
-        // Show the bars
-        chart.append('g')
-            .attr('class', 'bars')
-            .selectAll('g')
-            .data(data)
-            .join('rect')
-            .attr('fill', d => color(category))
-            .attr('x', d => x(0))
-            .attr('y', d => y(d.Name))
-            .attr('height', d => y.bandwidth())
-            .attr('stroke', 'black')
-            .attr('stroke-width', '.5')
-            .on('mouseover', mouseover)
-            .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave);
-
-        // Remove Y axis
-        if (!full) {
-            yAxis.selectAll('g')
-                .remove();
-        }
-        else {
-            width = width + getSVGWidth(yAxis);
-        }
-
-        // Animation
-        chart.selectAll('rect')
-            .transition()
-            .duration(1000)
-            .attr('width', d => x(d.Abundance))
-            .delay((d, i) => i * 75);
-
-        // Fix title position
-        title.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(title)) / 2},${-10})`);
-
-        // Set chart dimension
-        chart.attr('width', width)
-            .attr('height', height);
-
-        // Set chart viewBox
-        setViewBoxAttr(chart);
-    }
-};
-
-$(document).ready(async function () {
-    object.rawData = await d3.csv('../csv/geo_data_trees_neighborhoods.csv');
-
-    $(window).resize(function () {
-        if (currentWidth !== window.innerWidth) {
-            currentWidth = window.innerWidth;
-            $(multiContainer).html('');
-            object.getSubgroups().forEach(function (category, i) {
-                object.drawChart(multiContainer, category, i === 0);
-            });
-        }
-    });
-
-    $(window).resize();
+// This is what I need to compute kernel density estimation
+function kernelDensityEstimator(kernel, X) {
+return function(V) {
+return X.map(function(x) {
+  return [x, d3.mean(V, function(v) { return kernel(x - v); })];
 });
+};
+}
+function kernelEpanechnikov(k) {
+return function(v) {
+return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+};
+}
+})
