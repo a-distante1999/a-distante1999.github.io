@@ -1,15 +1,19 @@
 $(document).ready(function () {
-    //let data = [];
-    let features = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
 
+    let features = ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic", "Jan"];
+    features.reverse()
+
+    // Inizializzo array con valori dei mesi
     let anno2013 = [];
     let anno2014 = [];
     let anno2015 = [];
+
+    // Inizializzo variabili ausiliarie
     let a = 0;
     let b = 0;
     let c = 0;
 
-    //generate fake the data
+    // Load data
     d3.csv("../prova.csv").then(function (data) {
 
         // i< numero mesi
@@ -49,15 +53,8 @@ $(document).ready(function () {
             Jul: anno2015[6], Aug: anno2015[7], Sep: anno2015[8],
             Oct: anno2015[9], Nov: anno2015[10], Dic: anno2015[11]
         }
-        //console.log(points[0])
-        //console.log(points[1])
 
-
-
-
-
-        //console.log(data)
-        //SVG
+        // SVG
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
             .attr("height", 600);
@@ -96,7 +93,7 @@ $(document).ready(function () {
             let line_coordinate = angleToCoordinate(angle, 30);
             let label_coordinate = angleToCoordinate(angle, 32.5);
 
-            //draw axis line
+            // Draw axis line
             svg.append("line")
                 .attr("x1", 300)
                 .attr("y1", 300)
@@ -104,9 +101,9 @@ $(document).ready(function () {
                 .attr("y2", line_coordinate.y)
                 .attr("stroke", "black");
 
-            //draw axis label
+            // Draw axis label
             svg.append("text")
-                .attr("x", label_coordinate.x - 15)
+                .attr("x", label_coordinate.x - 10)
                 .attr("y", label_coordinate.y)
                 .text(ft_name);
         }
@@ -115,19 +112,6 @@ $(document).ready(function () {
             .y(d => d.y);
 
         let colors = ["darkorange", "gray", "navy"];
-
-        /*function getPathCoordinates(data_point) {
-            let coordinates = [];
-
-            for (let i = 0; i < features.length; i++) {
-                let ft_name = features[i];
-                console.log(points[ft_name])
-                let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-                coordinates.push(angleToCoordinate(angle, parseInt.points[ft_name]));
-            }
-            console.log(coordinates)
-            return coordinates;
-        }*/
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
@@ -141,27 +125,23 @@ $(document).ready(function () {
             return coordinates;
         }
 
-        //OCCHIO ALLA i
+        //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < 36; i++) {
             let d = points[i];
             let color = colors[i];
             let coordinates = getPathCoordinates(d);
             console.log(coordinates)
 
-
-            //draw the path element
+            // Draw the path element
             svg.append("path")
                 .datum(coordinates)
                 .attr("d", line)
-                .attr("stroke-width", 3)
+                .attr("stroke-width", 2)
                 .attr("stroke", color)
                 .attr("fill", "none")
-                .attr("stroke-opacity", 1)
-                .attr("opacity", 0.5);
+                .attr("opacity", 0.8);
         }
     })
-
-
 })
 
 

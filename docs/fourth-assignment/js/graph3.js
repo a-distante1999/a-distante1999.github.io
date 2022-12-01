@@ -1,17 +1,43 @@
 $(document).ready(function () {
 
-  // set the dimensions and margins of the graph
+  // Set the dimensions and margins of the graph
   const margin = { top: 30, right: 30, bottom: 30, left: 50 },
     width = 800 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
-  // append the svg object to the body of the page
+  // Set the legend
+  const legendTop = d3.select(singleContainer)
+    .append("svg")
+    .attr("width", 1400)
+    .attr("height", 50);
 
+  // Minimun
+  legendTop.append("text").attr("x", 220).attr("y", 10).text("Minimum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
+  legendTop.append('circle')
+    .attr('cx', 210)
+    .attr('cy', 9)
+    .attr('r', 7)
+    //.attr('stroke', 'black')
+    .attr('fill', '#85C1E9');
+  // Maximum
+  legendTop.append("text").attr("x", 420).attr("y", 10).text("Maximum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
+  legendTop.append('circle')
+    .attr('cx', 410)
+    .attr('cy', 9)
+    .attr('r', 7)
+    //.attr('stroke', 'black')
+    .attr('fill', '#E74C3C');
+
+  // Append the svg object to the body of the page
+  let month = ["January", "February", "March", "April", "May", "June", "July"
+    , "August", "September", "October", "November", "December"]
   let a = 1;
-  // get the data
+
+  // Read the data
   d3.csv("../graph3.csv").then(function (data) {
 
-    for (var i = 0; i < 2; i++) {
+    //  i=numero mesi
+    for (var i = 0; i < 3; i++) {
 
       const svg = d3.select(singleContainer)
         .append("svg")
@@ -20,7 +46,12 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      // add the x Axis
+      const legend = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 30);
+
+      // Add the x Axis
       const x = d3.scaleLinear()
         .domain([-10, 30])
         .range([0, width]);
@@ -28,7 +59,7 @@ $(document).ready(function () {
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x));
 
-      // add the y Axis
+      // Add the y Axis
       const y = d3.scaleLinear()
         .range([height, 0])
         .domain([0, 0.25]);
@@ -43,7 +74,6 @@ $(document).ready(function () {
       const density2 = kde(data
         .filter(function (d) { return d.month === a.toString() })
         .map(function (d) { return d.max; }))
-      a = a + 1;
 
       // Plot the area
       svg.append("path")
@@ -75,11 +105,12 @@ $(document).ready(function () {
           .y(function (d) { return y(d[1]); })
         );
 
+      //Legend (month)
+      legend.append("text").attr("x", 400).attr("y", 10).text(month[a - 1]).style("font-size", "12px").attr("alignment-baseline", "middle")
+      a = a + 1;
     }
   })
 
-
-  // add the x Axis
 
 
 
