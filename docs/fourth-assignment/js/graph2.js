@@ -1,225 +1,105 @@
-const object = {
-    rawData: [],
-    getSubgroups: function () {
-        return object.rawData.columns.slice(1);
-    },
-    drawChart: function (selector, percentage) {
-        // Copy data
-        let data = this.rawData.slice();
+$(document).ready(function () {
+    let data = [];
+    let features = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
 
-        const subgroups = this.getSubgroups();
-        const groups = data.map(d => (d.Neighborhood));
-
-        // Set chart dimensions
-        const height = getHorizontalChartHeight(data);
-        const width = getElementWidth(selector);
-
-        // Add tooltip
-        const tooltip = d3.select(selector)
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('display', 'none');
-
-        // Add chart svg
-        const chart = d3.select(selector)
-            .append('svg')
-            .attr('class', 'bar-chart');
-
-        // Add Y axis
-        const y = d3.scaleBand()
-            .domain(groups)
-            .range([0, height])
-            .padding([0.1]);
-
-        const yAxis = chart.append('g')
-            .attr('class', 'y-axis')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
-
-        // Add Y label
-        const yLabel = chart.append('g')
-            .attr('class', 'y-label')
-            .attr('font-size', '15');
-
-        yLabel.append('text')
-            .text('Neighborhood');
-
-        // Calculate x max value
-        const xMax = percentage ? 100 : d3.max(data, d => {
-            let tot = 0;
-            $(Object.values(d)).each(function (_, element) {
-                tot += parseFloat(element) || 0;
-            });
-            return tot;
-        });
-
-        // Add X axis
-        const x = d3.scaleLinear()
-            .domain([0, xMax])
-            .range([0, width]);
-
-        const xAxis = chart.append('g')
-            .attr('class', 'x-axis')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickSizeOuter(0));
-
-        // Add X label
-        const xLabel = chart.append('g')
-            .attr('class', 'x-label')
-            .attr('font-size', '15');
-
-        xLabel.append('text')
-            .text(percentage ? 'Percentage' : 'Abundance [Unit]')
-            .attr("y", 30);
-
-        // Color palette
-        const color = getTreeColors(subgroups);
-
-        if (percentage) {
-            // Normalize the data
-            $(data).each(function (_, d) {
-                let tot = 0;
-                for (let i in subgroups) {
-                    let name = subgroups[i];
-                    tot += +d[name];
-                }
-                // Now normalize
-                for (let i in subgroups) {
-                    let name = subgroups[i];
-                    d[name] = d[name] / tot * 100;
-                }
-            });
-        }
-
-        // Stack per subgroup
-        const stackedData = d3.stack()
-            .keys(subgroups)
-            (data);
-
-        // Tooltip timeout
-        let timeout = null;
-
-        // Clear tooltip timeout
-        const removeTimeout = () => {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-        };
-
-        const mouseover = (event, d) => {
-            removeTimeout();
-
-            // Get tooltip data
-            const target = d3.select(event.target).node().parentNode;
-            const subgroupName = d3.select(target).datum().key;
-            const subgroupValue = parseFloat(d.data[subgroupName]).toFixed(percentage ? 2 : 0);
-
-            // Set opacity to other rects
-            d3.selectAll('.myRect').style('opacity', 0.2);
-            // Show 'subgroupName' rect
-            d3.selectAll(`.${sanitizeString(subgroupName)}`).style('opacity', 1);
-
-            // Show tooltip
-            tooltip.html(`${subgroupName}: ${subgroupValue}${percentage ? '%' : ''}`)
-                .style('display', 'block');
-        };
-
-        const mousemove = (event, d) => {
-            // Move tooltip near mouse pointer
-            tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 2)}px`);
-        };
-
-        const mouseleave = (event, d) => {
-            removeTimeout();
-
-            // Add Tooltip timeout
-            timeout = setTimeout(() => {
-                // Show all rect
-                d3.selectAll('.myRect')
-                    .style('opacity', 1);
-
-                tooltip.style('display', 'none');
-            }, 150);
-        };
-
-        // Show the bars
-        chart.append('g')
-            .attr('class', 'bars')
-            .selectAll('g')
-            .data(stackedData)
-            .join('g')
-            .attr('fill', d => color(d.key))
-            .attr('class', d => `myRect ${sanitizeString(d.key)}`)
-            .selectAll('rect')
-            .data(d => d)
-            .join('rect')
-            .attr('x', d => x(d[0]))
-            .attr('y', d => y(d.data.Neighborhood))
-            .attr('height', d => y.bandwidth())
-            .attr('stroke', 'black')
-            .attr('stroke-width', '.5')
-            .on('mouseover', mouseover)
-            .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave);
-
-        // Animation
-        chart.selectAll('rect')
-            .transition()
-            .duration(1000)
-            .attr('width', d => x(d[1]) - x(d[0]))
-            .delay((d, i) => i * 75);
-
-        // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) - 10},${(getSVGHeight(yAxis) + getSVGWidth(yLabel)) / 2}) rotate(-90)`);
-        xLabel.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(xLabel)) / 2},${getSVGHeight(yAxis) + getSVGHeight(xLabel) + 10})`);
-
-        // Set chart dimension
-        chart.attr('width', width)
-            .attr('height', height);
-
-        // Set chart viewBox
-        setViewBoxAttr(chart);
-
-        // Add legend svg
-        const legend = d3.select(selector)
-            .append('svg')
-            .attr('class', d => 'legend');
-
-        const rows = legend.selectAll('g')
-            .data(subgroups)
-            .join('g')
-            .attr('transform', (d, i) => `translate(0,${i * 20})`);
-
-        rows.append('rect')
-            .attr('width', 18)
-            .attr('height', 18)
-            .style('fill', (d, i) => color(i));
-
-        rows.append('text')
-            .attr('x', 25)
-            .attr('y', 15)
-            .text(d => d);
-
-        // Set chart dimension
-        legend.attr('width', width)
-            .attr('height', getBBoxHeight(legend));
-
-        // Set chart viewBox
-        setViewBoxAttr(legend);
+    //generate fake the data
+    for (var i = 0; i < 3; i++) {
+        var point = {}
+        //each feature will be a random number from 1-9
+        features.forEach(f => point[f] = 1 + Math.random() * 8);
+        data.push(point);
     }
-};
+    console.log(data);
 
-$(document).ready(async function () {
-    object.rawData = await d3.csv('../csv/geo_data_trees_neighborhoods.csv');
+    //SVG
+    let svg = d3.select("body").append("svg")
+        .attr("width", 650)
+        .attr("height", 600);
 
-    $(window).resize(function () {
-        if (currentWidth !== window.innerWidth) {
-            currentWidth = window.innerWidth;
-            $(singleContainer).html('');
-            object.drawChart(singleContainer, $('.percentage').length);
+
+    let radialScale = d3.scaleLinear()
+        .domain([0, 12])
+        .range([0, 250]);
+
+    let ticks = [2, 4, 6, 8, 10, 12];
+
+    ticks.forEach(t =>
+        svg.append("circle")
+            .attr("cx", 300)
+            .attr("cy", 300)
+            .attr("fill", "none")
+            .attr("stroke", "gray")
+            .attr("r", radialScale(t))
+    );
+
+    ticks.forEach(t =>
+        svg.append("text")
+            .attr("x", 305)
+            .attr("y", 300 - radialScale(t))
+            .text(t.toString())
+    );
+
+    function angleToCoordinate(angle, value) {
+        let x = Math.cos(angle) * radialScale(value);
+        let y = Math.sin(angle) * radialScale(value);
+        return { "x": 300 + x, "y": 300 - y };
+    }
+
+    for (var i = 0; i < features.length; i++) {
+        let ft_name = features[i];
+        let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+        let line_coordinate = angleToCoordinate(angle, 12);
+        let label_coordinate = angleToCoordinate(angle, 13.5);
+
+        //draw axis line
+        svg.append("line")
+            .attr("x1", 300)
+            .attr("y1", 300)
+            .attr("x2", line_coordinate.x)
+            .attr("y2", line_coordinate.y)
+            .attr("stroke", "black");
+
+        //draw axis label
+        svg.append("text")
+            .attr("x", label_coordinate.x)
+            .attr("y", label_coordinate.y)
+            .text(ft_name);
+    }
+    let line = d3.line()
+        .x(d => d.x)
+        .y(d => d.y);
+
+    let colors = ["darkorange", "gray", "navy"];
+
+    function getPathCoordinates(data_point) {
+        let coordinates = [];
+        for (var i = 0; i < features.length; i++) {
+            let ft_name = features[i];
+            let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+            coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
         }
-    });
+        return coordinates;
+    }
 
-    $(window).resize();
-});
+    for (var i = 0; i < data.length; i++) {
+        let d = data[i];
+        let color = colors[i];
+        let coordinates = getPathCoordinates(d);
+
+        //draw the path element
+        svg.append("path")
+            .datum(coordinates)
+            .attr("d", line)
+            .attr("stroke-width", 3)
+            .attr("stroke", color)
+            .attr("fill", color)
+            .attr("stroke-opacity", 1)
+            .attr("opacity", 0.5);
+    }
+})
+
+
+
+
+
+
