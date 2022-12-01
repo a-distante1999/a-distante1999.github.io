@@ -1,158 +1,56 @@
-const object = {
-    rawData: [],
-    drawChart: function (selector) {
-        // Copy data and fix it
-        let data = [];
-        this.rawData.forEach((row, index) => {
-            data[index] = { ...row };
-            data[index].Abundance = parseInt(data[index].Abundance);
-            data[index].Canopy = parseFloat(data[index].Canopy).toFixed(2);
-        });
+$(document).ready(function () {
+    // set the dimensions and margins of the graph
+    const margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
-        // Sort data
-        data.sort((a, b) => b.Abundance - a.Abundance);
+    // append the svg object to the body of the page
+    const svg = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Slice data
-        data.length = 25;
+    //Read the data
+    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv").then(function (data) {
 
-        // Set chart dimensions
-        const height = getHorizontalChartHeight(data);
-        const width = getElementWidth(selector);
+        // group the data: I want to draw one line per group
+        const sumstat = d3.group(data, d => d.name); // nest function allows to group the calculation per level of a factor
 
-        // Add tooltip
-        const tooltip = d3.select(selector)
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('display', 'none');
-
-        // Add chart svg
-        const chart = d3.select(selector)
-            .append('svg')
-            .attr('class', 'bar-chart');
+        // Add X axis --> it is a date format
+        const x = d3.scaleLinear()
+            .domain(d3.extent(data, function (d) { return d.year; }))
+            .range([0, width]);
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x).ticks(5));
 
         // Add Y axis
-        const y = d3.scaleBand()
-            .domain(data.map(d => d.Name))
-            .range([0, height])
-            .padding([0.1]);
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, function (d) { return +d.n; })])
+            .range([height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
 
-        const yAxis = chart.append('g')
-            .attr('class', 'y-axis')
-            .call(d3.axisLeft(y).tickSizeOuter(0));
+        // color palette
+        const color = d3.scaleOrdinal()
+            .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'])
 
-        // Add Y label
-        const yLabel = chart.append('g')
-            .attr('class', 'y-label')
-            .attr('font-size', '15');
+        // Draw the line
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("fill", "none")
+            .attr("stroke", function (d) { return color(d[0]) })
+            .attr("stroke-width", 1.5)
+            .attr("d", function (d) {
+                return d3.line()
+                    .x(function (d) { return x(d.year); })
+                    .y(function (d) { return y(+d.n); })
+                    (d[1])
+            })
 
-        yLabel.append('text')
-            .text('Tree');
+    })
 
-        // Add X axis
-        const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Abundance)])
-            .range([0, width]);
-
-        const xAxis = chart.append('g')
-            .attr('class', 'x-axis')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickSizeOuter(0));
-
-        // Add X label
-        const xLabel = chart.append('g')
-            .attr('class', 'x-label')
-            .attr('font-size', '15')
-            
-
-        xLabel.append('text')
-            .text('Abundance [unit]')
-            .attr("y", 30);
-
-        // Color palette
-        const color = d3.scaleSequential()
-            .domain([0, 100])
-            .interpolator(d3.interpolateRainbow);
-
-        // Tooltip timeout
-        let timeout = null;
-
-        // Clear tooltip timeout
-        const removeTimeout = () => {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
-            }
-        };
-
-        const mouseover = (event, d) => {
-            removeTimeout();
-
-            // Show tooltip
-            tooltip.html(`Abundance: ${d.Abundance}<br>Canopy (avg.): ${d.Canopy} m<sup>2</sup>`)
-                .style('display', 'block');
-        };
-
-        const mousemove = (event, d) => {
-            // Move tooltip near mouse pointer
-            tooltip.style('left', `${event.x}px`)
-                .style('top', `${event.y - (parseFloat(tooltip.style('height')) * 3 / 2)}px`);
-        };
-
-        const mouseleave = (event, d) => {
-            removeTimeout();
-
-            // Add Tooltip timeout
-            timeout = setTimeout(() => {
-                tooltip.style('display', 'none');
-            }, 150);
-        };
-
-        // Show the bars
-        chart.append('g')
-            .attr('class', 'bars')
-            .selectAll('g')
-            .data(data)
-            .join('rect')
-            .attr('fill', d => color(Math.floor(d.Abundance) / d3.max(data, d => d.Abundance) * 100))
-            .attr('x', d => x(0))
-            .attr('y', d => y(d.Name))
-            .attr('height', d => y.bandwidth())
-            .attr('stroke', 'black')
-            .attr('stroke-width', '.5')
-            .on('mouseover', mouseover)
-            .on('mousemove', mousemove)
-            .on('mouseleave', mouseleave);
-
-        // Animation
-        chart.selectAll('rect')
-            .transition()
-            .duration(1000)
-            .attr('width', d => x(d.Abundance))
-            .delay((d, i) => i * 75);
-
-        // Fix labels position
-        yLabel.attr('transform', `translate(${-getSVGWidth(yAxis) - 10},${(getSVGHeight(yAxis) + getSVGWidth(yLabel)) / 2}) rotate(-90)`);
-        xLabel.attr('transform', `translate(${(getSVGWidth(xAxis) - getSVGWidth(xLabel)) / 2},${getSVGHeight(yAxis) + getSVGHeight(xLabel) + 10})`);
-
-        // Set chart dimension
-        chart.attr('width', width)
-            .attr('height', height);
-
-        // Set chart viewBox
-        setViewBoxAttr(chart);
-    }
-};
-
-$(document).ready(async function () {
-    object.rawData = await d3.csv('../csv/geo_data_trees_categories.csv');
-
-    $(window).resize(function () {
-        if (currentWidth !== window.innerWidth) {
-            currentWidth = window.innerWidth;
-            $(singleContainer).html('');
-            object.drawChart(singleContainer);
-        }
-    });
-
-    $(window).resize();
 });
