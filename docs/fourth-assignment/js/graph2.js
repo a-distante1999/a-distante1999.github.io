@@ -1,12 +1,14 @@
 $(document).ready(function () {
     //let data = [];
     let features = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
+
     let anno2013 = [];
     let anno2014 = [];
     let anno2015 = [];
     let a = 0;
     let b = 0;
     let c = 0;
+
     //generate fake the data
     d3.csv("../prova.csv").then(function (data) {
 
@@ -59,8 +61,6 @@ $(document).ready(function () {
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
             .attr("height", 600);
-
-
 
         let radialScale = d3.scaleLinear()
             .domain([0, 30])
@@ -141,7 +141,8 @@ $(document).ready(function () {
             return coordinates;
         }
 
-        for (var i = 0; i < 24; i++) {
+        //OCCHIO ALLA i
+        for (var i = 0; i < 36; i++) {
             let d = points[i];
             let color = colors[i];
             let coordinates = getPathCoordinates(d);
