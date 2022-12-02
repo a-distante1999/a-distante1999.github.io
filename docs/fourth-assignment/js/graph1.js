@@ -96,16 +96,9 @@ $(document).ready(function () {
             .attr("r", 2)
             .style("fill", function (d) { return colorMax(d.yr) })
 
+
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", margin.left - 120)
-            .attr("x", 0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .style("font-size", "15px")
-            .attr("alignment-baseline", "middle")
-            .text("Temperature [Celsius]");
+        svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
 
         //Bottom legend
         //1993
