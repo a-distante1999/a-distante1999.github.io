@@ -5,129 +5,134 @@ $(document).ready(function () {
     width = 800 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
-  // Set the legend
-  const legendTop = d3.select(singleContainer)
-    .append("svg")
-    .attr("width", 1400)
-    .attr("height", 50);
 
-  // Minimun
-  legendTop.append("text").attr("x", 220).attr("y", 10).text("Minimum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
-  legendTop.append('circle')
-    .attr('cx', 210)
-    .attr('cy', 9)
-    .attr('r', 7)
-    //.attr('stroke', 'black')
-    .attr('fill', '#85C1E9');
-  // Maximum
-  legendTop.append("text").attr("x", 420).attr("y", 10).text("Maximum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
-  legendTop.append('circle')
-    .attr('cx', 410)
-    .attr('cy', 9)
-    .attr('r', 7)
-    //.attr('stroke', 'black')
-    .attr('fill', '#E74C3C');
 
   // Append the svg object to the body of the page
   let month = ["January", "February", "March", "April", "May", "June", "July"
     , "August", "September", "October", "November", "December"]
-  let a = 1;
 
   // Read the data
   d3.csv("../graph3.csv").then(function (data) {
+    addEventListener("click", function (e) {
 
-    //  i=numero mesi
-    for (var i = 0; i < 3; i++) {
+      let a = 1;
+      let dataFiltered = [];
 
-      const svg = d3.select(singleContainer)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+      $(singleContainer).empty();
 
-      const legend = d3.select(singleContainer)
+      let f = document.getElementById("cars");
+      let value = f.value
+
+      // Set the legend
+      const legendTop = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
-        .attr("height", 30);
+        .attr("height", 50);
 
-      // Add the x Axis
-      const x = d3.scaleLinear()
-        .domain([-10, 30])
-        .range([0, width]);
-      svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
+      // Minimun
+      legendTop.append("text").attr("x", 220).attr("y", 10).text("Minimum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
+      legendTop.append('circle')
+        .attr('cx', 210)
+        .attr('cy', 9)
+        .attr('r', 7)
+        //.attr('stroke', 'black')
+        .attr('fill', '#85C1E9');
+      // Maximum
+      legendTop.append("text").attr("x", 420).attr("y", 10).text("Maximum temperature").style("font-size", "12px").attr("alignment-baseline", "middle")
+      legendTop.append('circle')
+        .attr('cx', 410)
+        .attr('cy', 9)
+        .attr('r', 7)
+        //.attr('stroke', 'black')
+        .attr('fill', '#E74C3C');
 
-      // Add the y Axis
-      const y = d3.scaleLinear()
-        .range([height, 0])
-        .domain([0, 0.25]);
-      svg.append("g")
-        .call(d3.axisLeft(y));
 
-      // Compute kernel density estimation
-      const kde = kernelDensityEstimator(kernelEpanechnikov(1), x.ticks(25))
-      const density1 = kde(data
-        .filter(function (d) { return d.month === a.toString() })
-        .map(function (d) { return d.min; }))
-      const density2 = kde(data
-        .filter(function (d) { return d.month === a.toString() })
-        .map(function (d) { return d.max; }))
+      //  i=numero mesi
+      for (let i = 0; i < 2; i++) {
+        const svg = d3.select(singleContainer)
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      // Plot the area
-      svg.append("path")
-        .attr("class", "mypath")
-        .datum(density1)
-        .attr("fill", "#85C1E9")
-        .attr("opacity", ".6")
-        //.attr("stroke", "#000")
-        .attr("stroke-width", 1)
-        .attr("stroke-linejoin", "round")
-        .attr("d", d3.line()
-          .curve(d3.curveBasis)
-          .x(function (d) { return x(d[0]); })
-          .y(function (d) { return y(d[1]); })
-        );
+        const legend = d3.select(singleContainer)
+          .append("svg")
+          .attr("width", 1400)
+          .attr("height", 30);
 
-      // Plot the area
-      svg.append("path")
-        .attr("class", "mypath")
-        .datum(density2)
-        .attr("fill", "#E74C3C")
-        .attr("opacity", ".6")
-        //.attr("stroke", "#000")
-        .attr("stroke-width", 1)
-        .attr("stroke-linejoin", "round")
-        .attr("d", d3.line()
-          .curve(d3.curveBasis)
-          .x(function (d) { return x(d[0]); })
-          .y(function (d) { return y(d[1]); })
-        );
+        // Add the x Axis
+        const x = d3.scaleLinear()
+          .domain([-10, 30])
+          .range([0, width]);
+        svg.append("g")
+          .attr("transform", `translate(0, ${height})`)
+          .call(d3.axisBottom(x));
 
-      //Legend (month)
-      legend.append("text").attr("x", 400).attr("y", 10).text(month[a - 1]).style("font-size", "12px").attr("alignment-baseline", "middle")
-      a = a + 1;
-    }
+        // Add the y Axis
+        const y = d3.scaleLinear()
+          .range([height, 0])
+          .domain([0, 0.25]);
+        svg.append("g")
+          .call(d3.axisLeft(y));
+        for (let j = 0; j < 112; j++) {
+          if (data[j].yr == f.value) {
+            dataFiltered.push(data[j])
+          }
+          console.log(dataFiltered)
+        }
+
+        // Compute kernel density estimation
+        const kde = kernelDensityEstimator(kernelEpanechnikov(1), x.ticks(25))
+        const density1 = kde(dataFiltered
+          .filter(function (d) { return d.month === a.toString() })
+          .map(function (d) { return d.min; }))
+        const density2 = kde(dataFiltered
+          .filter(function (d) { return d.month === a.toString() })
+          .map(function (d) { return d.max; }))
+
+        // Plot the area
+        svg.append("path")
+          .attr("class", "mypath")
+          .datum(density1)
+          .attr("fill", "#85C1E9")
+          .attr("opacity", ".6")
+          //.attr("stroke", "#000")
+          .attr("stroke-width", 1)
+          .attr("stroke-linejoin", "round")
+          .attr("d", d3.line()
+            .curve(d3.curveBasis)
+            .x(function (d) { return x(d[0]); })
+            .y(function (d) { return y(d[1]); })
+          );
+
+        // Plot the area
+        svg.append("path")
+          .attr("class", "mypath")
+          .datum(density2)
+          .attr("fill", "#E74C3C")
+          .attr("opacity", ".6")
+          //.attr("stroke", "#000")
+          .attr("stroke-width", 1)
+          .attr("stroke-linejoin", "round")
+          .attr("d", d3.line()
+            .curve(d3.curveBasis)
+            .x(function (d) { return x(d[0]); })
+            .y(function (d) { return y(d[1]); })
+          );
+
+        //Legend (month)
+        legend.append("text").attr("x", 400).attr("y", 10).text(month[a - 1]).style("font-size", "12px").attr("alignment-baseline", "middle")
+        a = a + 1;
+
+
+      }
+      //}
+
+    })
   })
-
-
-
-
-
-
-
-
-
-
 })
-/*
-  // Handmade legend
-  svg.append("circle").attr("cx", 300).attr("cy", 30).attr("r", 6).style("fill", "#69b3a2")
-  svg.append("circle").attr("cx", 300).attr("cy", 60).attr("r", 6).style("fill", "#404080")
-  svg.append("text").attr("x", 320).attr("y", 30).text("variable A").style("font-size", "15px").attr("alignment-baseline", "middle")
-  svg.append("text").attr("x", 320).attr("y", 60).text("variable B").style("font-size", "15px").attr("alignment-baseline", "middle")
-*/
+
 // Function to compute density
 function kernelDensityEstimator(kernel, X) {
   return function (V) {
