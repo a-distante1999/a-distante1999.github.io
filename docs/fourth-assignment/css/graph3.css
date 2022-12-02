@@ -1,3 +1,11 @@
-.multi-container {
-    gap: 3rem;
+div.menu {
+
+    margin-bottom: 50px;
+    margin-left: 200px;
+    font-size: 20px;
+}
+
+svg {
+    display: block;
+    margin: auto;
 }

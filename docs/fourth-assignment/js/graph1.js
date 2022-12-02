@@ -14,7 +14,12 @@ $(document).ready(function () {
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Append legend
-    const legend = d3.select(singleContainer)
+    const legendChart = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 70);
+
+    const legendColor = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
         .attr("height", 150);
@@ -42,17 +47,22 @@ $(document).ready(function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        // Color palette
-        const color = d3.scaleOrdinal()
+        // Color MAX
+        const colorMax = d3.scaleOrdinal()
             .domain("2013", "2014", "2015")
-            .range(['#F20808', '#08F24E', '#6D08F2'])
+            .range(['#CB4335', '#884EA0', '#2471A3'])
+
+        // Color MIN
+        const colorMin = d3.scaleOrdinal()
+            .domain("2013", "2014", "2015")
+            .range(['#F1948A', '#BB8FCE', '#85C1E9'])
 
         // Draw the line
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
             .attr("fill", "none")
-            .attr("stroke", function (d) { return color(d[0]) })
+            .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 1.5)
             .attr("d", function (d) {
                 return d3.line()
@@ -66,7 +76,7 @@ $(document).ready(function () {
             .data(sumstat)
             .join("path")
             .attr("fill", "none")
-            .attr("stroke", function (d) { return color(d[0]) })
+            .attr("stroke", function (d) { return colorMin(d[0]) })
             .attr("stroke-width", 1.5)
             .attr("d", function (d) {
                 return d3.line()
@@ -84,9 +94,9 @@ $(document).ready(function () {
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 2)
-            .style("fill", function (d) { return color(d.yr) })
+            .style("fill", function (d) { return colorMax(d.yr) })
 
-        legend.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
+        legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", margin.left - 120)
@@ -96,6 +106,32 @@ $(document).ready(function () {
             .style("font-size", "15px")
             .attr("alignment-baseline", "middle")
             .text("Temperature [Celsius]");
+
+        //Bottom legend
+        //1993
+        legendColor.append("text").attr("x", 415).attr("y", 15).text("1993").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 380).attr('y', 12).attr('fill', '#CB4335').attr('width', 25).attr('height', 5)
+        //1997
+        legendColor.append("text").attr("x", 415).attr("y", 52).text("1997").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 380).attr('y', 47).attr('fill', '#884EA0').attr('width', 25).attr('height', 5)
+        //2001
+        legendColor.append("text").attr("x", 615).attr("y", 15).text("2001").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 580).attr('y', 12).attr('fill', '#2471A3').attr('width', 25).attr('height', 5)
+        //2005
+        legendColor.append("text").attr("x", 615).attr("y", 50).text("2005").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 580).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
+        //2009
+        legendColor.append("text").attr("x", 815).attr("y", 15).text("2009").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 780).attr('y', 12).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
+        //2013
+        legendColor.append("text").attr("x", 815).attr("y", 50).text("2013").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 780).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
+        //2017
+        legendColor.append("text").attr("x", 1015).attr("y", 15).text("2017").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 980).attr('y', 12).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
+        //2021
+        legendColor.append("text").attr("x", 1015).attr("y", 50).text("2021").style("font-size", "20px").attr("alignment-baseline", "middle")
+        legendColor.append('rect').attr('x', 980).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
     })
 })
 
