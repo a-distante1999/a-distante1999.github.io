@@ -4,8 +4,18 @@ $(document).ready(function () {
     let months = ["Year", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
     features.reverse()
 
+
+    // Append legend
+    const legendColor = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 150);
+
+
     // Load data
     d3.csv("../prova.csv").then(function (data) {
+
+
 
         //Inizializzo array contente tutti i dati
         let values = new Array();
@@ -31,10 +41,9 @@ $(document).ready(function () {
             k++;
             if (k == 13) k = 1;
         }
-    
-        console.log(values[0])
-        console.log(values[1])
-        console.log(values[2])
+
+        // console.log(values)
+
 
         // SVG
         let svg = d3.select("body").append("svg")
@@ -89,11 +98,12 @@ $(document).ready(function () {
                 .attr("y", label_coordinate.y)
                 .text(ft_name);
         }
+
         let line = d3.line()
             .x(d => d.x)
             .y(d => d.y);
 
-        let colors = ["darkorange", "gray", "navy"];
+        let colors = ["blue", "red", "green"];
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
@@ -117,10 +127,31 @@ $(document).ready(function () {
             svg.append("path")
                 .datum(coordinates)
                 .attr("d", line)
-                .attr("stroke-width", 2)
+                .attr("stroke-width", 2.3)
                 .attr("stroke", color)
                 .attr("fill", "none")
                 .attr("opacity", 0.8);
+
+            //Bottom legend
+        
+            if (i%2==0) {
+            legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+            legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 25).attr('height', 5)
+            }
+            else {
+                legendColor.append("text").attr("x", 415 + (i-1) * 200).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 380 + (i-1) * 200).attr('y', 47).attr('fill', color).attr('width', 25).attr('height', 5)
+            }
+
+            // console.log(d)
+            // console.log(color)
+            // console.log(values)
+            // console.log(i)
+            // console.log(values[i][months[0]])
+            // console.log(Object.keys(years)[i])
+
         }
-    })
+
+    }
+    )
 })
