@@ -19,7 +19,7 @@ $(document).ready(function () {
             a++; //a+4;
         }
 
-        let anni = {
+        let years = {
             '2013': 0,
             '2014': 1,
             '2015': 2
@@ -27,7 +27,7 @@ $(document).ready(function () {
 
         for (let i = 0; i < values.length * 12; i++) {
 
-            values[anni[data[i].yr]][months[k]] = data[i].avg
+            values[years[data[i].yr]][months[k]] = data[i].avg
             k++;
             if (k == 13) k = 1;
         }
@@ -35,7 +35,7 @@ $(document).ready(function () {
         console.log(values[0])
         console.log(values[1])
         console.log(values[2])
-        
+
         // SVG
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
