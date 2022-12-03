@@ -93,7 +93,7 @@ $(document).ready(function () {
             .join("circle")
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
-            .attr("r", 2)
+            .attr("r", 5)
             .style("fill", function (d) { return colorMax(d.yr) })
 
 
