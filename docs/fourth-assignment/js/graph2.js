@@ -4,18 +4,15 @@ $(document).ready(function () {
     let months = ["Year", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
     features.reverse()
 
-
     // Append legend
     const legendColor = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
-        .attr("height", 150);
-
+        .attr("height", 100)
+        .attr("margin", 0);
 
     // Load data
     d3.csv("../prova.csv").then(function (data) {
-
-
 
         //Inizializzo array contente tutti i dati
         let values = new Array();
@@ -41,9 +38,6 @@ $(document).ready(function () {
             k++;
             if (k == 13) k = 1;
         }
-
-        // console.log(values)
-
 
         // SVG
         let svg = d3.select("body").append("svg")
@@ -103,7 +97,7 @@ $(document).ready(function () {
             .x(d => d.x)
             .y(d => d.y);
 
-        let colors = ["blue", "red", "green"];
+        let colors = ["blue", "red", "green", "purple"];
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
@@ -133,7 +127,6 @@ $(document).ready(function () {
                 .attr("opacity", 0.8);
 
             //Bottom legend
-        
             if (i%2==0) {
             legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
             legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 25).attr('height', 5)
@@ -151,7 +144,6 @@ $(document).ready(function () {
             // console.log(Object.keys(years)[i])
 
         }
-
     }
     )
 })
