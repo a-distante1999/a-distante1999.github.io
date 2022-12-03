@@ -8,34 +8,34 @@ $(document).ready(function () {
     d3.csv("../prova.csv").then(function (data) {
 
         //Inizializzo array contente tutti i dati
-        let anni = new Array();
+        let values = new Array();
         // Inizializzo variabili ausiliarie
         let k = 1;
         let a = 2013; // 1993; //anno di partenza
 
         for (var i = 0; i < 3; i++) { //3 deve divenatre 8 //Numero di anni ds considerare
-            anni[i] = {};
-            anni[i][months[0]] = a;
+            values[i] = {};
+            values[i][months[0]] = a;
             a++; //a+4;
         }
 
-        for (let i = 0; i < anni.length * 12; i++) {
-            switch (data[i].yr) {
-                case '2013':
-                    anni[0][months[k]] = data[i].avg
-                    k++;
-                    break;
-                case '2014':
-                    anni[1][months[k]] = data[i].avg
-                    k++;
-                    break;
-                case '2015':
-                    anni[2][months[k]] = data[i].avg
-                    k++;
-                    break;
-            }
+        let anni = {
+            '2013': 0,
+            '2014': 1,
+            '2015': 2
+        };
+
+        for (let i = 0; i < values.length * 12; i++) {
+
+            values[anni[data[i].yr]][months[k]] = data[i].avg
+            k++;
             if (k == 13) k = 1;
         }
+    
+        console.log(values[0])
+        console.log(values[1])
+        console.log(values[2])
+        
         // SVG
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
@@ -108,8 +108,8 @@ $(document).ready(function () {
         }
 
         //OCCHIO ALLA i (i = numero anni*12)
-        for (var i = 0; i < anni.length*12; i++) {
-            let d = anni[i];
+        for (var i = 0; i < values.length * 12; i++) {
+            let d = values[i];
             let color = colors[i];
             let coordinates = getPathCoordinates(d);
 
