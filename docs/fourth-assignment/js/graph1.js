@@ -5,6 +5,12 @@ $(document).ready(function () {
         width = 1400 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
+    // Append years legend
+    const legendColor = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 150);
+
     // Append the svg object to the body of the page
     const svg = d3.select(singleContainer)
         .append("svg")
@@ -13,17 +19,11 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Append legend
+    // Append graph legend
     const legendChart = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
         .attr("height", 70);
-
-    const legendColor = d3.select(singleContainer)
-        .append("svg")
-        .attr("width", 1400)
-        .attr("height", 150);
-
 
     // Read the data
     d3.csv("../prova.csv").then(function (data) {
@@ -31,6 +31,14 @@ $(document).ready(function () {
         // Group the data: I want to draw one line per group
         const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
         console.log(sumstat)
+
+        // Years array
+        let years = [];
+
+        for (let i = 0; i < sumstat.size; i++) {
+            years[i] = Array.from(sumstat)[i][0]
+        }
+        console.log(years)
 
         // Add X axis 
         const x = d3.scaleLinear()
@@ -49,12 +57,12 @@ $(document).ready(function () {
 
         // Color MAX
         const colorMax = d3.scaleOrdinal()
-            .domain("2013", "2014", "2015")
+            .domain(years)
             .range(['#CB4335', '#884EA0', '#2471A3'])
 
         // Color MIN
         const colorMin = d3.scaleOrdinal()
-            .domain("2013", "2014", "2015")
+            .domain(years)
             .range(['#F1948A', '#BB8FCE', '#85C1E9'])
 
         // Draw the line
@@ -65,12 +73,16 @@ $(document).ready(function () {
             .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 1.5)
             .attr("d", function (d) {
+
                 return d3.line()
                     .x(function (d) { return x(d.month); })
                     .y(function (d) { return y(+d.max); })
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
+
             })
+
+
 
         svg.selectAll(".line")
             .data(sumstat)

@@ -4,7 +4,7 @@ $(document).ready(function () {
     let months = ["Year", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
     features.reverse()
 
-    // Append legend
+    // Append years legend
     const legendColor = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
