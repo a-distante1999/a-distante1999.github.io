@@ -20,7 +20,7 @@ $(document).ready(function () {
         let k = 1;
         let a = 2013; // 1993; //anno di partenza
 
-        for (var i = 0; i < 3; i++) { //3 deve divenatre 8 //Numero di anni ds considerare
+        for (var i = 0; i < 3; i++) { //3 deve divenatre 8 //Numero di anni da considerare
             values[i] = {};
             values[i][months[0]] = a;
             a++; //a+4;
@@ -38,7 +38,7 @@ $(document).ready(function () {
             k++;
             if (k == 13) k = 1;
         }
-
+        console.log(values)
         // SVG
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
@@ -97,7 +97,7 @@ $(document).ready(function () {
             .x(d => d.x)
             .y(d => d.y);
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
-        let colors = ['#FF6103', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        let colors = ['#FF8000', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
@@ -129,7 +129,7 @@ $(document).ready(function () {
             //Bottom years legend
             if (i % 2 == 0) {
                 legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 30).attr('height',6)
+                legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 30).attr('height', 6)
             }
             else {
                 legendColor.append("text").attr("x", 415 + (i - 1) * 200).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
