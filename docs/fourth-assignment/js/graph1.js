@@ -53,27 +53,12 @@ $(document).ready(function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        // // Color palette
-        // const colorMax = d3.scaleSequential()
-        //     .domain([0, 10])
-        //     .interpolator(d3.interpolateRainbow);
-
-        // const colorMin = d3.scaleSequential()
-        //     .domain([0, 11])
-        //     .interpolator(d3.interpolateRainbow);
-
-
-
-
-
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro, 
         // Color MAX
         let maxColors = ['#FF6103', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
         const colorMax = d3.scaleOrdinal()
             .domain(years)
             .range(maxColors)
-
-
 
         // Color MIN
         let minColors = ['#FFA07A', '#FF0000', '#FFFACD', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
@@ -98,8 +83,6 @@ $(document).ready(function () {
 
             })
 
-
-
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
@@ -123,7 +106,6 @@ $(document).ready(function () {
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 5)
             .style("fill", function (d) { return colorMax(d.yr) })
-
 
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
