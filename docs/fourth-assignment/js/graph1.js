@@ -72,7 +72,7 @@ $(document).ready(function () {
             .join("path")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMax(d[0]) })
-            .attr("stroke-width", 4.5)
+            .attr("stroke-width", 2.5)
             .attr("d", function (d) {
 
                 return d3.line()
@@ -87,7 +87,7 @@ $(document).ready(function () {
             .join("path")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMin(d[0]) })
-            .attr("stroke-width", 4.5)
+            .attr("stroke-width", 2.5)
             .attr("d", function (d) {
                 return d3.line()
                     .x(function (d) { return x(d.month); })
@@ -114,7 +114,7 @@ $(document).ready(function () {
         //   //Bottom years legend
         for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
             //Bottom legend
-            if (i % 2 == 0) { 
+            if (i % 2 == 0) {
                 legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
@@ -124,7 +124,7 @@ $(document).ready(function () {
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
-            //text("000" + i) ==> text(years[i])
+            //text("000" + i) ==> text(years[i]) oppure text(Array.from(sumstat)[i][0])
         }
     })
 })
