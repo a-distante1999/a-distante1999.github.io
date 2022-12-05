@@ -55,13 +55,14 @@ $(document).ready(function () {
 
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         // Color MAX
-        let maxColors = ['#FF8000', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        let maxColors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
         const colorMax = d3.scaleOrdinal()
             .domain(years)
             .range(maxColors)
+            
 
         // Color MIN
-        let minColors = ['#FFDAB9', '#FF0000', '#FFFACD', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
+        let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
         const colorMin = d3.scaleOrdinal()
             .domain(years)
             .range(minColors)
