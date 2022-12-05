@@ -107,33 +107,33 @@ $(document).ready(function () {
                 coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
             }
             let angle = (Math.PI / 2) + (2 * Math.PI * 0 / features.length);
-            coordinates.push(angleToCoordinate(angle, data_point["Jan"]));
+            coordinates.push(angleToCoordinate(angle, data_point[months[1]]));
             return coordinates;
         }
 
         //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < values.length * 12; i++) {
-            let d = values[i];
-            let color = colors[i];
-            let coordinates = getPathCoordinates(d);
+           // let d = values[i];
+            //let color = colors[i];
+            let coordinates = getPathCoordinates(values[i]);
 
             // Draw the path element
             svg.append("path")
                 .datum(coordinates)
                 .attr("d", line)
                 .attr("stroke-width", 2.3)
-                .attr("stroke", color)
+                .attr("stroke", colors[i])
                 .attr("fill", "none")
                 .attr("opacity", 0.8);
 
             //Bottom years legend
             if (i % 2 == 0) {
-                legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 30).attr('height', 6)
+                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', colors[i]).attr('width', 30).attr('height', 6)
             }
             else {
-                legendColor.append("text").attr("x", 415 + (i - 1) * 200).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + (i - 1) * 200).attr('y', 47).attr('fill', color).attr('width', 30).attr('height', 6)
+                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', colors[i]).attr('width', 30).attr('height', 6)
             }
 
             // console.log(d)
