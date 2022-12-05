@@ -96,6 +96,7 @@ $(document).ready(function () {
         let line = d3.line()
             .x(d => d.x)
             .y(d => d.y);
+            
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         let colors = ['#FF8000', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
