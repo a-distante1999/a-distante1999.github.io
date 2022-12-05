@@ -96,8 +96,8 @@ $(document).ready(function () {
         let line = d3.line()
             .x(d => d.x)
             .y(d => d.y);
-
-        let colors = ["blue", "red", "green", "purple"];
+        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
+        let colors = ['#FF6103', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
@@ -127,13 +127,13 @@ $(document).ready(function () {
                 .attr("opacity", 0.8);
 
             //Bottom years legend
-            if (i%2==0) {
-            legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-            legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 25).attr('height', 5)
+            if (i % 2 == 0) {
+                legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 30).attr('height',6)
             }
             else {
-                legendColor.append("text").attr("x", 415 + (i-1) * 200).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + (i-1) * 200).attr('y', 47).attr('fill', color).attr('width', 25).attr('height', 5)
+                legendColor.append("text").attr("x", 415 + (i - 1) * 200).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 380 + (i - 1) * 200).attr('y', 47).attr('fill', color).attr('width', 30).attr('height', 6)
             }
 
             // console.log(d)
@@ -142,7 +142,6 @@ $(document).ready(function () {
             // console.log(i)
             // console.log(values[i][months[0]])
             // console.log(Object.keys(years)[i])
-
         }
     }
     )

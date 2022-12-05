@@ -53,7 +53,7 @@ $(document).ready(function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro, 
+        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         // Color MAX
         let maxColors = ['#FF6103', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
         const colorMax = d3.scaleOrdinal()
@@ -80,7 +80,6 @@ $(document).ready(function () {
                     .y(function (d) { return y(+d.max); })
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
-
             })
 
         svg.selectAll(".line")
@@ -115,16 +114,17 @@ $(document).ready(function () {
         //   //Bottom years legend
         for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
             //Bottom legend
-            if (i % 2 == 0) {
-                legendColor.append("text").attr("x", 415 + i * 100).attr("y", 20).text("00000Prova" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 25).attr('height', 5)
-                legendColor.append('rect').attr('x', 380 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 25).attr('height', 5)
+            if (i % 2 == 0) { 
+                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
             else {
-                legendColor.append("text").attr("x", 415 + (i - 1) * 100).attr("y", 55).text("Prova" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 380 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 25).attr('height', 5)
-                legendColor.append('rect').attr('x', 380 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 25).attr('height', 5)
+                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
+            //text("000" + i) ==> text(years[i])
         }
     })
 })
