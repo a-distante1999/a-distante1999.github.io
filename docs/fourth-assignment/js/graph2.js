@@ -126,7 +126,7 @@ $(document).ready(function () {
                 .attr("fill", "none")
                 .attr("opacity", 0.8);
 
-            //Bottom legend
+            //Bottom years legend
             if (i%2==0) {
             legendColor.append("text").attr("x", 415 + i * 200).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
             legendColor.append('rect').attr('x', 380 + i * 200).attr('y', 12).attr('fill', color).attr('width', 25).attr('height', 5)

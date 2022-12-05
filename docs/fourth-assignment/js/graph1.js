@@ -34,11 +34,9 @@ $(document).ready(function () {
 
         // Years array
         let years = [];
-
         for (let i = 0; i < sumstat.size; i++) {
             years[i] = Array.from(sumstat)[i][0]
         }
-        console.log(years)
 
         // Add X axis 
         const x = d3.scaleLinear()
@@ -55,15 +53,33 @@ $(document).ready(function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        // // Color palette
+        // const colorMax = d3.scaleSequential()
+        //     .domain([0, 10])
+        //     .interpolator(d3.interpolateRainbow);
+
+        // const colorMin = d3.scaleSequential()
+        //     .domain([0, 11])
+        //     .interpolator(d3.interpolateRainbow);
+
+
+
+
+
+        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro, 
         // Color MAX
+        let maxColors = ['#FF6103', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
         const colorMax = d3.scaleOrdinal()
             .domain(years)
-            .range(['#CB4335', '#884EA0', '#2471A3'])
+            .range(maxColors)
+
+
 
         // Color MIN
+        let minColors = ['#FFA07A', '#FF0000', '#FFFACD', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
         const colorMin = d3.scaleOrdinal()
             .domain(years)
-            .range(['#F1948A', '#BB8FCE', '#85C1E9'])
+            .range(minColors)
 
         // Draw the line
         svg.selectAll(".line")
@@ -71,7 +87,7 @@ $(document).ready(function () {
             .join("path")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMax(d[0]) })
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 4.5)
             .attr("d", function (d) {
 
                 return d3.line()
@@ -89,7 +105,7 @@ $(document).ready(function () {
             .join("path")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMin(d[0]) })
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 4.5)
             .attr("d", function (d) {
                 return d3.line()
                     .x(function (d) { return x(d.month); })
@@ -112,31 +128,22 @@ $(document).ready(function () {
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
 
-        //Bottom legend
-        //1993
-        legendColor.append("text").attr("x", 415).attr("y", 15).text("1993").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 380).attr('y', 12).attr('fill', '#CB4335').attr('width', 25).attr('height', 5)
-        //1997
-        legendColor.append("text").attr("x", 415).attr("y", 52).text("1997").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 380).attr('y', 47).attr('fill', '#884EA0').attr('width', 25).attr('height', 5)
-        //2001
-        legendColor.append("text").attr("x", 615).attr("y", 15).text("2001").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 580).attr('y', 12).attr('fill', '#2471A3').attr('width', 25).attr('height', 5)
-        //2005
-        legendColor.append("text").attr("x", 615).attr("y", 50).text("2005").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 580).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
-        //2009
-        legendColor.append("text").attr("x", 815).attr("y", 15).text("2009").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 780).attr('y', 12).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
-        //2013
-        legendColor.append("text").attr("x", 815).attr("y", 50).text("2013").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 780).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
-        //2017
-        legendColor.append("text").attr("x", 1015).attr("y", 15).text("2017").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 980).attr('y', 12).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
-        //2021
-        legendColor.append("text").attr("x", 1015).attr("y", 50).text("2021").style("font-size", "20px").attr("alignment-baseline", "middle")
-        legendColor.append('rect').attr('x', 980).attr('y', 47).attr('fill', '#85C1E9').attr('width', 25).attr('height', 5)
+        // 1 rosso, 3 arancione, 5 verde, 7 azzurro
+        // 2 giallo, 4 fucsia, 6 viola, 8 blu
+        //   //Bottom years legend
+        for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
+            //Bottom legend
+            if (i % 2 == 0) {
+                legendColor.append("text").attr("x", 415 + i * 100).attr("y", 20).text("00000Prova" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 380 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 25).attr('height', 5)
+                legendColor.append('rect').attr('x', 380 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 25).attr('height', 5)
+            }
+            else {
+                legendColor.append("text").attr("x", 415 + (i - 1) * 100).attr("y", 55).text("Prova" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 380 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 25).attr('height', 5)
+                legendColor.append('rect').attr('x', 380 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 25).attr('height', 5)
+            }
+        }
     })
 })
 
