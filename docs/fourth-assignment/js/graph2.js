@@ -12,7 +12,7 @@ $(document).ready(function () {
         .attr("margin", 0);
 
     // Load data
-    d3.csv("../prova.csv").then(function (data) {
+    d3.csv("../prova1-2.csv").then(function (data) {
 
         //Inizializzo array contente tutti i dati
         let values = new Array();
@@ -96,7 +96,7 @@ $(document).ready(function () {
         let line = d3.line()
             .x(d => d.x)
             .y(d => d.y);
-            
+
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         let colors = ['#FF8000', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
@@ -114,7 +114,7 @@ $(document).ready(function () {
 
         //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < values.length * 12; i++) {
-           // let d = values[i];
+            // let d = values[i];
             //let color = colors[i];
             let coordinates = getPathCoordinates(values[i]);
 

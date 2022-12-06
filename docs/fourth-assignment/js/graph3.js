@@ -23,7 +23,7 @@ function drawCharts(value, margin, width, height) {
     , "August", "September", "October", "November", "December"]
 
   // Read the data
-  d3.csv("../graph3.csv").then(function (data) {
+  d3.csv("../graph_3.csv").then(function (data) {
 
     //Auxiliary things
     let a = 1;
@@ -67,7 +67,7 @@ function drawCharts(value, margin, width, height) {
 
       // Add the x Axis
       const x = d3.scaleLinear()
-        .domain([-10, 30])
+        .domain([-15, 40])
         .range([0, width]);
       svg.append("g")
         .attr("transform", `translate(0, ${height})`)

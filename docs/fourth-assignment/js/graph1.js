@@ -26,7 +26,7 @@ $(document).ready(function () {
         .attr("height", 70);
 
     // Read the data
-    d3.csv("../prova.csv").then(function (data) {
+    d3.csv("../prova1-2.csv").then(function (data) {
 
         // Group the data: I want to draw one line per group
         const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
@@ -48,7 +48,7 @@ $(document).ready(function () {
 
         // Add Y axis
         const y = d3.scaleLinear()
-            .domain([0, 40])
+            .domain([-15, 40])
             .range([height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y));
