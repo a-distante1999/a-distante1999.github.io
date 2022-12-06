@@ -88,7 +88,7 @@ function drawCharts(value, margin, width, height) {
       }
 
       // Compute kernel density estimation
-      const kde = kernelDensityEstimator(kernelEpanechnikov(1), x.ticks(25))
+      const kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(25))
       const density1 = kde(dataFiltered
         .filter(function (d) { return d.month === a.toString() })
         .map(function (d) { return d.min; }))
