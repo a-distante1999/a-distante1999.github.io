@@ -98,7 +98,7 @@ $(document).ready(function () {
             .y(d => d.y);
 
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
-        let colors = ['#FF8000', '#CD0000', '#FFFF00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        let colors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
         function getPathCoordinates(data_point) {
             let coordinates = [];
