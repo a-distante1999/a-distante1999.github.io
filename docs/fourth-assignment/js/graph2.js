@@ -1,154 +1,169 @@
 $(document).ready(function () {
 
-    let features = ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic", "Jan"];
-    let months = ["Year", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dic"];
-    features.reverse()
+    // Set the dimensions and margins of the graph
+    const margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        width = 1400 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
     // Append years legend
     const legendColor = d3.select(singleContainer)
         .append("svg")
         .attr("width", 1400)
-        .attr("height", 100)
-        .attr("margin", 0);
+        .attr("height", 150);
 
-    // Load data
+    // Append the svg object to the body of the page
+    const svg = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Append graph legend
+    const legendChart = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1400)
+        .attr("height", 70);
+
+    // Read the data
     d3.csv("../graph_1.csv").then(function (data) {
 
-        //Inizializzo array contente tutti i dati
-        let values = new Array();
-        // Inizializzo variabili ausiliarie
-        let k = 1;
-        let a = 1993; // 1993; //anno di partenza
+        // Group the data: I want to draw one line per group
+        const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
+        console.log(sumstat)
 
-        for (var i = 0; i < 8; i++) { //3 deve divenatre 8 //Numero di anni da considerare
-            values[i] = {};
-            values[i][months[0]] = a;
-            a + 4; //a+4;
+        // Years array
+        let years = [];
+        for (let i = 0; i < sumstat.size; i++) {
+            years[i] = Array.from(sumstat)[i][0]
         }
 
-        let years = {
-            '1993': 0,
-            '1997': 1,
-            '2001': 2,
-            '2005': 3,
-            '2009': 4,
-            '2013': 5,
-            '2017': 6,
-            '2021': 7,
-        };
+        // Add X axis 
+        const x = d3.scaleLinear()
+            .domain([1, 12])
+            .range([0, width]);
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
 
-        for (let i = 0; i < values.length * 12; i++) {
-
-            values[years[data[i].yr]][months[k]] = data[i].avg
-            k++;
-            if (k == 13) k = 1;
-        }
-        console.log(values)
-        // SVG
-        let svg = d3.select("body").append("svg")
-            .attr("width", 650)
-            .attr("height", 600);
-
-        let radialScale = d3.scaleLinear()
-            .domain([0, 30])
-            .range([0, 250]);
-
-        let ticks = [5, 10, 15, 20, 25, 30];
-
-        ticks.forEach(t =>
-            svg.append("circle")
-                .attr("cx", 300)
-                .attr("cy", 300)
-                .attr("fill", "none")
-                .attr("stroke", "gray")
-                .attr("r", radialScale(t))
-        );
-
-        ticks.forEach(t =>
-            svg.append("text")
-                .attr("x", 305)
-                .attr("y", 300 - radialScale(t))
-                .text(t.toString())
-        );
-
-        function angleToCoordinate(angle, value) {
-            let x = Math.cos(angle) * radialScale(value);
-            let y = Math.sin(angle) * radialScale(value);
-            return { "x": 300 + x, "y": 300 - y };
-        }
-
-        for (var i = 0; i < features.length; i++) {
-            let ft_name = features[i];
-            let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-            let line_coordinate = angleToCoordinate(angle, 30);
-            let label_coordinate = angleToCoordinate(angle, 32.5);
-
-            // Draw axis line
-            svg.append("line")
-                .attr("x1", 300)
-                .attr("y1", 300)
-                .attr("x2", line_coordinate.x)
-                .attr("y2", line_coordinate.y)
-                .attr("stroke", "black");
-
-            // Draw axis label
-            svg.append("text")
-                .attr("x", label_coordinate.x - 10)
-                .attr("y", label_coordinate.y)
-                .text(ft_name);
-        }
-
-        let line = d3.line()
-            .x(d => d.x)
-            .y(d => d.y);
+        // Add Y axis
+        const y = d3.scaleLinear()
+            .domain([-15, 40])
+            .range([height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
 
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
-        let colors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        // Color MAX
+        let maxColors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        const colorMax = d3.scaleOrdinal()
+            .domain(years)
+            .range(maxColors)
 
-        function getPathCoordinates(data_point) {
-            let coordinates = [];
-            for (var i = 0; i < features.length; i++) {
-                let ft_name = features[i];
-                let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-                coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
-            }
-            let angle = (Math.PI / 2) + (2 * Math.PI * 0 / features.length);
-            coordinates.push(angleToCoordinate(angle, data_point[months[1]]));
-            return coordinates;
-        }
 
-        //OCCHIO ALLA i (i = numero anni*12)
-        for (var i = 0; i < values.length * 12; i++) {
-            // let d = values[i];
-            //let color = colors[i];
-            let coordinates = getPathCoordinates(values[i]);
+        // Color MIN
+        let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
+        const colorMin = d3.scaleOrdinal()
+            .domain(years)
+            .range(minColors)
 
-            // Draw the path element
-            svg.append("path")
-                .datum(coordinates)
-                .attr("d", line)
-                .attr("stroke-width", 2.3)
-                .attr("stroke", colors[i])
-                .attr("fill", "none")
-                .attr("opacity", 0.8);
+        // Draw the line
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("fill", "none")
+            .attr("stroke", function (d) { return colorMax(d[0]) })
+            .attr("stroke-width", 2.5)
+            .attr("d", function (d) {
 
-            //Bottom years legend
+                return d3.line()
+                    .x(function (d) { return x(d.month); })
+                    .y(function (d) { return y(+d.max); })
+                    //.y(function (d) { return y(+d.min); })
+                    (d[1])
+            })
+
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("fill", "none")
+            .attr("stroke", function (d) { return colorMin(d[0]) })
+            .attr("stroke-width", 2.5)
+            .attr("d", function (d) {
+                return d3.line()
+                    .x(function (d) { return x(d.month); })
+                    .y(function (d) { return y(+d.min); })
+                    //.y(function (d) { return y(+d.min); })
+                    (d[1])
+            })
+
+
+
+// Highlight the specie that is hovered
+const highlight = function(event,d){
+
+    selected_year = d.yr
+
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", "lightgrey")
+      .attr("r", 3)
+
+    d3.selectAll("." + selected_year)
+      .transition()
+      .duration(200)
+      .style("fill", colorMax(selected_year))
+      .attr("r", 7)
+
+      console.log(selected_year)
+  }
+  // Highlight the specie that is hovered
+  const doNotHighlight = function(event,d){
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", d => colorMax(d.yr))
+      .attr("r", 5 )
+  }
+
+
+        // Draw the dot
+        svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .join("circle")
+            .attr("class", function (d) { return "dot " + d.yr } )
+            .attr("cx", function (d) { return x(d.month); })
+            .attr("cy", function (d) { return y(d.avg); })
+            .attr("r", 5)
+            .style("fill", function (d) { return colorMax(d.yr) })
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight )
+
+        legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
+        svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
+
+        // 1 rosso, 3 arancione, 5 verde, 7 azzurro
+        // 2 giallo, 4 fucsia, 6 viola, 8 blu
+        //   //Bottom years legend
+        for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
+            //Bottom legend
             if (i % 2 == 0) {
-                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 15).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', colors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
             else {
-                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
-                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', colors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
+                legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
-
-            // console.log(d)
-            // console.log(color)
-            // console.log(values)
-            // console.log(i)
-            // console.log(values[i][months[0]])
-            // console.log(Object.keys(years)[i])
+            //text("000" + i) ==> text(years[i]) oppure text(Array.from(sumstat)[i][0])
         }
-    }
-    )
+    })
 })
+
+
+
+
