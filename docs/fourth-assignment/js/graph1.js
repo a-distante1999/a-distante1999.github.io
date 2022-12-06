@@ -60,6 +60,7 @@ $(document).ready(function () {
             .domain(years)
             .range(maxColors)
 
+
         // Color MIN
         let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
         const colorMin = d3.scaleOrdinal()
@@ -96,15 +97,49 @@ $(document).ready(function () {
                     (d[1])
             })
 
+
+
+// Highlight the specie that is hovered
+const highlight = function(event,d){
+
+    selected_year = d.yr
+
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", "lightgrey")
+      .attr("r", 3)
+
+    d3.selectAll("." + selected_year)
+      .transition()
+      .duration(200)
+      .style("fill", colorMax(selected_year))
+      .attr("r", 7)
+
+      console.log(selected_year)
+  }
+  // Highlight the specie that is hovered
+  const doNotHighlight = function(event,d){
+    d3.selectAll(".dot")
+      .transition()
+      .duration(200)
+      .style("fill", d => colorMax(d.yr))
+      .attr("r", 5 )
+  }
+
+
         // Draw the dot
         svg.append('g')
             .selectAll("dot")
             .data(data)
             .join("circle")
+            .attr("class", function (d) { return "dot " + d.yr } )
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 5)
             .style("fill", function (d) { return colorMax(d.yr) })
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight )
 
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
@@ -112,15 +147,15 @@ $(document).ready(function () {
         // 1 rosso, 3 arancione, 5 verde, 7 azzurro
         // 2 giallo, 4 fucsia, 6 viola, 8 blu
         //   //Bottom years legend
-        for (let i = 0; i < sumstat.size; i++) {   // 8 deve divenatre sumstat.size
+        for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
             //Bottom legend
             if (i % 2 == 0) {
-                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
             else {
-                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
