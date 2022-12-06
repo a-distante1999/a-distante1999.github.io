@@ -26,7 +26,7 @@ $(document).ready(function () {
         .attr("height", 70);
 
     // Read the data
-    d3.csv("../prova1-2.csv").then(function (data) {
+    d3.csv("../graph_1.csv").then(function (data) {
 
         // Group the data: I want to draw one line per group
         const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
@@ -59,7 +59,7 @@ $(document).ready(function () {
         const colorMax = d3.scaleOrdinal()
             .domain(years)
             .range(maxColors)
-            
+
 
         // Color MIN
         let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
