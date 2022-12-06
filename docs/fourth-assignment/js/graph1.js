@@ -36,6 +36,7 @@ $(document).ready(function () {
         let years = [];
         for (let i = 0; i < sumstat.size; i++) {
             years[i] = Array.from(sumstat)[i][0]
+
         }
 
         // Add X axis 
@@ -54,14 +55,15 @@ $(document).ready(function () {
             .call(d3.axisLeft(y));
 
         //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
-        // Color MAX
         let maxColors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
+        let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
+
+        // Color MAX
         const colorMax = d3.scaleOrdinal()
             .domain(years)
             .range(maxColors)
 
         // Color MIN
-        let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
         const colorMin = d3.scaleOrdinal()
             .domain(years)
             .range(minColors)
@@ -71,7 +73,7 @@ $(document).ready(function () {
             .data(sumstat)
             .join("path")
             .attr("fill", "none")
-            .attr("stroke", function (d) {  return colorMax(d[0]) })
+            .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 2.5)
             .attr("d", function (d) {
 
@@ -95,16 +97,66 @@ $(document).ready(function () {
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
+        /////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
 
+
+        // TODO:     
+
+        // Highlight the specie that is hovered
+        const highlight = function (event, d) {
+
+            selected_year = d.yr
+            console.log("years:")
+            console.log(years)
+            console.log("d:")
+            console.log(d)
+            // console.log(d.yr)
+            // console.log(selected_year)
+            // console.log(typeof d.yr)
+            // console.log(typeof selected_year)
+            console.log("Colore:")
+            console.log(colorMax(selected_year))
+            console.log(colorMax(d.yr))
+
+            d3.selectAll(".dot")
+                .transition()
+                .duration(200)
+                .style("fill", "lightgrey")
+                .attr("r", 3) //quelli grigi
+
+            d3.selectAll("." + selected_year)
+                .transition()
+                .duration(200)
+                .style("fill", colorMax(selected_year))
+                // .style("fill", "black")
+                .attr("r", 7) //quello colorato
+        }
+
+        // Highlight the specie that is hovered
+        const doNotHighlight = function (event, d) {
+            d3.selectAll(".dot")
+                .transition()
+                .duration(200)
+                .style("fill", d => colorMax(d.yr))
+                .attr("r", 5) //dopo aver spostato il mouse
+        }
+
+        /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
         // Draw the dot
         svg.append('g')
             .selectAll("dot")
             .data(data)
-            .join("circle")
+            .enter()
+            .append("circle") // .join("circle")
+            .attr("class", function (d) { return "dot " + d.yr })
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 5)
             .style("fill", function (d) { return colorMax(d.yr) })
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
+
+        /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
 
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
