@@ -129,7 +129,7 @@ $(document).ready(function () {
             }
 
 
-            d3.selectAll(".dot")
+            d3.selectAll("circle")
                 .transition()
                 .duration(200)
                 .style("fill", "lightgrey")
@@ -145,7 +145,7 @@ $(document).ready(function () {
 
         // Highlight the specie that is hovered
         const doNotHighlight = function (event, d) {
-            d3.selectAll(".dot")
+            d3.selectAll("circle")
                 .transition()
                 .duration(200)
                 .style("fill", d => colorMax(d.yr))
