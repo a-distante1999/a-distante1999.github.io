@@ -106,17 +106,28 @@ $(document).ready(function () {
         const highlight = function (event, d) {
 
             selected_year = d.yr
-            console.log("years:")
-            console.log(years)
-            console.log("d:")
-            console.log(d)
+
+            // console.log("years:")
+            // console.log(years)
+            // console.log("d:")
+            // console.log(d)
             // console.log(d.yr)
             // console.log(selected_year)
             // console.log(typeof d.yr)
             // console.log(typeof selected_year)
-            console.log("Colore:")
-            console.log(colorMax(selected_year))
-            console.log(colorMax(d.yr))
+            // console.log("Colore:")
+
+
+            for (let i = 0; i < years.length; i++) {
+
+                if (years[i] == selected_year) {
+                    console.log("Uguale:")
+                    console.log(selected_year)
+                    console.log(colorMax(d.yr))
+                    console.log(colorMax(selected_year))
+                }
+            }
+
 
             d3.selectAll(".dot")
                 .transition()
@@ -124,12 +135,12 @@ $(document).ready(function () {
                 .style("fill", "lightgrey")
                 .attr("r", 3) //quelli grigi
 
-            d3.selectAll("." + selected_year)
+            d3.selectAll(".dot" + selected_year)
                 .transition()
                 .duration(200)
                 .style("fill", colorMax(selected_year))
                 // .style("fill", "black")
-                .attr("r", 7) //quello colorato
+                .attr("r", 10) //quello colorato
         }
 
         // Highlight the specie that is hovered
@@ -148,7 +159,7 @@ $(document).ready(function () {
             .data(data)
             .enter()
             .append("circle") // .join("circle")
-            .attr("class", function (d) { return "dot " + d.yr })
+            .attr("class", function (d) { return "dot" + d.yr })
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 5)
