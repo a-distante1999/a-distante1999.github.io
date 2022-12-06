@@ -79,6 +79,7 @@ $(document).ready(function () {
                 .style("opacity", "1")
                 .style("stroke-width", "3");
         }
+
         const mouseovermin = function (event, d) {
             const selection = d3.select(this).raise();
             selection
@@ -89,6 +90,7 @@ $(document).ready(function () {
                 .style("opacity", "1")
                 .style("stroke-width", "3");
         }
+
         const mouseout = function (event, d) {
             const selection = d3.select(this)
             selection
@@ -100,73 +102,10 @@ $(document).ready(function () {
                 .style("stroke-width", "2.5");
         }
 
-        // Draw the line
-        svg.selectAll(".line")
-            .data(sumstat)
-            .join("path")
-            .attr("class", "line1")
-            .attr("fill", "none")
-            .attr("stroke", function (d) { return colorMax(d[0]) })
-            .attr("stroke-width", 2.5)
-            .attr("d", function (d) {
-
-                return d3.line()
-                    .x(function (d) { return x(d.month); })
-                    .y(function (d) { return y(+d.max); })
-                    //.y(function (d) { return y(+d.min); })
-                    (d[1])
-            })
-            .on("mouseover", mouseover)
-            .on("mouseleave", mouseout)
-
-
-        svg.selectAll(".line")
-            .data(sumstat)
-            .join("path")
-            .attr("class", "line")
-            .attr("fill", "none")
-            .attr("stroke", function (d) { return colorMin(d[0]) })
-            .attr("stroke-width", 2.5)
-            .attr("d", function (d) {
-                return d3.line()
-                    .x(function (d) { return x(d.month); })
-                    .y(function (d) { return y(+d.min); })
-                    //.y(function (d) { return y(+d.min); })
-                    (d[1])
-            })
-            .on("mouseover", mouseovermin)
-            .on("mouseleave", mouseout)
-        /////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
-
-
-        // TODO:     
-
         // Highlight the specie that is hovered
         const highlight = function (event, d) {
 
             selected_year = d.yr
-
-            // console.log("years:")
-            // console.log(years)
-            // console.log("d:")
-            // console.log(d)
-            // console.log(d.yr)
-            // console.log(selected_year)
-            // console.log(typeof d.yr)
-            // console.log(typeof selected_year)
-            // console.log("Colore:")
-
-
-            for (let i = 0; i < years.length; i++) {
-
-                if (years[i] == selected_year) {
-                    console.log("Uguale:")
-                    console.log(selected_year)
-                    console.log(colorMax(d.yr))
-                    console.log(colorMax(selected_year))
-                }
-            }
-
 
             d3.selectAll("circle")
                 .transition()
@@ -191,7 +130,42 @@ $(document).ready(function () {
                 .attr("r", 5) //dopo aver spostato il mouse
         }
 
-        /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
+        // Draw the line
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("class", "line1")
+            .attr("fill", "none")
+            .attr("stroke", function (d) { return colorMax(d[0]) })
+            .attr("stroke-width", 2.5)
+            .attr("d", function (d) {
+
+                return d3.line()
+                    .x(function (d) { return x(d.month); })
+                    .y(function (d) { return y(+d.max); })
+                    //.y(function (d) { return y(+d.min); })
+                    (d[1])
+            })
+            .on("mouseover", mouseover)
+            .on("mouseleave", mouseout)
+
+        svg.selectAll(".line")
+            .data(sumstat)
+            .join("path")
+            .attr("class", "line")
+            .attr("fill", "none")
+            .attr("stroke", function (d) { return colorMin(d[0]) })
+            .attr("stroke-width", 2.5)
+            .attr("d", function (d) {
+                return d3.line()
+                    .x(function (d) { return x(d.month); })
+                    .y(function (d) { return y(+d.min); })
+                    //.y(function (d) { return y(+d.min); })
+                    (d[1])
+            })
+            .on("mouseover", mouseovermin)
+            .on("mouseleave", mouseout)
+
         // Draw the dot
         svg.append('g')
             .selectAll("dot")
@@ -205,8 +179,6 @@ $(document).ready(function () {
             .style("fill", function (d) { return colorMax(d.yr) })
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight)
-
-        /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
 
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
