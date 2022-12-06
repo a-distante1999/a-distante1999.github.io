@@ -68,10 +68,43 @@ $(document).ready(function () {
             .domain(years)
             .range(minColors)
 
+        //highlight lines 
+        const mouseover = function (event, d) {
+            const selection = d3.select(this).raise();
+            selection
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMax(d[0]) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
+        }
+        const mouseovermin = function (event, d) {
+            const selection = d3.select(this).raise();
+            selection
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMin(d[0]) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
+        }
+        const mouseout = function (event, d) {
+            const selection = d3.select(this)
+            selection
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", "#d2d2d2")
+                .style("opacity", "1")
+                .style("stroke-width", "2.5");
+        }
+
         // Draw the line
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
+            .attr("class", "line1")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 2.5)
@@ -83,10 +116,14 @@ $(document).ready(function () {
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
+            .on("mouseover", mouseover)
+            .on("mouseleave", mouseout)
+
 
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
+            .attr("class", "line")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMin(d[0]) })
             .attr("stroke-width", 2.5)
@@ -97,6 +134,8 @@ $(document).ready(function () {
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
+            .on("mouseover", mouseovermin)
+            .on("mouseleave", mouseout)
         /////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////  /////////////////
 
 
