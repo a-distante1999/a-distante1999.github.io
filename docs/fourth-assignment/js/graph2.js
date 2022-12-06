@@ -12,24 +12,29 @@ $(document).ready(function () {
         .attr("margin", 0);
 
     // Load data
-    d3.csv("../prova.csv").then(function (data) {
+    d3.csv("../graph_1.csv").then(function (data) {
 
         //Inizializzo array contente tutti i dati
         let values = new Array();
         // Inizializzo variabili ausiliarie
         let k = 1;
-        let a = 2013; // 1993; //anno di partenza
+        let a = 1993; // 1993; //anno di partenza
 
-        for (var i = 0; i < 3; i++) { //3 deve divenatre 8 //Numero di anni da considerare
+        for (var i = 0; i < 8; i++) { //3 deve divenatre 8 //Numero di anni da considerare
             values[i] = {};
             values[i][months[0]] = a;
             a++; //a+4;
         }
 
         let years = {
-            '2013': 0,
-            '2014': 1,
-            '2015': 2
+            '1993': 0,
+            '1997': 1,
+            '2001': 2,
+            '2005': 3,
+            '2009': 4,
+            '2013': 5,
+            '2017': 6,
+            '2021': 7,
         };
 
         for (let i = 0; i < values.length * 12; i++) {
@@ -114,7 +119,7 @@ $(document).ready(function () {
 
         //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < values.length * 12; i++) {
-           // let d = values[i];
+            // let d = values[i];
             //let color = colors[i];
             let coordinates = getPathCoordinates(values[i]);
 
