@@ -60,7 +60,6 @@ $(document).ready(function () {
             .domain(years)
             .range(maxColors)
 
-
         // Color MIN
         let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
         const colorMin = d3.scaleOrdinal()
@@ -113,15 +112,15 @@ $(document).ready(function () {
         // 1 rosso, 3 arancione, 5 verde, 7 azzurro
         // 2 giallo, 4 fucsia, 6 viola, 8 blu
         //   //Bottom years legend
-        for (let i = 0; i < 8; i++) {   // 8 deve divenatre sumstat.size
+        for (let i = 0; i < sumstat.size; i++) {   // 8 deve divenatre sumstat.size
             //Bottom legend
             if (i % 2 == 0) {
-                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 12).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + i * 100).attr('y', 20).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
             else {
-                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text("000" + i).style("font-size", "20px").attr("alignment-baseline", "middle")
+                legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 55).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }

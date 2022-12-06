@@ -23,7 +23,7 @@ $(document).ready(function () {
         for (var i = 0; i < 8; i++) { //3 deve divenatre 8 //Numero di anni da considerare
             values[i] = {};
             values[i][months[0]] = a;
-            a++; //a+4;
+            a + 4; //a+4;
         }
 
         let years = {
