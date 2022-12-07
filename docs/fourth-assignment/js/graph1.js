@@ -68,9 +68,9 @@ $(document).ready(function () {
             .domain(years)
             .range(minColors)
 
-    // TODO: Manca da illuminare solo una linea quando si tocca o una linea o un pallino e no tutto il blocco insieme
+        // TODO: Manca da illuminare solo una linea quando si tocca o una linea o un pallino e no tutto il blocco insieme
 
-      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
+        ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
         //highlight lines 
         // const mouseover = function (event, d) {
         //     const selection = d3.select(this).raise();
@@ -137,7 +137,15 @@ $(document).ready(function () {
                 .style("fill", colorMax(selected_year))
                 .attr("r", 10) //quello colorato
 
-            d3.selectAll(".line2")
+            d3.selectAll("path")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", "lightgrey")
+                .style("opacity", "1")
+                .style("stroke-width", "3");
+
+            d3.selectAll(".line2" + selected_year)
                 .transition()
                 .delay("100")
                 .duration("10")
@@ -145,7 +153,7 @@ $(document).ready(function () {
                 .style("opacity", "1")
                 .style("stroke-width", "3");
 
-            d3.selectAll(".line3")
+            d3.selectAll(".line3" + selected_year)
                 .transition()
                 .delay("100")
                 .duration("10")
@@ -179,6 +187,7 @@ $(document).ready(function () {
                 .style("stroke", function (d) { return colorMax(d[0]) })
                 .style("opacity", "1")
                 .style("stroke-width", "3");
+
             d3.selectAll(".line3")
                 .transition()
                 .delay("100")
@@ -188,11 +197,20 @@ $(document).ready(function () {
                 .style("stroke-width", "3");
         }
 
+        // Variabili ausiliarie per identificare lelinee
+        let n = 0;
+        let m = 0;
+
         // Draw the line
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
             .attr("class", "line2")
+            .attr("class", function (d) {
+                l3 = Array.from(sumstat)[m][0]
+                m++;
+                return "line2" + l3
+            })
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 2.5)
@@ -211,6 +229,11 @@ $(document).ready(function () {
             .data(sumstat)
             .join("path")
             .attr("class", "line3")
+            .attr("class", function (d) {
+                l3 = Array.from(sumstat)[n][0]
+                n++;
+                return "line3" + l3
+            })
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMin(d[0]) })
             .attr("stroke-width", 2.5)
@@ -230,7 +253,11 @@ $(document).ready(function () {
             .data(data)
             .enter()
             .append("circle") // .join("circle")
-            .attr("class", function (d) { return "dot" + d.yr })
+            .attr("class", function (d) {
+                // console.log(typeof d.yr)
+                // console.log(d.yr)
+                return "dot" + d.yr
+            })
             .attr("cx", function (d) { return x(d.month); })
             .attr("cy", function (d) { return y(d.avg); })
             .attr("r", 5)
