@@ -30,14 +30,16 @@ $(document).ready(function () {
 
         // Group the data: I want to draw one line per group
         const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
-        console.log(sumstat)
+
 
         // Years array
         let years = [];
+
         for (let i = 0; i < sumstat.size; i++) {
             years[i] = Array.from(sumstat)[i][0]
 
         }
+        console.log(years)
 
         // Add X axis 
         const x = d3.scaleLinear()
@@ -113,13 +115,9 @@ $(document).ready(function () {
         const highlight = function (event, d) {
 
             if (typeof d[0] === 'string') {
-                console.log("Riga:");
-                console.log(d[0])
                 selected_year = d[0]
 
             } else {
-                console.log("Pallino:");
-                console.log(d.yr)
                 selected_year = d.yr
             }
 
@@ -151,7 +149,7 @@ $(document).ready(function () {
                 .duration("10")
                 .style("stroke", function (d) { return colorMax(selected_year) })
                 .style("opacity", "1")
-                .style("stroke-width", "3");
+                .style("stroke-width", "6");
 
             d3.selectAll(".line3" + selected_year)
                 .transition()
@@ -159,42 +157,41 @@ $(document).ready(function () {
                 .duration("10")
                 .style("stroke", function (d) { return colorMin(selected_year) })
                 .style("opacity", "1")
-                .style("stroke-width", "3");
+                .style("stroke-width", "6");
         }
 
         // Highlight the specie that is hovered
         const doNotHighlight = function (event, d) {
             if (typeof d[0] === 'string') {
-                console.log("Riga:");
-                console.log(d[0])
                 selected_year = d[0]
 
             } else {
-                console.log("Pallino:");
-                console.log(d.yr)
                 selected_year = d.yr
             }
+
             d3.selectAll("circle")
                 .transition()
                 .duration(200)
                 .style("fill", d => colorMax(d.yr))
                 .attr("r", 5) //dopo aver spostato il mouse
 
-            d3.selectAll(".line2")
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMax(d[0]) })
-                .style("opacity", "1")
-                .style("stroke-width", "3");
+            for (let i = 0; i < 8; i++) {
+                d3.selectAll(".line2" + years[i])
+                    .transition()
+                    .duration(200)
+                    .style("stroke", function (d) { return colorMax(d[0]) })
+                    .style("opacity", "1")
+                    .style("stroke-width", "3");
 
-            d3.selectAll(".line3")
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMin(d[0]) })
-                .style("opacity", "1")
-                .style("stroke-width", "3");
+                d3.selectAll(".line3" + years[i])
+                    .transition()
+                    .delay("100")
+                    .duration("10")
+                    .style("stroke", function (d) { return colorMin(d[0]) })
+                    .style("opacity", "1")
+                    .style("stroke-width", "3");
+            }
+
         }
 
         // Variabili ausiliarie per identificare lelinee
