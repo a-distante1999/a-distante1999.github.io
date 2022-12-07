@@ -39,7 +39,7 @@ $(document).ready(function () {
             years[i] = Array.from(sumstat)[i][0]
 
         }
-        console.log(years)
+
 
         // Add X axis 
         const x = d3.scaleLinear()
@@ -143,21 +143,60 @@ $(document).ready(function () {
                 .style("opacity", "1")
                 .style("stroke-width", "3");
 
-            d3.selectAll(".line2" + selected_year)
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMax(selected_year) })
-                .style("opacity", "1")
-                .style("stroke-width", "6");
 
-            d3.selectAll(".line3" + selected_year)
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMin(selected_year) })
-                .style("opacity", "1")
-                .style("stroke-width", "6");
+            //ESTRAGGO RILEVAZIONI DEL SINGOLO ANNO
+            let max = [];
+            max.length = 0;
+            let min = [];
+            min.length = 0;
+            a = 1;
+            for (let i = 0; i < 96; i++) {
+
+                if (data[i].yr == selected_year) {
+                    max[a] = data[i].max
+                    min[a] = data[i].min
+                    a++
+                }
+            }
+
+
+            //RIDISEGNO LINEA MASSIMO
+            svg.selectAll(".line")
+                .data(sumstat)
+                .join("path")
+                .attr("class", "lineMAX")
+                .attr("fill", "none")
+                .attr("stroke", function (d) { return colorMax(selected_year) })
+                .attr("stroke-width", 6)
+                .attr("d", function (d) {
+
+                    return d3.line()
+                        .x(function (d) { return x(d.month); })
+                        .y(function (d) { return y(+max[d.month]); })
+
+                        (d[1])
+
+                })
+            //RIDISEGNO LINEA MINIMO
+            svg.selectAll(".line")
+                .data(sumstat)
+                .join("path")
+                .attr("class", "lineMIN")
+                .attr("fill", "none")
+                .attr("stroke", function (d) { return colorMin(selected_year) })
+                .attr("stroke-width", 6)
+                .attr("d", function (d) {
+                    return d3.line()
+                        .x(function (d) { return x(d.month); })
+                        .y(function (d) { return y(+min[d.month]); })
+                        (d[1])
+                })
+
+            console.log(d.month)
+
+
+
+
         }
 
         // Highlight the specie that is hovered
@@ -168,6 +207,9 @@ $(document).ready(function () {
             } else {
                 selected_year = d.yr
             }
+
+            svg.selectAll(".lineMAX").remove()
+            svg.selectAll(".lineMIN").remove()
 
             d3.selectAll("circle")
                 .transition()
