@@ -122,9 +122,6 @@ $(document).ready(function () {
                 console.log(d.yr)
                 selected_year = d.yr
             }
-
-            // selected_year = d.yr
-
             d3.selectAll("circle")
                 .transition()
                 .duration(200)
@@ -164,6 +161,7 @@ $(document).ready(function () {
 
         // Highlight the specie that is hovered
         const doNotHighlight = function (event, d) {
+            console.log(d)
             if (typeof d[0] === 'string') {
                 console.log("Riga:");
                 console.log(d[0])
@@ -180,18 +178,32 @@ $(document).ready(function () {
                 .style("fill", d => colorMax(d.yr))
                 .attr("r", 5) //dopo aver spostato il mouse
 
+            // d3.selectAll(".line2")
+            //     .transition()
+            //     .delay("100")
+            //     .duration("10")
+            //     .style("stroke", function (d) { return colorMax(d[0]) }) 
+            //     .style("opacity", "1")
+            //     .style("stroke-width", "3");
+
+            // d3.selectAll(".line3")
+            //     .transition()
+            //     .delay("100")
+            //     .duration("10")
+            //     .style("stroke", function (d) { return colorMin(d[0]) })
+            //     .style("opacity", "1")
+            //     .style("stroke-width", "3");
+
             d3.selectAll(".line2")
                 .transition()
-                .delay("100")
-                .duration("10")
+                .duration(10)
                 .style("stroke", function (d) { return colorMax(d[0]) })
                 .style("opacity", "1")
                 .style("stroke-width", "3");
 
             d3.selectAll(".line3")
                 .transition()
-                .delay("100")
-                .duration("10")
+                .duration(10)
                 .style("stroke", function (d) { return colorMin(d[0]) })
                 .style("opacity", "1")
                 .style("stroke-width", "3");
@@ -241,7 +253,6 @@ $(document).ready(function () {
                 return d3.line()
                     .x(function (d) { return x(d.month); })
                     .y(function (d) { return y(+d.min); })
-                    //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
             .on("mouseover", highlight)
@@ -254,8 +265,6 @@ $(document).ready(function () {
             .enter()
             .append("circle") // .join("circle")
             .attr("class", function (d) {
-                // console.log(typeof d.yr)
-                // console.log(d.yr)
                 return "dot" + d.yr
             })
             .attr("cx", function (d) { return x(d.month); })
