@@ -68,44 +68,62 @@ $(document).ready(function () {
             .domain(years)
             .range(minColors)
 
+    // TODO: Manca da illuminare solo una linea quando si tocca o una linea o un pallino e no tutto il blocco insieme
+
+      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
         //highlight lines 
-        const mouseover = function (event, d) {
-            const selection = d3.select(this).raise();
-            selection
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMax(d[0]) })
-                .style("opacity", "1")
-                .style("stroke-width", "3");
-        }
+        // const mouseover = function (event, d) {
+        //     const selection = d3.select(this).raise();
+        //     selection
+        //         .transition()
+        //         .delay("100")
+        //         .duration("10")
+        //         .style("stroke", function (d) { return colorMax(d[0]) })
+        //         .style("opacity", "1")
+        //         .style("stroke-width", "3");
+        // }
 
-        const mouseovermin = function (event, d) {
-            const selection = d3.select(this).raise();
-            selection
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", function (d) { return colorMin(d[0]) })
-                .style("opacity", "1")
-                .style("stroke-width", "3");
-        }
+        // const mouseovermin = function (event, d) {
 
-        const mouseout = function (event, d) {
-            const selection = d3.select(this)
-            selection
-                .transition()
-                .delay("100")
-                .duration("10")
-                .style("stroke", "#d2d2d2")
-                .style("opacity", "1")
-                .style("stroke-width", "2.5");
-        }
+        //     const selection = d3.select(this).raise();
+        //     selection
+        //         .transition()
+        //         .delay("100")
+        //         .duration("10")
+        //         .style("stroke", function (d) { return colorMin(d[0]) })
+        //         .style("opacity", "1")
+        //         .style("stroke-width", "3");
+
+        // }
+
+        // const mouseout = function (event, d) {
+        //     //console.log(d)
+        //     const selection = d3.select(this)
+        //     selection
+        //         .transition()
+        //         .delay("100")
+        //         .duration("10")
+        //        // .style("stroke", "#d2d2d2")
+        //         .style("stroke", function (d) { return colorMax(selected_year) })
+        //         .style("opacity", "1")
+        //         .style("stroke-width", "2.5");
+        // }
 
         // Highlight the specie that is hovered
         const highlight = function (event, d) {
 
-            selected_year = d.yr
+            if (typeof d[0] === 'string') {
+                console.log("Riga:");
+                console.log(d[0])
+                selected_year = d[0]
+
+            } else {
+                console.log("Pallino:");
+                console.log(d.yr)
+                selected_year = d.yr
+            }
+
+            // selected_year = d.yr
 
             d3.selectAll("circle")
                 .transition()
@@ -117,24 +135,64 @@ $(document).ready(function () {
                 .transition()
                 .duration(200)
                 .style("fill", colorMax(selected_year))
-                // .style("fill", "black")
                 .attr("r", 10) //quello colorato
+
+            d3.selectAll(".line2")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMax(selected_year) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
+
+            d3.selectAll(".line3")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMin(selected_year) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
         }
 
         // Highlight the specie that is hovered
         const doNotHighlight = function (event, d) {
+            if (typeof d[0] === 'string') {
+                console.log("Riga:");
+                console.log(d[0])
+                selected_year = d[0]
+
+            } else {
+                console.log("Pallino:");
+                console.log(d.yr)
+                selected_year = d.yr
+            }
             d3.selectAll("circle")
                 .transition()
                 .duration(200)
                 .style("fill", d => colorMax(d.yr))
                 .attr("r", 5) //dopo aver spostato il mouse
+
+            d3.selectAll(".line2")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMax(d[0]) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
+            d3.selectAll(".line3")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("stroke", function (d) { return colorMin(d[0]) })
+                .style("opacity", "1")
+                .style("stroke-width", "3");
         }
 
         // Draw the line
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
-            .attr("class", "line1")
+            .attr("class", "line2")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMax(d[0]) })
             .attr("stroke-width", 2.5)
@@ -146,13 +204,13 @@ $(document).ready(function () {
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
-            .on("mouseover", mouseover)
-            .on("mouseleave", mouseout)
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
 
         svg.selectAll(".line")
             .data(sumstat)
             .join("path")
-            .attr("class", "line")
+            .attr("class", "line3")
             .attr("fill", "none")
             .attr("stroke", function (d) { return colorMin(d[0]) })
             .attr("stroke-width", 2.5)
@@ -163,8 +221,8 @@ $(document).ready(function () {
                     //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
-            .on("mouseover", mouseovermin)
-            .on("mouseleave", mouseout)
+            .on("mouseover", highlight)
+            .on("mouseleave", doNotHighlight)
 
         // Draw the dot
         svg.append('g')
@@ -179,6 +237,8 @@ $(document).ready(function () {
             .style("fill", function (d) { return colorMax(d.yr) })
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight)
+
+        ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
 
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
