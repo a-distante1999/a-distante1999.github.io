@@ -31,7 +31,6 @@ $(document).ready(function () {
         // Group the data: I want to draw one line per group
         const sumstat = d3.group(data, d => d.yr); // nest function allows to group the calculation per level of a factor
 
-
         // Years array
         let years = [];
 
@@ -39,7 +38,6 @@ $(document).ready(function () {
             years[i] = Array.from(sumstat)[i][0]
 
         }
-
 
         // Add X axis 
         const x = d3.scaleLinear()
@@ -70,48 +68,7 @@ $(document).ready(function () {
             .domain(years)
             .range(minColors)
 
-        // TODO: Manca da illuminare solo una linea quando si tocca o una linea o un pallino e no tutto il blocco insieme
-
-        ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
-        //highlight lines 
-        // const mouseover = function (event, d) {
-        //     const selection = d3.select(this).raise();
-        //     selection
-        //         .transition()
-        //         .delay("100")
-        //         .duration("10")
-        //         .style("stroke", function (d) { return colorMax(d[0]) })
-        //         .style("opacity", "1")
-        //         .style("stroke-width", "3");
-        // }
-
-        // const mouseovermin = function (event, d) {
-
-        //     const selection = d3.select(this).raise();
-        //     selection
-        //         .transition()
-        //         .delay("100")
-        //         .duration("10")
-        //         .style("stroke", function (d) { return colorMin(d[0]) })
-        //         .style("opacity", "1")
-        //         .style("stroke-width", "3");
-
-        // }
-
-        // const mouseout = function (event, d) {
-        //     //console.log(d)
-        //     const selection = d3.select(this)
-        //     selection
-        //         .transition()
-        //         .delay("100")
-        //         .duration("10")
-        //        // .style("stroke", "#d2d2d2")
-        //         .style("stroke", function (d) { return colorMax(selected_year) })
-        //         .style("opacity", "1")
-        //         .style("stroke-width", "2.5");
-        // }
-
-        // Highlight the specie that is hovered
+        // Highlight the year that is hovered
         const highlight = function (event, d) {
 
             if (typeof d[0] === 'string') {
@@ -121,19 +78,17 @@ $(document).ready(function () {
                 selected_year = d.yr
             }
 
-            // selected_year = d.yr
-
             d3.selectAll("circle")
                 .transition()
                 .duration(200)
                 .style("fill", "lightgrey")
-                .attr("r", 3) //quelli grigi
+                .attr("r", 3) //gray
 
             d3.selectAll(".dot" + selected_year)
                 .transition()
                 .duration(200)
                 .style("fill", colorMax(selected_year))
-                .attr("r", 10) //quello colorato
+                .attr("r", 10) //colored
 
             d3.selectAll("path")
                 .transition()
@@ -143,8 +98,7 @@ $(document).ready(function () {
                 .style("opacity", "1")
                 .style("stroke-width", "3");
 
-
-            //ESTRAGGO RILEVAZIONI DEL SINGOLO ANNO
+            //Extract single year detections 
             let max = [];
             max.length = 0;
             let min = [];
@@ -159,8 +113,7 @@ $(document).ready(function () {
                 }
             }
 
-
-            //RIDISEGNO LINEA MASSIMO
+            //Maximum line redrawing
             svg.selectAll(".line")
                 .data(sumstat)
                 .join("path")
@@ -177,7 +130,8 @@ $(document).ready(function () {
                         (d[1])
 
                 })
-            //RIDISEGNO LINEA MINIMO
+                
+            //Minimum line redrawing
             svg.selectAll(".line")
                 .data(sumstat)
                 .join("path")
@@ -191,15 +145,10 @@ $(document).ready(function () {
                         .y(function (d) { return y(+min[d.month]); })
                         (d[1])
                 })
-
             console.log(d.month)
-
-
-
-
         }
 
-        // Highlight the specie that is hovered
+        // Recoloring all lines
         const doNotHighlight = function (event, d) {
             if (typeof d[0] === 'string') {
                 selected_year = d[0]
@@ -215,7 +164,7 @@ $(document).ready(function () {
                 .transition()
                 .duration(200)
                 .style("fill", d => colorMax(d.yr))
-                .attr("r", 5) //dopo aver spostato il mouse
+                .attr("r", 5) 
 
             for (let i = 0; i < 8; i++) {
                 d3.selectAll(".line2" + years[i])
@@ -233,10 +182,9 @@ $(document).ready(function () {
                     .style("opacity", "1")
                     .style("stroke-width", "3");
             }
-
         }
 
-        // Variabili ausiliarie per identificare lelinee
+        // Auxiliary variables to identify lelines
         let n = 0;
         let m = 0;
 
@@ -258,7 +206,6 @@ $(document).ready(function () {
                 return d3.line()
                     .x(function (d) { return x(d.month); })
                     .y(function (d) { return y(+d.max); })
-                    //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
             .on("mouseover", highlight)
@@ -280,7 +227,6 @@ $(document).ready(function () {
                 return d3.line()
                     .x(function (d) { return x(d.month); })
                     .y(function (d) { return y(+d.min); })
-                    //.y(function (d) { return y(+d.min); })
                     (d[1])
             })
             .on("mouseover", highlight)
@@ -291,10 +237,8 @@ $(document).ready(function () {
             .selectAll("dot")
             .data(data)
             .enter()
-            .append("circle") // .join("circle")
+            .append("circle") 
             .attr("class", function (d) {
-                // console.log(typeof d.yr)
-                // console.log(d.yr)
                 return "dot" + d.yr
             })
             .attr("cx", function (d) { return x(d.month); })
@@ -304,15 +248,13 @@ $(document).ready(function () {
             .on("mouseover", highlight)
             .on("mouseleave", doNotHighlight)
 
-        ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////      ////////////////////////////////
-
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
 
         // 1 rosso, 3 arancione, 5 verde, 7 azzurro
         // 2 giallo, 4 fucsia, 6 viola, 8 blu
-        //   //Bottom years legend
-        for (let i = 0; i < sumstat.size; i++) {   // 8 deve divenatre sumstat.size
+        //Bottom years legend
+        for (let i = 0; i < sumstat.size; i++) { 
             //Bottom legend
             if (i % 2 == 0) {
                 legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")
@@ -324,7 +266,6 @@ $(document).ready(function () {
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', maxColors[i]).attr('width', 30).attr('height', 6)
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 55).attr('fill', minColors[i]).attr('width', 30).attr('height', 6)
             }
-            //text("000" + i) ==> text(years[i]) oppure text(Array.from(sumstat)[i][0])
         }
     })
 })
