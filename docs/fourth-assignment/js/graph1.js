@@ -54,7 +54,6 @@ $(document).ready(function () {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         let maxColors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
         let minColors = ['#FFDAB9', '#FF0000', '#FFD700', '#FF82AB', '#00CD00', '#AB82FF', '#BBFFFF', '#6495ED'];
 
@@ -82,7 +81,7 @@ $(document).ready(function () {
                 .transition()
                 .duration(200)
                 .style("fill", "lightgrey")
-                .attr("r", 3) //gray
+                .attr("r", 3) //grey
 
             d3.selectAll(".dot" + selected_year)
                 .transition()
@@ -126,11 +125,9 @@ $(document).ready(function () {
                     return d3.line()
                         .x(function (d) { return x(d.month); })
                         .y(function (d) { return y(+max[d.month]); })
-
                         (d[1])
-
                 })
-                
+
             //Minimum line redrawing
             svg.selectAll(".line")
                 .data(sumstat)
@@ -145,14 +142,12 @@ $(document).ready(function () {
                         .y(function (d) { return y(+min[d.month]); })
                         (d[1])
                 })
-            console.log(d.month)
         }
 
         // Recoloring all lines
         const doNotHighlight = function (event, d) {
             if (typeof d[0] === 'string') {
                 selected_year = d[0]
-
             } else {
                 selected_year = d.yr
             }
@@ -164,7 +159,7 @@ $(document).ready(function () {
                 .transition()
                 .duration(200)
                 .style("fill", d => colorMax(d.yr))
-                .attr("r", 5) 
+                .attr("r", 5)
 
             for (let i = 0; i < 8; i++) {
                 d3.selectAll(".line2" + years[i])
@@ -184,7 +179,7 @@ $(document).ready(function () {
             }
         }
 
-        // Auxiliary variables to identify lelines
+        // Auxiliary variables to identify lines
         let n = 0;
         let m = 0;
 
@@ -237,7 +232,7 @@ $(document).ready(function () {
             .selectAll("dot")
             .data(data)
             .enter()
-            .append("circle") 
+            .append("circle")
             .attr("class", function (d) {
                 return "dot" + d.yr
             })
@@ -251,10 +246,8 @@ $(document).ready(function () {
         legendChart.append("text").attr("x", 700).attr("y", 10).text("Month").style("font-size", "15px").attr("alignment-baseline", "middle")
         svg.append("text").attr("transform", "rotate(-90)").attr("y", margin.left - 120).attr("x", 0 - (height / 2)).attr("dy", "1em").style("text-anchor", "middle").style("font-size", "15px").attr("alignment-baseline", "middle").text("Temperature [Celsius]");
 
-        // 1 rosso, 3 arancione, 5 verde, 7 azzurro
-        // 2 giallo, 4 fucsia, 6 viola, 8 blu
         //Bottom years legend
-        for (let i = 0; i < sumstat.size; i++) { 
+        for (let i = 0; i < sumstat.size; i++) {
             //Bottom legend
             if (i % 2 == 0) {
                 legendColor.append("text").attr("x", 340 + i * 100).attr("y", 20).text(Array.from(sumstat)[i][0]).style("font-size", "20px").attr("alignment-baseline", "middle")

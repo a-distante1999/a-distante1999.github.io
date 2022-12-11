@@ -5,10 +5,10 @@ $(document).ready(function () {
     width = 800 - margin.left - margin.right,
     height = 100 - margin.top - margin.bottom;
 
-  //CHIAMATA DEL PRIMO ANNO
+  // Call first year
   drawCharts(1993, margin, width, height)
 
-  //CHIAMATA GENERALE
+  // General call
   addEventListener("click", function (e) {
     let f = document.getElementById("cars");
     drawCharts(f.value, margin, width, height)
@@ -25,11 +25,11 @@ function drawCharts(value, margin, width, height) {
   // Read the data
   d3.csv("../graph_3.csv").then(function (data) {
 
-    //Auxiliary things
+    //Auxiliary variables
     let a = 1;
     let dataFiltered = [];
 
-    //Empty the SVG
+    // Empty the SVG
     $(singleContainer).empty();
 
     // Set the legend
@@ -54,7 +54,6 @@ function drawCharts(value, margin, width, height) {
       .attr('r', 7)
       .attr('fill', '#E74C3C');
 
-    //  i=numero mesi
     for (let i = 0; i < 12; i++) {
 
       // Append the svg object to the body of the page
@@ -67,7 +66,7 @@ function drawCharts(value, margin, width, height) {
 
       // Add the x Axis
       const x = d3.scaleLinear()
-        .domain([-15, 40])
+        .domain([-15, 45])
         .range([0, width]);
       svg.append("g")
         .attr("transform", `translate(0, ${height})`)
@@ -77,10 +76,7 @@ function drawCharts(value, margin, width, height) {
       const y = d3.scaleLinear()
         .range([height, 0])
         .domain([0, 0.25]);
-      //svg.append("g")
-      //call(d3.axisLeft(y));
 
-      //NUMERO RIGHE CSV
       for (let j = 0; j < data.length - 1; j++) {
         if (data[j].yr == value) {
           dataFiltered.push(data[j])
@@ -102,7 +98,6 @@ function drawCharts(value, margin, width, height) {
         .datum(density1)
         .attr("fill", "#85C1E9")
         .attr("opacity", ".6")
-        //.attr("stroke", "#000")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
         .attr("d", d3.line()
@@ -117,7 +112,6 @@ function drawCharts(value, margin, width, height) {
         .datum(density2)
         .attr("fill", "#E74C3C")
         .attr("opacity", ".6")
-        //.attr("stroke", "#000")
         .attr("stroke-width", 1)
         .attr("stroke-linejoin", "round")
         .attr("d", d3.line()
@@ -126,9 +120,9 @@ function drawCharts(value, margin, width, height) {
           .y(function (d) { return y(d[1]); })
         );
 
-      //Legend (month)
+      // Legend (month)
       svg.append("text").attr("x", 680).attr("y", 10).text(month[a - 1]).style("font-size", "12px").attr("alignment-baseline", "middle")
-      a = a + 1;
+      a++;
     }
   })
 }

@@ -14,16 +14,17 @@ $(document).ready(function () {
     // Load data
     d3.csv("../graph_1.csv").then(function (data) {
 
-        //Inizializzo array contente tutti i dati
+        // Inizitialization array all data
         let values = new Array();
-        // Inizializzo variabili ausiliarie
-        let k = 1;
-        let a = 1993; // 1993; //anno di partenza
 
-        for (var i = 0; i < 8; i++) { //3 deve divenatre 8 //Numero di anni da considerare
+        // Inizialization auxiliaries variables 
+        let k = 1;
+        let a = 1993;
+
+        for (var i = 0; i < 8; i++) {
             values[i] = {};
             values[i][months[0]] = a;
-            a + 4; //a+4;
+            a + 4;
         }
 
         let years = {
@@ -38,12 +39,11 @@ $(document).ready(function () {
         };
 
         for (let i = 0; i < values.length * 12; i++) {
-
             values[years[data[i].yr]][months[k]] = data[i].avg
             k++;
             if (k == 13) k = 1;
         }
-        console.log(values)
+
         // SVG
         let svg = d3.select("body").append("svg")
             .attr("width", 650)
@@ -102,7 +102,6 @@ $(document).ready(function () {
             .x(d => d.x)
             .y(d => d.y);
 
-        //arancione, rosso, giallo, fucsia ,verde,  viola, blu, azzurro
         let colors = ['#FF8000', '#CD0000', '#CDAD00', '#FF1493', '#228B22', '#9B30FF', '#00FFFF', '#0000FF'];
 
         function getPathCoordinates(data_point) {
@@ -116,7 +115,7 @@ $(document).ready(function () {
             coordinates.push(angleToCoordinate(angle, data_point[months[1]]));
             return coordinates;
         }
-        var t = 0;
+
         const highlight = function (event, d) {
 
             d3.selectAll("path")
@@ -145,13 +144,8 @@ $(document).ready(function () {
                 .style("stroke-width", "2.3");
         }
 
-
-
-        //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < values.length * 12; i++) {
 
-            // let d = values[i];
-            //let color = colors[i];
             let coordinates = getPathCoordinates(values[i]);
 
             // Draw the path element
@@ -164,8 +158,6 @@ $(document).ready(function () {
                 .attr("opacity", 1)
                 .on("mouseover", highlight)
                 .on("mouseleave", doNotHighlight)
-                ;
-
 
             //Bottom years legend
             if (i % 2 == 0) {
@@ -176,14 +168,6 @@ $(document).ready(function () {
                 legendColor.append("text").attr("x", 340 + (i - 1) * 100).attr("y", 52).text(Object.keys(years)[i]).style("font-size", "20px").attr("alignment-baseline", "middle")
                 legendColor.append('rect').attr('x', 300 + (i - 1) * 100).attr('y', 47).attr('fill', colors[i]).attr('width', 30).attr('height', 6)
             }
-
-            // console.log(d)
-            // console.log(color)
-            // console.log(values)
-            // console.log(i)
-            // console.log(values[i][months[0]])
-            // console.log(Object.keys(years)[i])
         }
-    }
-    )
+    })
 })
