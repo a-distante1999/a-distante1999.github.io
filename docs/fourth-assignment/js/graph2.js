@@ -116,9 +116,40 @@ $(document).ready(function () {
             coordinates.push(angleToCoordinate(angle, data_point[months[1]]));
             return coordinates;
         }
+        var t = 0;
+        const highlight = function (event, d) {
+
+            d3.selectAll("path")
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("opacity", "0.1")
+                .style("stroke-width", "1.3");
+
+            const selection = d3.select(this).raise();
+            selection
+                .transition()
+                .delay("100")
+                .duration("10")
+                .style("opacity", "1")
+                .style("stroke-width", "4");
+        }
+
+        const doNotHighlight = function (event, d) {
+            d3.selectAll("path")
+                .transition()
+                .delay("100")
+                .duration("10")
+
+                .style("opacity", "1")
+                .style("stroke-width", "2.3");
+        }
+
+
 
         //OCCHIO ALLA i (i = numero anni*12)
         for (var i = 0; i < values.length * 12; i++) {
+
             // let d = values[i];
             //let color = colors[i];
             let coordinates = getPathCoordinates(values[i]);
@@ -130,7 +161,11 @@ $(document).ready(function () {
                 .attr("stroke-width", 2.3)
                 .attr("stroke", colors[i])
                 .attr("fill", "none")
-                .attr("opacity", 0.8);
+                .attr("opacity", 1)
+                .on("mouseover", highlight)
+                .on("mouseleave", doNotHighlight)
+                ;
+
 
             //Bottom years legend
             if (i % 2 == 0) {
