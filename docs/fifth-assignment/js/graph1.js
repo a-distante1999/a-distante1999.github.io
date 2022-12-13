@@ -2,8 +2,8 @@ $(document).ready(function () {
 
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        width = 450 - margin.left - margin.right,
-        height = 480 - margin.top - margin.bottom;
+        width = 1000 - margin.left - margin.right,
+        height = 1000 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select(singleContainer).append("svg")
@@ -13,17 +13,18 @@ $(document).ready(function () {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+
     // Color scale used
     var color = d3.scaleOrdinal(d3.schemeCategory20);
 
     // Set the sankey diagram properties
     var sankey = d3.sankey()
         .nodeWidth(36)
-        .nodePadding(290)
+        .nodePadding(10)
         .size([width, height]);
 
     // load the data
-    d3.json("../data_sankey.json", function (graph) {
+    d3.json("../data_sankey.json", function (error, graph) {
 
         // Constructs a new Sankey generator with the default settings.
         sankey
@@ -63,7 +64,12 @@ $(document).ready(function () {
             .style("stroke", function (d) { return d3.rgb(d.color).darker(2); })
             // Add hover text
             .append("title")
-            .text(function (d) { return d.name + "\n" + "There is " + d.value + " stuff in this node"; });
+            .text(function (d) {
+                if (d.name == "Carbon storage") { return "Total carbon storage:  " + d.Abundance + " (kg/yr)"; }
+                if (d.name == "Total annual benefits") { return "Total benefits: " + d.Abundance + " (eur/yr)"; }
+                else { return d.name + "\n" + "Abundance: " + d.Abundance + " unit" }
+            });
+        console.log(graph.nodes[0].name)
 
         // add in the title for the nodes
         node
@@ -78,32 +84,19 @@ $(document).ready(function () {
             .attr("x", 6 + sankey.nodeWidth())
             .attr("text-anchor", "start");
 
-        /* // the function for moving the nodes
-         function dragmove(d) {
-             console.log(d)
-             d3.select(this)
-                 .attr("transform",
-                     "translate("
-                     + d.x + ","
-                     + (d.y = Math.max(
-                         0, Math.min(height - d.dy, d3.event.y))
-                     ) + ")");
-             sankey.relayout();
-             link.attr("d", sankey.link());
- 
-         }*/
-
+        // the function for moving the nodes
         function dragmove(d) {
-            console.log(d)
             d3.select(this)
                 .attr("transform",
-                    "translate(0,3.197442310920451e-14)");
+                    "translate("
+                    + d.x + ","
+                    + (d.y = Math.max(
+                        0, Math.min(height - d.dy, d3.event.y))
+                    ) + ")");
+
             sankey.relayout();
             link.attr("d", sankey.link());
-
         }
-
-
     });
 })
 

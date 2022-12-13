@@ -1,18 +1,38 @@
 {
   "nodes": [
-    { "node": 0, "name": "node0" },
-    { "node": 1, "name": "node1" },
-    { "node": 2, "name": "node2" },
-    { "node": 3, "name": "node3" },
-    { "node": 4, "name": "node4" }
+    { "node": 0, "name": "Carbon storage", "Abundance": "2000" },
+    { "node": 1, "name": "Celtis Australis", "Abundance": "1500" },
+    { "node": 2, "name": "Aesculus hippocastanum", "Abundance": "1500" },
+    { "node": 3, "name": "Carpinus betulus", "Abundance": "1500" },
+    { "node": 4, "name": "Tilia cordata", "Abundance": "1500" },
+    { "node": 5, "name": "Platanus x hispanica", "Abundance": "1500" },
+    { "node": 6, "name": "Tilia x europaea", "Abundance": "1500" },
+    { "node": 7, "name": "Acer campestre", "Abundance": "1500" },
+    { "node": 8, "name": "Cupressus", "Abundance": "1500" },
+    { "node": 9, "name": "Sophora japonica", "Abundance": "1500" },
+    { "node": 10, "name": "Prunus cerasifera", "Abundance": "1500" },
+    { "node": 11, "name": "Total annual benefits", "Abundance": "1500" }
   ],
   "links": [
-    { "source": 0, "target": 2, "value": 2 },
-    { "source": 1, "target": 2, "value": 2 },
-    { "source": 1, "target": 3, "value": 2 },
-    { "source": 0, "target": 3, "value": 2 },
-    { "source": 2, "target": 3, "value": 2 },
-    { "source": 2, "target": 4, "value": 2 },
-    { "source": 3, "target": 4, "value": 4 }
+    { "source": 0, "target": 1, "value": 1 },
+    { "source": 0, "target": 2, "value": 1 },
+    { "source": 0, "target": 3, "value": 1 },
+    { "source": 0, "target": 4, "value": 1 },
+    { "source": 0, "target": 5, "value": 1 },
+    { "source": 0, "target": 6, "value": 1 },
+    { "source": 0, "target": 7, "value": 1 },
+    { "source": 0, "target": 8, "value": 1 },
+    { "source": 0, "target": 9, "value": 1 },
+    { "source": 0, "target": 10, "value": 1 },
+    { "source": 1, "target": 11, "value": 1 },
+    { "source": 2, "target": 11, "value": 1 },
+    { "source": 3, "target": 11, "value": 1 },
+    { "source": 4, "target": 11, "value": 1 },
+    { "source": 5, "target": 11, "value": 1 },
+    { "source": 6, "target": 11, "value": 1 },
+    { "source": 7, "target": 11, "value": 1 },
+    { "source": 8, "target": 11, "value": 1 },
+    { "source": 9, "target": 11, "value": 1 },
+    { "source": 10, "target": 11, "value": 1 }
   ]
 }
