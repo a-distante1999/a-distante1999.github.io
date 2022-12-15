@@ -20,11 +20,11 @@ $(document).ready(function () {
     // Set the sankey diagram properties
     var sankey = d3.sankey()
         .nodeWidth(36)
-        .nodePadding(10)
+        .nodePadding(5)
         .size([width, height]);
 
     // load the data
-    d3.json("../data_sankey.json", function (error, graph) {
+    d3.json("../data_sankey_per.json", function (error, graph) {
 
         // Constructs a new Sankey generator with the default settings.
         sankey
