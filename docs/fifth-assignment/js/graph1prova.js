@@ -5,6 +5,11 @@ $(document).ready(function () {
         width = 1000 - margin.left - margin.right,
         height = 1000 - margin.top - margin.bottom;
 
+    var legend = d3.select(singleContainer)
+        .append("svg")
+        .attr("width", 1000)
+        .attr("height", 80);
+
     // append the svg object to the body of the page
     var svg = d3.select(singleContainer).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -17,34 +22,35 @@ $(document).ready(function () {
     var color = d3.scaleOrdinal(d3.schemeCategory20);
 
     // Inizitialization array all data links and aux variables
-    let carbon = new Array();
+    let data = new Array();
     let a = 0;
     let start = {};
     let end = {};
     let startPoint = 0;
 
     // Struttura base ausiliaria per disegnare i links
-    let textCordinates = ["dy", "source", "sy", "target", "ty", "value"];
+    let textCordinates = ["dy", "source", "sy", "target", "ty", "value", "text"];
     let coordinates = ["dx", "dy", "x", "y"]
-    for (var i = 0; i < 10; i++) {
-        carbon[i] = {};
-        carbon[i][textCordinates[0]] = 0;
-        carbon[i][textCordinates[1]] = {};
-        carbon[i][textCordinates[2]] = 0;
-        carbon[i][textCordinates[3]] = {};
-        carbon[i][textCordinates[4]] = 0;
-        carbon[i][textCordinates[5]] = 2;
+    for (var i = 0; i < 20; i++) {
+        data[i] = {};
+        data[i][textCordinates[0]] = 0;
+        data[i][textCordinates[1]] = {};
+        data[i][textCordinates[2]] = 0;
+        data[i][textCordinates[3]] = {};
+        data[i][textCordinates[4]] = 0;
+        data[i][textCordinates[5]] = 2;
+        data[i][textCordinates[6]] = "";
 
         for (var k = 0; k < 4; k++) {
-            carbon[i][textCordinates[1]][coordinates[k]] = 0;
-            carbon[i][textCordinates[3]][coordinates[k]] = 0;
+            data[i][textCordinates[1]][coordinates[k]] = 0;
+            data[i][textCordinates[3]][coordinates[k]] = 0;
         }
     }
 
     // Set the sankey diagram properties
     var sankey = d3.sankey()
         .nodeWidth(36)
-        .nodePadding(10)
+        .nodePadding(20)
         .size([width, height]);
 
     // load the data
@@ -55,19 +61,8 @@ $(document).ready(function () {
             .nodes(graph.nodes)
             .links(graph.links)
             .layout(1);
-        /*
-                // add in the links
-                var link = svg.append("g")
-                    .selectAll(".link")
-                    .data(graph.links)
-                    .enter()
-                    .append("path")
-                    .attr("class", "link")
-                    .attr("d", sankey.link())
-                    .style("stroke-width", function (d) { return Math.max(1, d.dy); })
-                    .sort(function (a, b) { return b.dy - a.dy; });
-                    */
 
+        let c = (graph.links.length / 2) - 1;
         // add in the nodes
         var node = svg.append("g")
             .selectAll(".node")
@@ -84,47 +79,63 @@ $(document).ready(function () {
         node
             .append("rect")
             .attr("height", function (d) {
+                if (a == 0) {
+                    start.dx = d.dx;
+                    start.dy = d.dy;
+                    start.x = d.x;
+                    start.y = d.y;
+                    startPoint = start.y;
+                } else if (a != 0 && a != graph.nodes.length - 1) {
 
-                if (a != 0 && a != 11) {
-                    // Riempio il source
-                    // carbon[a - 1][textCordinates[1]][coordinates[0]] = start.dx;
-                    // carbon[a - 1][textCordinates[1]][coordinates[1]] = start.dy / 100 * (graph.links[a - 1].value);
-                    // carbon[a - 1][textCordinates[1]][coordinates[2]] = start.x;
-                    carbon[a - 1].source.dx = start.dx;
-                    carbon[a - 1].source.dy = start.dy / 100 * (graph.links[a - 1].value);
-                    carbon[a - 1].source.x = start.x;
+                    //CARBON
+                    data[a - 1].source.dx = start.dx;
+                    data[a - 1].source.dy = start.dy / 100 * (graph.links[a - 1].value2);
+                    data[a - 1].source.x = start.x;
                     if (a == 1) {
-                        carbon[a - 1][textCordinates[1]][coordinates[3]] = start.y;
+                        data[a - 1].source.y = start.y;
                     } else {
-                        carbon[a - 1][textCordinates[1]][coordinates[3]] = carbon[a - 2].source.y + carbon[a - 2].source.dy;
+                        data[a - 1].source.y = data[a - 2].source.y + data[a - 2].source.dy;
                     }
-                    // Riempio il target
-                    carbon[a - 1][textCordinates[3]][coordinates[0]] = d.dx;
-                    carbon[a - 1][textCordinates[3]][coordinates[1]] = d.dy;
-                    carbon[a - 1][textCordinates[3]][coordinates[2]] = d.x;
-                    carbon[a - 1][textCordinates[3]][coordinates[3]] = d.y;
-                } else if (a == 0) {
-                    // start[coordinates[0]] = d.dx;
-                    // start[coordinates[1]] = d.dy;
-                    // start[coordinates[2]] = d.x;
-                    // start[coordinates[3]] = d.y;
-                    start[coordinates[0]] = 36;
-                    start[coordinates[1]] = 890;
-                    start[coordinates[2]] = 0;
-                    start[coordinates[3]] = 0.3655079999999782;
-                    startPoint = start[coordinates[3]];
-                } else if (a == 11) {
-                    end[coordinates[0]] = d.dx;
-                    end[coordinates[1]] = d.dy;
-                    end[coordinates[2]] = d.x;
-                    end[coordinates[3]] = d.y;
+                    data[a - 1].text = "Carbon storage: " + graph.links[a - 1].value3 + " [kg/yr]"
+                    data[a - 1].target.dx = d.dx;
+                    data[a - 1].target.dy = d.dy;
+                    data[a - 1].target.x = d.x;
+                    data[a - 1].target.y = d.y;
+
+                    //EURO
+                    data[a + c].source.dx = d.dx;
+                    data[a + c].source.dy = d.dy;
+                    data[a + c].source.x = d.x;
+                    data[a + c].source.y = d.y;
+                    data[a + c].text = "Total annual benefit: " + graph.links[a + c].value3 + " [eur/yr]"
+
+                } else if (a == graph.nodes.length - 1) {
+                    end.dx = d.dx;
+                    end.dy = d.dy;
+                    end.x = d.x;
+                    end.y = d.y;
+
+                    //EURO
+                    for (let i = 1; i < graph.nodes.length - 1; i++) {
+                        data[i + c].target.dx = end.dx;
+                        data[i + c].target.dy = end.dy / 100 * (graph.links[i + c].value2);
+                        data[i + c].target.x = end.x;
+                        if (i == 1) {
+                            data[i + c].target.y = end.y;
+                        }
+                        else {
+                            data[i + c].target.y = data[i + c - 1].target.y + data[i + c - 1].target.dy;
+                        }
+                    }
                 }
                 a++;
                 { return d.dy; }
             })
             .attr("width", sankey.nodeWidth())
             .style("fill", function (d) { return d.color = color(d.name.replace(/ .*/, "")); })
-            .style("stroke", function (d) { return d3.rgb(d.color).darker(2); })
+            .style("stroke", "black")
+            .style('stroke-opacity', '1')
+            .style('stroke-width', '1')
             // Add hover text
             .append("title")
             .text(function (d) {
@@ -133,15 +144,9 @@ $(document).ready(function () {
                 else { return d.name + "\n" + "Abundance: " + d.Abundance + " unit" }
             });
 
-        //console.log(start)
-        // console.log(carbon)
-        // console.log(graph.links[0].value)
-        // console.log(graph.nodes[0].name)
-        // console.log("___________________________")
-        // for (let i = 0; i < 10; i++) {
-        //     console.log(carbon[i].source.y);
-        // }
-        // console.log("___________________________")
+        console.log(graph.links.length)
+        console.log(graph.nodes.length)
+        console.log(c)
 
         // add in the title for the nodes
         node
@@ -170,33 +175,24 @@ $(document).ready(function () {
             link.attr("d", sankey.link());
         }
 
-        //array of d3 sankey nodes
-        var data = [
-            {
-                dy: 0,
-                source: { dx: 36, dy: 24.92, x: 0, y: 0, }, sy: 0,
-                target: { dx: 36, dy: 176.5, x: 472, y: -2.2737367544323206e-13 }, ty: 0, value: 2
-            },
-            {
-                dy: 0,
-                source: { dx: 36, dy: 155.75, x: 0, y: 24.92, }, sy: 0,
-                target: { dx: 36, dy: 100.5, x: 472, y: 185 }, ty: 0, value: 2
-            },
-            {
-                dy: 0,
-                source: { dx: 36, dy: 91.67, x: 0, y: 155.75, }, sy: 0,
-                target: { dx: 36, dy: 92.5, x: 472, y: 294.5 }, ty: 0, value: 2
-            },
-        ]
+        legend.append("text")
+            .attr("x", 385)
+            .attr("y", 40)
+            .text("Use tooltip for more details!")
+            .style("font-size", "20px")
+            .attr("alignment-baseline", "middle")
 
-        console.log(data)
-        console.log(carbon)
         svg.selectAll("path")
             .data(data)
             .enter()
             .append("path")
             .style("stroke-width", "black")
-            .attr("d", function (d) { return link(d) });
+            .attr("d", function (d) { return link(d) })
+            .append("title")
+            .text(function (d) {
+
+                { return d.text }
+            });
 
         //borrowed from sankey.js, draws one a line from top of source to top of target, top of target to bottom of target, bottom of target to bottom of source, bottom of source to top of source
         function link(d) {
