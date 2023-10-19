@@ -1,0 +1,89 @@
+body {
+    text-align: center;
+    margin:0;
+
+}
+
+header {
+  /*  position: fixed; /* Fissa la posizione dell'intestazione */
+    top: 0; /* Allinea l'intestazione in cima alla pagina */
+   width: 100%; /* Imposta la larghezza dell'intestazione al 100% del viewport */
+    background-color: #333;
+    color: azure;
+
+}
+
+h1 {
+    font-size: 36px;
+}
+
+.content {
+    max-width: 95%; /*aumenta dimensione colonne*/
+    margin: 0 auto;
+    margin-top: 120px;
+    box-sizing: border-box;
+}
+
+/* Crea una riga flex */
+.row {
+    display: flex;
+    align-items: center; /* Allinea verticalmente gli elementi al centro */
+    justify-content: space-between; /* Allontana le colonne ai lati opposti del contenitore */
+}
+
+/* Crea colonne flex */
+.column {
+    flex: 5; /* Imposta la larghezza delle colonne in modo che occupino lo stesso spazio */
+}
+
+.column.text {
+    background-color: #636363;
+    padding: 20px;
+    text-align: left;
+    font-size: 30px; /*aumenta dimensione testo affiancato*/ 
+}
+
+.column.title {
+    padding: 20px;
+    background-color: #ff6060;
+}
+
+.column.title h2 {
+    font-size: 70px; /* Aumenta la dimensione del font del titolo */
+}
+
+
+
+@media (max-width: 800px) {
+    header{
+        font-size: 12px;
+    }
+     nav{font-size: 10px;}
+
+    .content {
+        max-width: 100%;
+    }
+
+    .column {
+        padding: 10px;
+    }
+
+    .column.title h2 {
+        font-size: 24px; /* Riduci la dimensione del font del titolo per i dispositivi con larghezza inferiore a 600px */
+    }
+    .column.text{
+        font-size:16px
+    }
+
+    /* Imposta l'orientamento delle colonne su verticale quando la larghezza del viewport è inferiore a 600px */
+    .row {
+        flex-direction: column-reverse;
+        align-items: center; /* Allinea verticalmente gli elementi al centro */
+        text-align: center; /* Allinea al centro il testo della riga */
+        justify-content: normal; /* Imposta la distribuzione normale del contenuto quando la larghezza del viewport è inferiore a 600px */
+    }
+    .row:nth-child(even) {
+        flex-direction: column;
+    }
+}
+
