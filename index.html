@@ -3,7 +3,9 @@
 <head>
     <link rel="stylesheet" type="text/css" href="test.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.css"> <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Titolo della Pagina</title>
+
 </head>
 <body>
     <header>
@@ -12,8 +14,20 @@
     </h1>
    
     </header>
+    <div class="topnav">
+        <a href="#home" class="active">Logo</a>
+        <!-- Navigation links (hidden by default) -->
+        <div id="myLinks">
+          <a href="#news">News</a>
+          <a href="#contact">Contact</a>
+          <a href="#about">About</a>
+        </div>
+        <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
     <div class="content">
-        <!-- Aggiungi la classe 'row' per ogni paragrafo -->
         <div class="row" id="paragrafo1" data-aos="fade-left" data-aos-duration="1200">
             <div class="column text">
                 <p>Con il termine lorem ipsum si indica un testo segnaposto utilizzato da grafici, progettisti, programmatori e tipografi a modo riempitivo per bozzetti e 
@@ -29,8 +43,6 @@
                 <h2>Titolo a Destra 1</h2>
             </div>
         </div>
-
-        <!-- Ripeti per ogni paragrafo -->
         <div class="row" id="paragrafo2" data-aos="fade-right" data-aos-duration="1200">
             <div class="column title">
                 <h2>Titolo a Destra 2</h2>
@@ -46,7 +58,6 @@
             </div>
             
         </div>
-
         <div class="row" id="paragrafo3" data-aos="fade-left" data-aos-duration="1200">
             <div class="column text">
                 <p>Con il termine lorem ipsum si indica un testo segnaposto utilizzato da grafici, progettisti, programmatori e tipografi a modo riempitivo per bozzetti e 
@@ -61,7 +72,6 @@
                 <h2>Titolo a Destra 2</h2>
             </div>
         </div>
-
         <div class="row" id="paragrafo4" data-aos="fade-right" data-aos-duration="1200">
             <div class="column title">
                 <h2>Titolo a Destra 2</h2>
@@ -77,8 +87,6 @@
             </div>
             
         </div>
-
-        <!-- E così via... -->
     </div>
 
     <!-- AOS JavaScript -->
