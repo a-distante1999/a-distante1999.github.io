@@ -1,16 +1,18 @@
 body {
     text-align: center;
     margin:0;
-
+    padding:0;
+    overflow-x: hidden; /* Aggiunto per nascondere l'overflow orizzontale */
 }
 
 header {
-  /*  position: fixed; /* Fissa la posizione dell'intestazione */
+    
     top: 0; /* Allinea l'intestazione in cima alla pagina */
-   width: 100%; /* Imposta la larghezza dell'intestazione al 100% del viewport */
+    width: 100%; /* Imposta la larghezza dell'intestazione al 100% del viewport */
     background-color: #333;
-    color: azure;
-
+    color: white;
+    padding: 0px;
+    z-index: 1; 
 }
 
 h1 {
