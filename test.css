@@ -1,38 +1,33 @@
-
-
-
 /*------------------FONT--------------*/
 @font-face {
     font-family: "bahnschrift";
     src: url(BAHNSCHRIFT.ttf) format("truetype");
 }
 
+/*--------------------HTML, BODY------------*/
 html,body {
- 
     width: 100%;
     height: 100%;
     margin: 0px;
     padding: 0px;
     overflow-x: hidden;
-   
 }
 
 /*----------------HEADER, NAVBAR, HAMBURGER---------*/
-header {
-}
 
-nav{
-    background-color: rgb(41, 41, 41);
+    nav{
+    background-color: #70a9a1;
     height: 95px;
     width: 100%;
     font-family: 'bahnschrift', fallback;
     }
+
     /*---------LOGO NAVBAR--------*/
     label.logo{
-        color: white;
-        font-size: 35px;
-        line-height: 90px;
-        padding: 0 100px;
+        color: rgb(255, 255, 255);
+        font-size: 100px;
+        line-height: 140px;
+        padding: 0 20px;
         font-weight: bold;
     }
     
@@ -47,23 +42,24 @@ nav{
     margin: 0 5px;
     text-transform: uppercase;
     }
+
     /*--------NOMI PARAGRAFO NAVBAR-------*/
     nav ul li a{
     color: rgb(255, 255, 255);
-    font-size: 17px;
+    font-size: 20px;
     text-transform: uppercase;
     padding: 7px 13px;
     border-radius: 3;
     text-decoration: none;
-    
+    font-weight: bold;
     }
     
     a.active,a:hover{
     background: #494949;
     transition: .5s;
     border-radius: 10px;
-    
     }
+
    /*----------HAMBURGER---------*/ 
     .checkbtn{
     font-size: 30px;
@@ -73,45 +69,50 @@ nav{
     margin-right: 40px;
     cursor: pointer;
     display: none;
-    z-index: 1;
     }
     #check{
        display: none;
     }
 
+    /*------------------X ICON DOPO HAMBURGER------------*/
+    .checkbtn1 {
+        position: relative; 
+        left: 37%; 
+        top: 10px; 
+        cursor: pointer;
+        display: none;
+    }
+    
     /*-----------------CORPO------------------*/
-h1 {
-    font-size: 36px;
-}
 
 .content {
-    max-width: 95%; /*aumenta dimensione colonne*/
+    max-width: 95%; /*Aumenta dimensione colonne*/
     margin: 0 auto;
     margin-top: 60px;
     box-sizing: border-box;
 }
 
-/* Crea una riga flex */
 .row {
     display: flex;
-    align-items: center; /* Allinea verticalmente gli elementi al centro */
-    justify-content: space-between; /* Allontana le colonne ai lati opposti del contenitore */
+    align-items: center;
+    justify-content: space-between; 
 }
 
-/* Crea colonne flex */
 .column {
-    flex: 5; /* Imposta la larghezza delle colonne in modo che occupino lo stesso spazio */
+    flex: 1; 
 }
 
+/*--------------BLOCCO TESTO----------*/
 .column.text {
-    background-color: #ffffff;
+    background-color: #ffffff; /*Background*/
     padding: 20px;
     text-align: left;
-    font-size: 20px; /*aumenta dimensione testo affiancato*/ 
-    font-family: 'bahnschrift', fallback;
+    font-size: 20px; /*Dimensione*/ 
+    font-family: 'bahnschrift', fallback; /*Font*/
     font-weight: lighter;
 }
 
+/*---------------BLOCCO TITOLO-------------*/
 .column.title {
     padding: 20px;
     background-color: #ffffff;
@@ -121,35 +122,32 @@ h1 {
 }
 
 .column.title h2 {
-    font-size: 60px; /* Aumenta la dimensione del font del titolo */
+    font-size: 60px; /*Dimensione*/
 }
-
-
-
 
 @media (max-width: 1200px) {
 label.logo{
-    font-size: 20px;
-    padding-left: 50px;
-
-}
-nav ul li a{
-    font-size: 16px;
-    margin: 50px;
-    line-height: 30px;
-    
+    font-size: 50px; /*Dimensione logo dopo ridimensionamento*/
+    padding-left: 15px;
+    line-height: 90px;
 }
 
-
+/*---------ICONA HAMBURGER------*/
 .checkbtn{
 display: block;
 }
 
+/*---------ICONA X------*/
+.checkbtn1{
+    display: block;
+    }
+
+/*----------LISTA AFTER HAMBURGER---------*/  
 ul{
 position: fixed;
 width: 100%;
 height: 100vh;
-background: rgb(80, 80, 80);
+background: #70a9a1;
 top: 0px;
 left: -120%;
 text-align: center;
@@ -166,11 +164,8 @@ nav ul li a{
 font-size: 20px;
 }
 
-
 a:hover,a.active{
-background: none;
-color:rgb(255, 0, 13)
-
+color:rgb(131, 131, 131)
 }
 
 #check:checked ~ ul{
@@ -179,12 +174,7 @@ color:rgb(255, 0, 13)
     z-index: 1;
 }
 
-
-
-    header{
-        font-size: 12px;
-    }
-     
+/*---------------BLOCCO TESTO-TITOLO DOPO RIDIMENSIONAMENTO*/
     .content {
         max-width: 100%;
     }
@@ -194,23 +184,19 @@ color:rgb(255, 0, 13)
     }
 
     .column.title h2 {
-        font-size: 50px; /* Riduci la dimensione del font del titolo per i dispositivi con larghezza inferiore a 600px */
+        font-size: 50px; 
     }
     .column.text{
         font-size:20px
     }
-
-    /* Imposta l'orientamento delle colonne su verticale quando la larghezza del viewport è inferiore a 600px */
     .row {
         flex-direction: column-reverse;
-        align-items: center; /* Allinea verticalmente gli elementi al centro */
-        text-align: center; /* Allinea al centro il testo della riga */
-        justify-content: normal; /* Imposta la distribuzione normale del contenuto quando la larghezza del viewport è inferiore a 600px */
+        align-items: center; 
+        text-align: center; 
+        justify-content: normal; 
     }
     .row:nth-child(even) {
         flex-direction: column;
-    }
-
-    
+    }  
 }
 
