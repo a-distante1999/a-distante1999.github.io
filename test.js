@@ -1,5 +1,8 @@
-document.querySelector('.menu-icon').addEventListener('click', function() {
-   document.querySelectorAll('nav a').forEach(function(el) {
-      el.style.display = el.style.display === 'none' ? 'block' : 'none';
-   });
-});
+function myFunction() {
+   var x = document.getElementById("myTopnav");
+   if (x.className === "topnav") {
+     x.className += " responsive";
+   } else {
+     x.className = "topnav";
+   }
+ }

@@ -1,5 +1,5 @@
 body {
-    text-align: center;
+ 
     margin:0;
     padding:0;
     overflow-x: hidden; /* Aggiunto per nascondere l'overflow orizzontale */
@@ -55,46 +55,113 @@ h1 {
     font-size: 60px; /* Aumenta la dimensione del font del titolo */
 }
 
-.topnav {
-    background-color: #333;
-    overflow: hidden;
-  }
-  
-  /* Style the links inside the navigation bar */
-  .topnav a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-  }
-  
-  /* Change the color of links on hover */
-  .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  
-  /* Add an active class to highlight the current page */
-  .topnav a.active {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
-  /* Hide the link that should open and close the topnav on small screens */
-  .topnav .icon {
-    display: none;
-  }
+nav{
+background-color: aqua;
+height: 97px;
+width: 100%;
 
+}
+label.logo{
+    color: white;
+    font-size: 35px;
+    line-height: 80px;
+    padding: 0 100px;
+    font-weight: bold;
+}
+
+nav ul{
+float: right;
+margin-right: 20px;
+z-index: 1;
+}
+
+nav ul li{
+display: inline-block;
+line-height: 80px;
+margin: 0 5px;
+text-transform: uppercase;
+}
+
+nav u li a{
+color: rgb(255, 0, 13);
+font-size: 17px;
+text-transform: uppercase;
+padding: 7px 13px;
+border-radius: 3;
+}
+
+a.active,a:hover{
+background: #333;
+transition: .5s;
+
+}
+
+.checkbtn{
+font-size: 30px;
+color:white;
+float:right;
+line-height: 80px;
+margin-right: 40px;
+cursor: pointer;
+display: none;
+}
+#check{
+    display: none;
+}
 
 @media (max-width: 800px) {
+label.logo{
+    font-size: 30px;
+    padding-left: 50px;
+
+}
+nav ul li a{
+    font-size: 16px;
+    margin: 50px;
+    line-height: 30px;
+}
+
+.checkbtn{
+display: block;
+}
+
+ul{
+position: fixed;
+width: 100%;
+height: 100vh;
+background: goldenrod;
+top: 80px;
+left: -100%;
+text-align: center;
+padding-left: 0;
+margin: 0;
+
+transition: all .5s;
+}
+
+nav ul li{
+display: block;
+}
+
+nav ul li a{
+font-size: 20px;
+}
+
+a:hover,a.active{
+background: none;
+color:rgb(255, 0, 13)
+
+}
+
+#check:checked ~ ul{
+    left:0%;
+}
+
+
     header{
         font-size: 12px;
     }
-     nav{font-size: 10px;}
-
+     
     .content {
         max-width: 100%;
     }
