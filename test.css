@@ -1,5 +1,12 @@
 
 
+
+/*------------------FONT--------------*/
+@font-face {
+    font-family: "bahnschrift";
+    src: url(BAHNSCHRIFT.ttf) format("truetype");
+}
+
 html,body {
  
     width: 100%;
@@ -10,17 +17,69 @@ html,body {
    
 }
 
+/*----------------HEADER, NAVBAR, HAMBURGER---------*/
 header {
-    
-    top: 0; /* Allinea l'intestazione in cima alla pagina */
-    width: 100%; /* Imposta la larghezza dell'intestazione al 100% del viewport */
-    background-color: #333;
-    color: white;
-    padding: 0px;
-    z-index: 1; 
-    overflow-x: hidden;
 }
 
+nav{
+    background-color: rgb(41, 41, 41);
+    height: 95px;
+    width: 100%;
+    font-family: 'bahnschrift', fallback;
+    }
+    /*---------LOGO NAVBAR--------*/
+    label.logo{
+        color: white;
+        font-size: 35px;
+        line-height: 90px;
+        padding: 0 100px;
+        font-weight: bold;
+    }
+    
+    nav ul{
+    float: right;
+    margin-right: 20px;
+    }
+    
+    nav ul li{
+    display: inline-block;
+    line-height: 60px;
+    margin: 0 5px;
+    text-transform: uppercase;
+    }
+    /*--------NOMI PARAGRAFO NAVBAR-------*/
+    nav ul li a{
+    color: rgb(255, 255, 255);
+    font-size: 17px;
+    text-transform: uppercase;
+    padding: 7px 13px;
+    border-radius: 3;
+    text-decoration: none;
+    
+    }
+    
+    a.active,a:hover{
+    background: #494949;
+    transition: .5s;
+    border-radius: 10px;
+    
+    }
+   /*----------HAMBURGER---------*/ 
+    .checkbtn{
+    font-size: 30px;
+    color:rgb(255, 255, 255);
+    float:right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+    z-index: 1;
+    }
+    #check{
+       display: none;
+    }
+
+    /*-----------------CORPO------------------*/
 h1 {
     font-size: 36px;
 }
@@ -49,76 +108,28 @@ h1 {
     padding: 20px;
     text-align: left;
     font-size: 20px; /*aumenta dimensione testo affiancato*/ 
+    font-family: 'bahnschrift', fallback;
+    font-weight: lighter;
 }
 
 .column.title {
     padding: 20px;
     background-color: #ffffff;
     text-align: center;
+    font-family: 'bahnschrift', fallback;
+    font-weight: bolder;
 }
 
 .column.title h2 {
     font-size: 60px; /* Aumenta la dimensione del font del titolo */
 }
 
-nav{
-background-color: aqua;
-height: 97px;
-width: 100%;
 
-}
+
+
+@media (max-width: 1200px) {
 label.logo{
-    color: white;
-    font-size: 35px;
-    line-height: 80px;
-    padding: 0 100px;
-    font-weight: bold;
-}
-
-nav ul{
-float: right;
-margin-right: 20px;
-z-index: 1;
-}
-
-nav ul li{
-display: inline-block;
-line-height: 80px;
-margin: 0 5px;
-text-transform: uppercase;
-}
-
-nav u li a{
-color: rgb(255, 0, 13);
-font-size: 17px;
-text-transform: uppercase;
-padding: 7px 13px;
-border-radius: 3;
-}
-
-a.active,a:hover{
-background: #333;
-transition: .5s;
-
-}
-
-.checkbtn{
-font-size: 30px;
-color:rgb(0, 255, 21);
-float:right;
-line-height: 80px;
-margin-right: 40px;
-cursor: pointer;
-display: none;
-}
-#check{
-   display: none;
-}
-
-
-@media (max-width: 900px) {
-label.logo{
-    font-size: 30px;
+    font-size: 20px;
     padding-left: 50px;
 
 }
@@ -126,7 +137,9 @@ nav ul li a{
     font-size: 16px;
     margin: 50px;
     line-height: 30px;
+    
 }
+
 
 .checkbtn{
 display: block;
@@ -136,14 +149,13 @@ ul{
 position: fixed;
 width: 100%;
 height: 100vh;
-background: goldenrod;
-top: 80px;
+background: rgb(80, 80, 80);
+top: 0px;
 left: -120%;
 text-align: center;
 padding-left: 0;
 margin: 0;
-
-transition: all .5s;
+transition: .5s;
 }
 
 nav ul li{
@@ -154,6 +166,7 @@ nav ul li a{
 font-size: 20px;
 }
 
+
 a:hover,a.active{
 background: none;
 color:rgb(255, 0, 13)
@@ -162,11 +175,11 @@ color:rgb(255, 0, 13)
 
 #check:checked ~ ul{
     left:0%;
+    transition: all .5s;
+    z-index: 1;
 }
 
-#check1:checked ~ ul{
-    left:-120%;
-}
+
 
     header{
         font-size: 12px;
