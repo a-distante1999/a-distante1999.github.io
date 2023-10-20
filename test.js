@@ -1,8 +1,11 @@
-function myFunction() {
-   var x = document.getElementById("myTopnav");
-   if (x.className === "topnav") {
-     x.className += " responsive";
-   } else {
-     x.className = "topnav";
-   }
- }
+
+    window.onload = function() {
+        var links = document.querySelectorAll('ul li a');
+        var checkbox = document.getElementById('check');
+        for (var i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', function() {
+                checkbox.checked = false;
+            });
+        }
+    }
+
